@@ -7,7 +7,7 @@ This plugin allows you to manage files and directories before or after Webpack b
 
 `npm install filemanager-webpack-plugin --save-dev `
 
-## Setup
+## Usage
 
 Webpack.config.js:
 
@@ -33,3 +33,20 @@ module.exports = {
   ...
 }
 ```
+
+## Options
+
+
+```js
+new FileManagerPlugin(object)
+```
+
+#### Event Options
+* `onStart`: Commands to execute before Webpack begins the bundling process
+* `onEnd`: Commands to execute after Webpack has finished the bundling process
+
+#### File Management Options
+
+|Name|Description|Example
+|:--:|:----------|:-----|
+|**`copy`**|Copy individual files or entire directories from a source folder to a destination folder|copy: [<br /> { 'dist/bundle.js', '/home/web/js/'<br /> }
