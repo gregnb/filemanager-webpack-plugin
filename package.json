@@ -1,0 +1,22 @@
+{
+  "name": "filemanager-webpack-plugin",
+  "version": "1.0.0",
+  "description": "Cross environment file and directory management for Webpack builds",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gregnb/filemanager-webpack-plugin.git"
+  },
+  "keywords": [
+    "webpack"
+  ],
+  "author": "gregnb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gregnb/filemanager-webpack-plugin/issues"
+  },
+  "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme"
+}
