@@ -24,6 +24,10 @@ module.exports = {
           { source: '/path/from', destination: '/path/to' },
           { source: '/path/fromfile.txt', destination: '/path/tofile.txt' }
         ],
+        move: [
+          { source: '/path/from', destination: '/path/to' },
+          { source: '/path/fromfile.txt', destination: '/path/tofile.txt' }
+        ],
         delete: [
          '/path/to/file.txt',
          '/path/to/directory/'
@@ -52,3 +56,4 @@ new FileManagerPlugin(object)
 |:--:|:----------|:-----|
 |**`copy`**|Copy individual files or entire directories from a source folder to a destination folder|copy: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }
 |**`delete`**|Delete individual files or entire directories. |delete: [<br />'file.txt', '/path/to'<br />]
+|**`move`**|Move individual files or entire directories. |move: <br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }

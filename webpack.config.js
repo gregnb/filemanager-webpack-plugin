@@ -19,9 +19,12 @@ module.exports = {
     new FileManagerPlugin({
       onEnd: {
         copy: [
-          { source: "./dist", destination: "./testcpr" },
-          { source: "./dist", destination: "./testingcpr2" },
-          { source: "./dist/bundle.js", destination: "./yoyo.js" }
+          { source: "./dist", destination: "./testing1" },
+          { source: "./dist", destination: "./testing2" },
+          { source: "./dist/bundle.js", destination: "./newfile.js" }
+        ],
+        move: [
+          { source: "./dist/bundle.js", destination: "./dist/testing.js" }
         ],
         delete: [
           './dist'

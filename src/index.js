@@ -1,5 +1,6 @@
 const cpr = require('cpr');
 const rimraf = require('rimraf');
+const mv = require('mv');
 
 class FileManagerPlugin {
   
@@ -61,6 +62,22 @@ class FileManagerPlugin {
 
           break;
         
+        
+        case 'move':
+
+          fileOptions.forEach(command => {
+          
+            if (!command.source || !command.destination)
+              return;
+
+            mv(command.source, command.destination, (err) => {
+              // handle error
+            });
+
+          });
+
+          break;
+
         case 'delete':
 
           fileOptions.forEach(path => {
