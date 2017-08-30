@@ -22,6 +22,9 @@ module.exports = {
           { source: "./dist", destination: "./testcpr" },
           { source: "./dist", destination: "./testingcpr2" },
           { source: "./dist/bundle.js", destination: "./yoyo.js" }
+        ],
+        delete: [
+          './dist'
         ]
       }
     }),

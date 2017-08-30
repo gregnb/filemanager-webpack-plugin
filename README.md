@@ -51,3 +51,4 @@ new FileManagerPlugin(object)
 |Name|Description|Example
 |:--:|:----------|:-----|
 |**`copy`**|Copy individual files or entire directories from a source folder to a destination folder|copy: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }
+|**`delete`**|Delete individual files or entire directories. |delete: [<br />'file.txt', '/path/to'<br />]

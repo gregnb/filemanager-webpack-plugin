@@ -1,6 +1,6 @@
 {
   "name": "filemanager-webpack-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cross environment file and directory management for Webpack builds",
   "main": "index.js",
   "scripts": {
@@ -28,6 +28,7 @@
     "babel-preset-es2015-rollup": "^3.0.0",
     "cpr": "^2.2.0",
     "eslint": "^4.5.0",
+    "rimraf": "^2.6.1",
     "rollup": "^0.49.1",
     "rollup-plugin-babel": "^3.0.2",
     "webpack": "^3.5.5",

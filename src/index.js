@@ -1,4 +1,5 @@
 const cpr = require('cpr');
+const rimraf = require('rimraf');
 
 class FileManagerPlugin {
   
@@ -61,6 +62,14 @@ class FileManagerPlugin {
           break;
         
         case 'delete':
+
+          fileOptions.forEach(path => {
+
+            rimraf(path, { }, (response) => {
+              // handle error
+            });
+
+          });
 
           break;
 
