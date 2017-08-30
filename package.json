@@ -1,6 +1,6 @@
 {
   "name": "filemanager-webpack-plugin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Cross environment file and directory management for Webpack builds",
   "main": "lib/index.js",
   "scripts": {
