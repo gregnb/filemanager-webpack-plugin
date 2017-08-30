@@ -21,7 +21,8 @@ module.exports = {
     new FileManagerPlugin({
       onEnd: {
         copy: [
-          { 'src', 'destination' }
+          { source: '/path/from', destination: '/path/to' },
+          { source: '/path/fromfile.txt', destination: '/path/tofile.txt' }
         ],
         delete: [
          '/path/to/file.txt',
@@ -49,4 +50,4 @@ new FileManagerPlugin(object)
 
 |Name|Description|Example
 |:--:|:----------|:-----|
-|**`copy`**|Copy individual files or entire directories from a source folder to a destination folder|copy: [<br /> { 'dist/bundle.js', '/home/web/js/'<br /> }
+|**`copy`**|Copy individual files or entire directories from a source folder to a destination folder|copy: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }
