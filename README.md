@@ -1,3 +1,8 @@
+
+<div align="center">
+  <img src="https://user-images.githubusercontent.com/19170080/29996498-a5ed1944-8fcd-11e7-8729-625eb997dbfe.png" />
+</div>
+
 # Webpack File Manager Plugin
 
 [![Build Status](https://travis-ci.org/gregnb/filemanager-webpack-plugin.svg?branch=master)](https://travis-ci.org/gregnb/filemanager-webpack-plugin)
