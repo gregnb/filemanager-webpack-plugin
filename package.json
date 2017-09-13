@@ -1,12 +1,12 @@
 {
   "name": "filemanager-webpack-plugin",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "Cross environment file and directory management for Webpack builds",
   "main": "lib/index.js",
   "scripts": {
     "build": "rollup -c",
     "webpack": "webpack --progress",
-    "webpack-dev-server": "webpack-dev-server --progress"
+    "webpack-dev-server": "webpack-dev-server --colors --progress"
   },
   "repository": {
     "type": "git",

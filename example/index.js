@@ -1,5 +1,4 @@
 /* simple dummy project */
-import "./style.css";
 
 const test = () => {
 }

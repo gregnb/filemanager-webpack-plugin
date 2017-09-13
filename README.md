@@ -9,7 +9,7 @@
 [![dependencies Status](https://david-dm.org/gregnb/filemanager-webpack-plugin/status.svg)](https://david-dm.org/gregnb/filemanager-webpack-plugin)
 [![npm version](https://badge.fury.io/js/filemanager-webpack-plugin.svg)](https://badge.fury.io/js/filemanager-webpack-plugin)
 
-This plugin allows you to manage files and directories before or after Webpack builds.  
+This Webpack plugin allows you to copy, move, delete files and directories before and after builds
 
 
 ## Install

@@ -123,6 +123,8 @@ class FileManagerPlugin {
         this.parseFileOptions(this.options.onEnd);
       }
 
+      callback();
+   
     });
 
   }
