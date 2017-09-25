@@ -1,7 +1,7 @@
 {
   "name": "filemanager-webpack-plugin",
-  "version": "1.0.7",
-  "description": "Cross environment file and directory management for Webpack builds",
+  "version": "1.0.8",
+  "description": "This Webpack plugin allows you to copy, move, delete files and directories before and after builds",
   "main": "lib/index.js",
   "scripts": {
     "build": "rollup -c",
