@@ -36,6 +36,16 @@ class FileManagerPlugin {
 
   }
 
+  checkOptions(stage) {
+
+    if (this.options[stage] && Array.isArray(this.options[stage])) {
+      this.options[stage].map(opts => this.parseFileOptions(opts));
+    } else {
+      this.parseFileOptions(this.options[stage]);
+    }
+
+  }
+
   parseFileOptions(options) {
 
     const optKeys = Object.keys(options);
@@ -99,6 +109,7 @@ class FileManagerPlugin {
  
   }
 
+
   apply(compiler) {
 
     compiler.plugin("compilation", (comp) => {
@@ -107,9 +118,7 @@ class FileManagerPlugin {
         console.log("FileManagerPlugin: onStart");
       }
 
-      if (this.options.onStart && Object.keys(this.options.onStart).length) {
-        this.parseFileOptions(this.options.onStart);
-      }
+      this.checkOptions("onStart");
 
     });
 
@@ -119,9 +128,7 @@ class FileManagerPlugin {
         console.log("FileManagerPlugin: onEnd");
       }
 
-      if (this.options.onEnd && Object.keys(this.options.onEnd).length) {
-        this.parseFileOptions(this.options.onEnd);
-      }
+      this.checkOptions("onEnd");
 
       callback();
    

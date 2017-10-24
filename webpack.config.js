@@ -25,6 +25,21 @@ module.exports = {
           { source: "./dist/bundle.js", destination: "./newfile.js" }
         ]
       }
+      /*
+      onEnd: [
+        {
+          copy: [
+            { source: "./dist/bundle.js", destination: "./newfile.js" }
+          ]
+        },
+        {
+          delete: [
+            "./dist/bundle.js"
+          ]
+        }
+      ]
+      */
+
     }),
     new webpack.HotModuleReplacementPlugin()
   ]
