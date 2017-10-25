@@ -38,17 +38,34 @@ class FileManagerPlugin {
 
   checkOptions(stage) {
 
-    if (this.options[stage] && Array.isArray(this.options[stage])) {
-      this.options[stage].map(opts => this.parseFileOptions(opts));
-    } else {
-      this.parseFileOptions(this.options[stage]);
+    if (this.options.verbose && Object.keys(this.options[stage]).length) {
+      console.log(`FileManagerPlugin: processing ${stage} event`);
     }
+
+    let operationList = [];
+
+    if (this.options[stage] && Array.isArray(this.options[stage])) {
+      this.options[stage].map(opts => operationList.push(...this.parseFileOptions(opts, true)));
+    } else {
+      operationList.push(...this.parseFileOptions(this.options[stage]));
+    }
+
+    if(operationList.length) {
+
+      operationList.reduce((previous, fn) => {
+        return previous.then(retVal => fn(retVal));
+      }, Promise.resolve());
+
+    }
+
 
   }
 
-  parseFileOptions(options) {
+  parseFileOptions(options, preserveOrder = false) {
 
     const optKeys = Object.keys(options);
+
+    let commandOrder = [];
 
     for (let i = 0; i < optKeys.length; i++) {
 
@@ -59,44 +76,78 @@ class FileManagerPlugin {
       
         case 'copy':
 
-          fileOptions.forEach(command => {
-          
+          for(let key in fileOptions) {
+
+            const command = fileOptions[key];
+
             if (!command.source || !command.destination)
               return;
 
-            cpr(command.source, command.destination, this.cprOptions, (err, files) => {
-              // handle error
-            });
+            
+            commandOrder.push(() => new Promise((resolve, reject) => {
 
-          });          
+              if (this.options.verbose) {
+                console.log(`  - FileManagerPlugin: Start copy source: ${command.source} to destination: ${command.destination}`)
+              }
+
+              cpr(command.source, command.destination, this.cprOptions, (err, files) => {
+                
+                if (this.options.verbose) {
+                  console.log(`  - FileManagerPlugin: Finished copy source: ${command.source} to destination: ${command.destination}`)
+                }
+
+                resolve(err);
+              
+              });
+
+            }));
+            
+          }          
 
           break;
         
         
         case 'move':
 
-          fileOptions.forEach(command => {
+          for(let key in fileOptions) {
           
+            const command = fileOptions[key];
+
             if (!command.source || !command.destination)
               return;
 
-            mv(command.source, command.destination, (err) => {
-              // handle error
-            });
+            commandOrder.push(() => new Promise((resolve, reject) => {
+              mv(command.source, command.destination, (err) => {
+                resolve(err);
+              });
+            }));
 
-          });
+          }
 
           break;
 
         case 'delete':
 
-          fileOptions.forEach(path => {
+          for(let key in fileOptions) {
 
-            rimraf(path, { }, (response) => {
-              // handle error
-            });
+            const path = fileOptions[key];
 
-          });
+            commandOrder.push(() => new Promise((resolve, reject) => {
+
+              if (this.options.verbose) {
+                console.log(`  - FileManagerPlugin: Starting delete path ${path}`)
+              }
+
+              rimraf(path, { }, (response) => {
+                if (this.options.verbose && response === null) {
+                  console.log(`  - FileManagerPlugin: Finished delete path ${path}`)
+                }
+                resolve();
+              });
+
+            }));
+
+          }
 
           break;
 
@@ -107,6 +158,8 @@ class FileManagerPlugin {
 
     }
  
+    return commandOrder;
+
   }
 
 
@@ -114,19 +167,11 @@ class FileManagerPlugin {
 
     compiler.plugin("compilation", (comp) => {
 
-      if (this.options.verbose) {
-        console.log("FileManagerPlugin: onStart");
-      }
-
       this.checkOptions("onStart");
 
     });
 
     compiler.plugin('after-emit', (compliation, callback) => {
-
-      if (this.options.verbose) {
-        console.log("FileManagerPlugin: onEnd");
-      }
 
       this.checkOptions("onEnd");
 
