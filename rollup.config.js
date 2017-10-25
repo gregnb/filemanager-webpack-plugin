@@ -12,15 +12,6 @@ export default {
             "modules": false
           }
         ]
-      ],
-      "plugins": [
-        "external-helpers",
-        ["transform-runtime", {
-          "helpers": false,
-          "polyfill": false,
-          "regenerator": true,
-          "moduleName": "rollup-regenerator-runtime"
-        }]
       ]
     }),
     nodeResolve({
