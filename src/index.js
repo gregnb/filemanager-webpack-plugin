@@ -31,9 +31,14 @@ class FileManagerPlugin {
         defaultOptions[key] = userOptions[key];
       }
     }
+    /* override cpr default options */
+    for (const key in this.cprOptions) {
+      if (userOptions.hasOwnProperty(key)) {
+        this.cprOptions[key] = userOptions[key];
+      }
+    }
 
     return defaultOptions;
-
   }
 
   checkOptions(stage) {
