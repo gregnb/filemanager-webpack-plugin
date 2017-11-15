@@ -5,9 +5,6 @@ const mv = require('mv');
 class FileManagerPlugin {
   
   constructor(options) {
-    
-    this.options = this.setOptions(options);
-    this.isWin = /^win/.test(process.platform);
 
     /* cpr options */
     this.cprOptions = {
@@ -15,6 +12,9 @@ class FileManagerPlugin {
       overwrite: true,
       confirm: true 
     };
+    
+    this.options = this.setOptions(options);
+    this.isWin = /^win/.test(process.platform);
     
   }
 
