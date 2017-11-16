@@ -102,5 +102,3 @@ new FileManagerPlugin(object)
 |**`delete`**|Delete individual files or entire directories. |delete: [<br />'file.txt', '/path/to'<br />]
 |**`move`**|Move individual files or entire directories. |move: <br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }
 |**`mkdir`**|Create a directory path. Think mkdir -p |mkdir: [ <br />'/path/to/directory/', '/another/path/' <br/> ]
-|**`verbose`**|Enable verbose logging |verbose: true
-|**`moveWithMkdirp`**|Enable creating paths while moving. |moveWithMkdirp: true
