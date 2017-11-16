@@ -38,7 +38,7 @@
     "webpack-dev-server": "^2.7.1"
   },
   "dependencies": {
-    "cpr": "^2.2.0",
+    "cpr": "^3.0.1",
     "make-dir": "^1.1.0",
     "mv": "^2.1.1",
     "rimraf": "^2.6.1"
