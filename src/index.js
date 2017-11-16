@@ -1,6 +1,7 @@
 const cpr = require('cpr');
 const rimraf = require('rimraf');
 const mv = require('mv');
+const makeDir = require('make-dir');
 
 class FileManagerPlugin {
   
@@ -22,6 +23,7 @@ class FileManagerPlugin {
 
     const defaultOptions = {
       verbose: false,
+      moveWithMkdirp: false,
       onStart: {},
       onEnd: {}
     };
@@ -80,8 +82,12 @@ class FileManagerPlugin {
 
             const command = fileOptions[key];
 
-            if (!command.source || !command.destination)
+            if (!command.source || !command.destination) {
+              if (this.options.verbose) {
+                console.log('  - FileManagerPlugin: Warning - copy parameter has to be formated as follows: { source: <string>, destination: <string> }');
+              }
               return;
+            }
 
             
             commandOrder.push(() => new Promise((resolve, reject) => {
@@ -91,6 +97,9 @@ class FileManagerPlugin {
               }
 
               cpr(command.source, command.destination, this.cprOptions, (err, files) => {
+                if (err && this.options.verbose) {
+                  console.log('  - FileManagerPlugin: Error - copy failed', err);
+                }
                 
                 if (this.options.verbose) {
                   console.log(`  - FileManagerPlugin: Finished copy source: ${command.source} to destination: ${command.destination}`)
@@ -113,11 +122,28 @@ class FileManagerPlugin {
           
             const command = fileOptions[key];
 
-            if (!command.source || !command.destination)
+            if (!command.source || !command.destination) {
+              if (this.options.verbose) {
+                console.log('  - FileManagerPlugin: Warning - move parameter has to be formated as follows: { source: <string>, destination: <string> }');
+              }
               return;
+            }
 
             commandOrder.push(() => new Promise((resolve, reject) => {
-              mv(command.source, command.destination, (err) => {
+              
+              if (this.options.verbose) {
+                console.log(`  - FileManagerPlugin: Start move source: ${command.source} to destination: ${command.destination}`)
+              }
+
+              mv(command.source, command.destination, { mkdirp: this.options.moveWithMkdirp }, (err) => {
+                if (err && this.options.verbose) {
+                  console.log('  - FileManagerPlugin: Error - move failed', err);
+                }
+                
+                if (this.options.verbose) {
+                  console.log(`  - FileManagerPlugin: Finished move source: ${command.source} to destination: ${command.destination}`)
+                }
+
                 resolve(err);
               });
             }));
@@ -137,6 +163,13 @@ class FileManagerPlugin {
               if (this.options.verbose) {
                 console.log(`  - FileManagerPlugin: Starting delete path ${path}`)
               }
+              
+              if (typeof path !== 'string') {
+                if (this.options.verbose) {
+                  console.log('  - FileManagerPlugin: Warning - delete parameter has to be type of string. Process canceled.');
+                }
+                return;
+              }
 
               rimraf(path, { }, (response) => {
                 if (this.options.verbose && response === null) {
@@ -147,6 +180,28 @@ class FileManagerPlugin {
 
             }));
 
+          }
+
+          break;
+          
+        case 'mkdir':
+        
+          for(let key in fileOptions) {
+            
+            const path = fileOptions[key];
+            
+            if (this.options.verbose) {
+              console.log(`  - FileManagerPlugin: Creating path ${path}`)
+            }
+            
+            if (typeof path !== 'string') {
+              if (this.options.verbose) {
+                console.log('  - FileManagerPlugin: Warning - mkdir parameter has to be type of string. Process canceled.');
+              }
+              return;
+            }
+            
+            commandOrder.push(() => makeDir(path));
           }
 
           break;
