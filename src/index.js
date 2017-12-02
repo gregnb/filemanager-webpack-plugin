@@ -95,10 +95,16 @@ class FileManagerPlugin {
 
               fs.lstat(command.source, (err, stats) => {
                 
+                if (this.options.verbose) {
+                  console.log(`  - FileManagerPlugin: Start copy source: ${sourceDir} to destination: ${command.destination}`)
+                }
+
                 if(stats.isFile()) {
 
                   fs.copyFile(command.source, command.destination, (err) => {
-                    console.log(`  - FileManagerPlugin: Start copy source file: ${command.source} to destination file: ${command.destination}`)
+                    if (err && this.options.verbose) {
+                      console.log(`  - FileManagerPlugin: Start copy source file: ${command.source} to destination file: ${command.destination}`)
+                    }
                   });
 
                 } else {
@@ -108,10 +114,6 @@ class FileManagerPlugin {
                   // If a user does not provide a glob pattern just append one of **/*
                   if (!command.source.includes("*")) {
                     sourceDir += ((sourceDir.substr(-1) !== "/") ? "/" : "") + "**/*";
-                  }
-
-                  if (this.options.verbose) {
-                    console.log(`  - FileManagerPlugin: Start copy source: ${sourceDir} to destination: ${command.destination}`)
                   }
 
                   cpx.copy(sourceDir, command.destination, this.cpxOptions, (err) => {
