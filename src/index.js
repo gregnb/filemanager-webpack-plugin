@@ -1,4 +1,5 @@
-const cpr = require('cpr');
+const cpx = require('cpx');
+const fs = require('fs');
 const rimraf = require('rimraf');
 const mv = require('mv');
 const makeDir = require('make-dir');
@@ -10,11 +11,11 @@ class FileManagerPlugin {
     this.options = this.setOptions(options);
     this.isWin = /^win/.test(process.platform);
 
-    /* cpr options */
-    this.cprOptions = {
-      deleteFirst: true,
-      overwrite: true,
-      confirm: true 
+    /* cpx options */
+    this.cpxOptions = {
+      clean: false,
+      includeEmptyDirs: true,
+      update: false 
     };
     
   }
@@ -92,21 +93,42 @@ class FileManagerPlugin {
             
             commandOrder.push(() => new Promise((resolve, reject) => {
 
-              if (this.options.verbose) {
-                console.log(`  - FileManagerPlugin: Start copy source: ${command.source} to destination: ${command.destination}`)
-              }
-
-              cpr(command.source, command.destination, this.cprOptions, (err, files) => {
-                if (err && this.options.verbose) {
-                  console.log('  - FileManagerPlugin: Error - copy failed', err);
-                }
+              fs.lstat(command.source, (err, stats) => {
                 
-                if (this.options.verbose) {
-                  console.log(`  - FileManagerPlugin: Finished copy source: ${command.source} to destination: ${command.destination}`)
+                if(stats.isFile()) {
+
+                  fs.copyFile(command.source, command.destination, (err) => {
+                    console.log(`  - FileManagerPlugin: Start copy source file: ${command.source} to destination file: ${command.destination}`)
+                  });
+
+                } else {
+
+                  let sourceDir = command.source;
+
+                  // If a user does not provide a glob pattern just append one of **/*
+                  if (!command.source.includes("*")) {
+                    sourceDir += ((sourceDir.substr(-1) !== "/") ? "/" : "") + "**/*";
+                  }
+
+                  if (this.options.verbose) {
+                    console.log(`  - FileManagerPlugin: Start copy source: ${sourceDir} to destination: ${command.destination}`)
+                  }
+
+                  cpx.copy(sourceDir, command.destination, this.cpxOptions, (err) => {
+                    if (err && this.options.verbose) {
+                      console.log('  - FileManagerPlugin: Error - copy failed', err);
+                    }
+                    
+                    if (this.options.verbose) {
+                      console.log(`  - FileManagerPlugin: Finished copy source: ${sourceDir} to destination: ${command.destination}`)
+                    }
+
+                    resolve(err);
+                  
+                  });
+
                 }
 
-                resolve(err);
-              
               });
 
             }));

@@ -23,7 +23,7 @@ module.exports = {
           { source: "./dist", destination: "./testing1" },
           { source: "./dist", destination: "./testing2" },
           { source: "./dist/bundle.js", destination: "./newfile.js" }
-        ]
+        ],
       }
       /*
       onEnd: [
