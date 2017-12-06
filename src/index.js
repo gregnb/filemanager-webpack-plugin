@@ -64,6 +64,25 @@ class FileManagerPlugin {
 
   }
 
+  copyDirectory(source, destination, resolve, reject) {
+      
+    console.log(source, destination);
+    cpx.copy(source, destination, this.cpxOptions, (err) => {
+      if (err && this.options.verbose) {
+        console.log('  - FileManagerPlugin: Error - copy failed', err);
+        reject(err);
+      }
+      
+      if (this.options.verbose) {
+        console.log(`  - FileManagerPlugin: Finished copy source: ${sourceDir} to destination: ${command.destination}`)
+      }
+
+      resolve();
+    
+    });
+
+  }
+
   parseFileOptions(options, preserveOrder = false) {
 
     const optKeys = Object.keys(options);
@@ -89,49 +108,44 @@ class FileManagerPlugin {
               }
               return;
             }
-
             
             commandOrder.push(() => new Promise((resolve, reject) => {
 
-              fs.lstat(command.source, (err, stats) => {
-                
-                if (this.options.verbose) {
-                  console.log(`  - FileManagerPlugin: Start copy source: ${sourceDir} to destination: ${command.destination}`)
-                }
+              // if source is a file, just copyFile()
+              // if source is a NOT a glob pattern, simply append **/*
+              if (!command.source.includes("*")) {            
 
-                if(stats.isFile()) {
-
-                  fs.copyFile(command.source, command.destination, (err) => {
-                    if (err && this.options.verbose) {
-                      console.log(`  - FileManagerPlugin: Start copy source file: ${command.source} to destination file: ${command.destination}`)
-                    }
-                  });
-
-                } else {
-
-                  let sourceDir = command.source;
-
-                  // If a user does not provide a glob pattern just append one of **/*
-                  if (!command.source.includes("*")) {
-                    sourceDir += ((sourceDir.substr(-1) !== "/") ? "/" : "") + "**/*";
+                fs.lstat(command.source, (err, stats) => {
+                  
+                  if (this.options.verbose) {
+                    console.log(`  - FileManagerPlugin: Start copy source: ${sourceDir} to destination: ${command.destination}`)
                   }
 
-                  cpx.copy(sourceDir, command.destination, this.cpxOptions, (err) => {
-                    if (err && this.options.verbose) {
-                      console.log('  - FileManagerPlugin: Error - copy failed', err);
-                    }
-                    
-                    if (this.options.verbose) {
-                      console.log(`  - FileManagerPlugin: Finished copy source: ${sourceDir} to destination: ${command.destination}`)
-                    }
+                  if(stats.isFile()) {
 
-                    resolve(err);
-                  
-                  });
+                    fs.copyFile(command.source, command.destination, (err) => {
+                      if (err && this.options.verbose) {
+                        console.log(`  - FileManagerPlugin: Start copy source file: ${command.source} to destination file: ${command.destination}`)
+                      }
+                      resolve(err)
+                    });
 
-                }
+                  } else {
 
-              });
+                    let sourceDir = command.source;
+                    sourceDir += ((sourceDir.substr(-1) !== "/") ? "/" : "") + "**/*";
+
+                    this.copyDirectory(sourceDir, command.destination, resolve, reject);
+           
+                  }
+
+                });
+
+              } else {
+     
+                this.copyDirectory(command.source, command.destination, resolve, reject);
+
+              }
 
             }));
             
@@ -162,13 +176,14 @@ class FileManagerPlugin {
               mv(command.source, command.destination, { mkdirp: this.options.moveWithMkdirp }, (err) => {
                 if (err && this.options.verbose) {
                   console.log('  - FileManagerPlugin: Error - move failed', err);
+                  reject(err);
                 }
                 
                 if (this.options.verbose) {
                   console.log(`  - FileManagerPlugin: Finished move source: ${command.source} to destination: ${command.destination}`)
                 }
 
-                resolve(err);
+                resolve();
               });
             }));
 
@@ -192,7 +207,7 @@ class FileManagerPlugin {
                 if (this.options.verbose) {
                   console.log('  - FileManagerPlugin: Warning - delete parameter has to be type of string. Process canceled.');
                 }
-                return;
+                reject();
               }
 
               rimraf(path, { }, (response) => {
