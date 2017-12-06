@@ -1,5 +1,6 @@
 const cpx = require('cpx');
 const fs = require('fs');
+const fsExtra = require('fs-extra')
 const rimraf = require('rimraf');
 const mv = require('mv');
 const makeDir = require('make-dir');
@@ -65,8 +66,11 @@ class FileManagerPlugin {
   }
 
   copyDirectory(source, destination, resolve, reject) {
-      
-    console.log(source, destination);
+  
+    if (this.options.verbose) {
+      console.log(`  - FileManagerPlugin: Start copy source file: ${source} to destination file: ${destination}`);
+    }
+
     cpx.copy(source, destination, this.cpxOptions, (err) => {
       if (err && this.options.verbose) {
         console.log('  - FileManagerPlugin: Error - copy failed', err);
@@ -74,7 +78,7 @@ class FileManagerPlugin {
       }
       
       if (this.options.verbose) {
-        console.log(`  - FileManagerPlugin: Finished copy source: ${sourceDir} to destination: ${command.destination}`)
+        console.log(`  - FileManagerPlugin: Finished copy source: ${source} to destination: ${destination}`)
       }
 
       resolve();
@@ -117,24 +121,24 @@ class FileManagerPlugin {
 
                 fs.lstat(command.source, (err, stats) => {
                   
-                  if (this.options.verbose) {
-                    console.log(`  - FileManagerPlugin: Start copy source: ${sourceDir} to destination: ${command.destination}`)
-                  }
-
                   if(stats.isFile()) {
 
-                    fs.copyFile(command.source, command.destination, (err) => {
-                      if (err && this.options.verbose) {
-                        console.log(`  - FileManagerPlugin: Start copy source file: ${command.source} to destination file: ${command.destination}`)
-                      }
-                      resolve(err)
+                    if (this.options.verbose) {
+                      console.log(`  - FileManagerPlugin: Start copy source: ${command.source} to destination: ${command.destination}`);
+                    }
+
+                    fsExtra.copy(command.source, command.destination, (err) => {
+                      
+                      if (err) 
+                        reject(err);
+                      
+                      resolve();
+                    
                     });
 
                   } else {
 
-                    let sourceDir = command.source;
-                    sourceDir += ((sourceDir.substr(-1) !== "/") ? "/" : "") + "**/*";
-
+                    const sourceDir = command.source + ((command.source.substr(-1) !== "/") ? "/" : "") + "**/*";
                     this.copyDirectory(sourceDir, command.destination, resolve, reject);
            
                   }
@@ -170,17 +174,19 @@ class FileManagerPlugin {
             commandOrder.push(() => new Promise((resolve, reject) => {
               
               if (this.options.verbose) {
-                console.log(`  - FileManagerPlugin: Start move source: ${command.source} to destination: ${command.destination}`)
+                console.log(`  - FileManagerPlugin: Start move source: ${command.source} to destination: ${command.destination}`);
               }
 
               mv(command.source, command.destination, { mkdirp: this.options.moveWithMkdirp }, (err) => {
-                if (err && this.options.verbose) {
-                  console.log('  - FileManagerPlugin: Error - move failed', err);
+                if (err) {
+                  if(this.options.verbose) {
+                    console.log('  - FileManagerPlugin: Error - move failed', err);
+                  }
                   reject(err);
                 }
                 
                 if (this.options.verbose) {
-                  console.log(`  - FileManagerPlugin: Finished move source: ${command.source} to destination: ${command.destination}`)
+                  console.log(`  - FileManagerPlugin: Finished move source: ${command.source} to destination: ${command.destination}`);
                 }
 
                 resolve();

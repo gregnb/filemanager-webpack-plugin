@@ -22,7 +22,9 @@ module.exports = {
         copy: [
           { source: "./dist/*", destination: "./testing1" },
           { source: "./dist", destination: "./testing2" },
-          { source: "./dist/bundle.js", destination: "./newfile.js" }
+          { source: "./dist/bundle.js", destination: "./newfile.js" },
+          { source: "./dist/bundle.js", destination: "./newfile2.js" },
+          { source: "./dist/bundle.js", destination: "./newfile3.js" }
         ],
       }
       /*
