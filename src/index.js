@@ -117,7 +117,10 @@ class FileManagerPlugin {
 
               // if source is a file, just copyFile()
               // if source is a NOT a glob pattern, simply append **/*
-              if (!command.source.includes("*")) {            
+              const fileRegex = /(\*|\{+|\}+)/g;
+              const matches = fileRegex.exec(command.source);
+
+              if (matches === null) {            
 
                 fs.lstat(command.source, (err, stats) => {
                   
@@ -146,7 +149,7 @@ class FileManagerPlugin {
                 });
 
               } else {
-     
+              
                 this.copyDirectory(command.source, command.destination, resolve, reject);
 
               }

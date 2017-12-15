@@ -4,7 +4,6 @@ const webpack = require('webpack');
 const FileManagerPlugin = require('./lib');
 
 module.exports = {
-  watch: true,
   entry: path.resolve(__dirname, 'example/index.js'),
   stats: "verbose",
   output: {
@@ -20,11 +19,12 @@ module.exports = {
     new FileManagerPlugin({
       onEnd: {
         copy: [
-          { source: "./dist/*", destination: "./testing1" },
-          { source: "./dist", destination: "./testing2" },
-          { source: "./dist/bundle.js", destination: "./newfile.js" },
-          { source: "./dist/bundle.js", destination: "./newfile2.js" },
-          { source: "./dist/bundle.js", destination: "./newfile3.js" }
+           { source: "./dist/*", destination: "./testing/testing1" },
+           { source: "./dist/**/*", destination: "./testing/testing2"},
+           { source: "./dist", destination: "./testing/testing3" },
+           { source: "./dist/**/*.{html,js}", destination: "./testing/testing4" },
+           { source: "./dist/{fake,bundle}.js", destination: "./testing/testing5" },
+           { source: "./dist/bundle.js", destination: "./testing/newfile.js" },
         ],
       }
       /*

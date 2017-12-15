@@ -6,13 +6,19 @@ export default {
   plugins: [
     babel({
       "presets": [
-        [
-          "es2015",
-          {
-            "modules": false
-          }
-        ]
-      ]
+        ["env", {
+          "targets": {
+            "browsers": ["last 2 versions", "ie >= 10"]
+          },
+          "debug": false,
+          "modules": false
+        }]
+      ],
+      "plugins": [
+        "external-helpers",
+        "babel-plugin-transform-class-properties"
+      ],
+      babelrc: false
     }),
     nodeResolve({
       jsnext: true
