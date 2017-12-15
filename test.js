@@ -6,13 +6,6 @@ import delay from 'delay';
 import options from './webpack.config.js';
 import rimraf from 'rimraf';
 
-//  { source: "./dist/*", destination: "./testing/testing1" },
-//  { source: "./dist/**/*.{js}", destination: "./testing"},
-//  { source: "./dist", destination: "./testing/testing2" },
-//  { source: "./dist/bundle.js", destination: "./testing/newfile.js" },
-//  { source: "./dist/bundle.js", destination: "./testing/newfile2.js" },
-//  { source: "./dist/bundle.js", destination: "./testing/newfile3.js" }
-
 test.before(async () => {
   console.log("running webpack build..");
   webpack(options, function(err, stats) {
