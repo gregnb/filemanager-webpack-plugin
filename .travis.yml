@@ -13,4 +13,5 @@ install:
 - npm install
 
 script:
-- npm test
+ - npm run -s build
+ - npm run -s test
