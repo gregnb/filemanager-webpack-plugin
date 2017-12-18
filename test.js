@@ -12,7 +12,7 @@ test.before(async () => {
     if (err) return done(err);
     if (stats.hasErrors()) return done(new Error(stats.toString()));
   });
-  await delay(2000);
+  await delay(3000);
 });
 
 test.serial('should successfully copy when { source: "/source/*", destination: "/dest" } provided', t => {
@@ -63,7 +63,12 @@ test.serial('should successfully copy when { source: "/sourceFile.js", destinati
 
 });
 
-test.after(async () => {
-  rimraf('./testing', () => {});
+test.serial('should successfully copy when { source: "/sourceFile.js", destination: "/destFolder" } provided', t => {
+
+  const result = fs.existsSync("./testing/bundle.js");
+  t.true(result);
+  t.pass();
+
 });
+
 

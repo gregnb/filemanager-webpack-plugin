@@ -1,5 +1,6 @@
 const cpx = require('cpx');
 const fs = require('fs');
+const path = require('path');
 const fsExtra = require('fs-extra')
 const rimraf = require('rimraf');
 const mv = require('mv');
@@ -122,29 +123,37 @@ class FileManagerPlugin {
 
               if (matches === null) {            
 
-                fs.lstat(command.source, (err, stats) => {
-                  
-                  if(stats.isFile()) {
+                fs.lstat(command.source, (sErr, sStats) => {
 
-                    if (this.options.verbose) {
-                      console.log(`  - FileManagerPlugin: Start copy source: ${command.source} to destination: ${command.destination}`);
+                  fs.lstat(command.destination, (dErr, dStats) => {
+
+                    if(sStats.isFile()) {
+
+                      const destination = dStats && dStats.isDirectory() 
+                        ? command.destination + "/" + path.basename(command.source)
+                        : command.destination;
+
+                      if (this.options.verbose) {
+                        console.log(`  - FileManagerPlugin: Start copy source: ${command.source} to destination: ${destination}`);
+                      }
+
+                      fsExtra.copy(command.source, destination, (err) => {
+                        
+                        if (err) 
+                          reject(err);
+                        
+                        resolve();
+                      
+                      });
+
+                    } else {
+
+                      const sourceDir = command.source + ((command.source.substr(-1) !== "/") ? "/" : "") + "**/*";
+                      this.copyDirectory(sourceDir, command.destination, resolve, reject);
+             
                     }
 
-                    fsExtra.copy(command.source, command.destination, (err) => {
-                      
-                      if (err) 
-                        reject(err);
-                      
-                      resolve();
-                    
-                    });
-
-                  } else {
-
-                    const sourceDir = command.source + ((command.source.substr(-1) !== "/") ? "/" : "") + "**/*";
-                    this.copyDirectory(sourceDir, command.destination, resolve, reject);
-           
-                  }
+                  });
 
                 });
 
