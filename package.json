@@ -4,8 +4,9 @@
   "description": "This Webpack plugin allows you to copy, move, delete files and directories before and after builds",
   "main": "lib/index.js",
   "scripts": {
-    "build": "rollup -c",
+    "build": "npm run prettier && rollup -c",
     "test": "rimraf testing && ava --verbose test.js",
+    "prettier": "find src/ -name \"*.js\" | xargs prettier --write",
     "webpack": "webpack --progress",
     "webpack-dev-server": "webpack-dev-server --colors --progress"
   },
@@ -32,6 +33,7 @@
     "babel-preset-env": "^1.6.1",
     "delay": "^2.0.0",
     "eslint": "^4.5.0",
+    "prettier": "^1.9.2",
     "rollup": "^0.49.1",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
