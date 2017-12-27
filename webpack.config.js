@@ -24,8 +24,8 @@ module.exports = {
            { source: "./dist", destination: "./testing/testing3" },
            { source: "./dist/**/*.{html,js}", destination: "./testing/testing4" },
            { source: "./dist/{fake,bundle}.js", destination: "./testing/testing5" },
-           { source: "./dist/bundle.js", destination: "./testing" },
            { source: "./dist/bundle.js", destination: "./testing/newfile.js" },
+           { source: "./dist/bundle.js", destination: "./testing/testing6" }
         ],
       }
       /*

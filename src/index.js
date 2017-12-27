@@ -136,15 +136,29 @@ class FileManagerPlugin {
                       if (this.options.verbose) {
                         console.log(`  - FileManagerPlugin: Start copy source: ${command.source} to destination: ${destination}`);
                       }
-
-                      fsExtra.copy(command.source, destination, (err) => {
-                        
-                        if (err) 
-                          reject(err);
-                        
-                        resolve();
                       
-                      });
+                      /*
+                       * If the supplied destination is a directory copy inside.
+                       * If the supplied destination is a directory that does not exist yet create it & copy inside                      
+                       */
+
+                      const pathInfo = path.parse(destination);
+
+                      const execCopy = (src, dest) => {
+                        fsExtra.copy(src, dest, (err) => {                          
+                          if (err) 
+                            reject(err);                          
+                          resolve();                        
+                        });                        
+                      };
+
+                      if (pathInfo.ext === '') {
+                        makeDir(destination).then(mPath => {
+                          execCopy(command.source, destination + "/" + path.basename(command.source));
+                        });
+                      } else {
+                        execCopy(command.source, destination);
+                      }
 
                     } else {
 

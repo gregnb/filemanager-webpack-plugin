@@ -63,9 +63,9 @@ test.serial('should successfully copy when { source: "/sourceFile.js", destinati
 
 });
 
-test.serial('should successfully copy when { source: "/sourceFile.js", destination: "/destFolder" } provided', t => {
+test.serial('should successfully first create destination if it does not exist and copy inside destination when { source: "/sourceFile.js", destination: "/destFolder" } provided', t => {
 
-  const result = fs.existsSync("./testing/bundle.js");
+  const result = fs.existsSync("./testing/testing6/bundle.js");
   t.true(result);
   t.pass();
 
