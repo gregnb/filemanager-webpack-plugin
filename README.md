@@ -101,7 +101,7 @@ new FileManagerPlugin(object)
 
 |Name|Description|Example
 |:--:|:----------|:-----|
-|**`copy`**|Copy individual files or entire directories from a source folder to a destination folder. Also supports glob pattern |copy: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }
+|**`copy`**|Copy individual files or entire directories from a source folder to a destination folder. Also supports glob pattern |copy: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }<br />]
 |**`delete`**|Delete individual files or entire directories. |delete: [<br />'file.txt', '/path/to'<br />]
-|**`move`**|Move individual files or entire directories. |move: <br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }
+|**`move`**|Move individual files or entire directories. |move: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }<br />]
 |**`mkdir`**|Create a directory path. Think mkdir -p |mkdir: [ <br />'/path/to/directory/', '/another/path/' <br/> ]
