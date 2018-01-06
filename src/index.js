@@ -75,6 +75,10 @@ class FileManagerPlugin {
     });
   }
 
+  replaceHash(filename) {
+    return filename.replace("[hash]", this.fileHash);
+  }
+
   parseFileOptions(options, preserveOrder = false) {
     const optKeys = Object.keys(options);
 
@@ -87,7 +91,10 @@ class FileManagerPlugin {
       switch (fileAction) {
         case "copy":
           for (let key in fileOptions) {
-            const command = fileOptions[key];
+            const command = {
+              source: this.replaceHash(fileOptions[key].source),
+              destination: this.replaceHash(fileOptions[key].destination),
+            };
 
             if (!command.source || !command.destination) {
               if (this.options.verbose) {
@@ -161,7 +168,10 @@ class FileManagerPlugin {
 
         case "move":
           for (let key in fileOptions) {
-            const command = fileOptions[key];
+            const command = {
+              source: this.replaceHash(fileOptions[key].source),
+              destination: this.replaceHash(fileOptions[key].destination),
+            };
 
             if (!command.source || !command.destination) {
               if (this.options.verbose) {
@@ -209,7 +219,7 @@ class FileManagerPlugin {
 
         case "delete":
           for (let key in fileOptions) {
-            const path = fileOptions[key];
+            const path = this.replaceHash(fileOptions[key]);
 
             commandOrder.push(
               () =>
@@ -241,7 +251,7 @@ class FileManagerPlugin {
 
         case "mkdir":
           for (let key in fileOptions) {
-            const path = fileOptions[key];
+            const path = this.replaceHash(fileOptions[key]);
 
             if (this.options.verbose) {
               console.log(`  - FileManagerPlugin: Creating path ${path}`);
@@ -270,13 +280,13 @@ class FileManagerPlugin {
   }
 
   apply(compiler) {
-    compiler.plugin("compilation", comp => {
+    compiler.plugin("compilation", compliation => {
       this.checkOptions("onStart");
     });
 
     compiler.plugin("after-emit", (compliation, callback) => {
+      this.fileHash = compliation.hash;
       this.checkOptions("onEnd");
-
       callback();
     });
   }

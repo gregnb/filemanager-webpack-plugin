@@ -34,7 +34,8 @@ module.exports = {
           { source: '/path/**/*.js', destination: '/path' },
           { source: '/path/fromfile.txt', destination: '/path/tofile.txt' },
           { source: '/path/**/*.{html,js}', destination: '/path/to' },
-          { source: '/path/{file1,file2}.js', destination: '/path/to' }
+          { source: '/path/{file1,file2}.js', destination: '/path/to' },
+          { source: '/path/file-[hash].js', destination: '/path/to' }
         ],
         move: [
           { source: '/path/from', destination: '/path/to' },

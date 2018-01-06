@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 const FileManagerPlugin = require('./lib');
 
-module.exports = {
+const plainConfig = {
   entry: path.resolve(__dirname, 'example/index.js'),
   stats: "verbose",
   output: {
@@ -47,3 +47,32 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin()
   ]
 };
+
+const hashConfig = {
+  entry: path.resolve(__dirname, 'example/index.js'),
+  stats: "verbose",
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle-[hash].js'
+  },
+  module: {
+    loaders: [
+      { test: /\.css$/, loader: 'style!css' }
+    ]
+  },
+  plugins: [
+    new FileManagerPlugin({
+      onEnd: {
+        copy: [
+           { source: "./dist/bundle-[hash].js", destination: "./testing/hashed-bundle.js" }
+        ],
+      }
+    })
+  ]
+};
+
+module.exports = [
+  plainConfig,
+  hashConfig
+];
+
