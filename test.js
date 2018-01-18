@@ -5,6 +5,7 @@ import webpack from 'webpack';
 import delay from 'delay';
 import options from './webpack.config.js';
 import rimraf from 'rimraf';
+import FileManagerPlugin from './lib';
 
 test.before(async () => {
   console.log("running webpack build..");
@@ -78,3 +79,43 @@ test.serial('should successfully copy a [hash] file name to destination when { s
   t.pass();
 
 });
+
+test.serial('should fail webpack build when string provided in delete function instead of array', async t => {
+
+  const baseConfig = getBasePlainConfig();
+  const configWithStringInDelete = Object.assign(baseConfig, {
+    plugins: [
+      new FileManagerPlugin({
+        onStart: {
+          delete: "string instead of array",
+        }
+      })
+    ]
+  });
+
+  webpack(configWithStringInDelete, function (err, stats) {
+    if (err || stats.hasErrors()) t.pass();
+    else t.fail();
+  });
+
+  await delay(1000);
+
+});
+
+function getBasePlainConfig() {
+
+  return {
+    entry: path.resolve(__dirname, 'example/index.js'),
+    stats: "verbose",
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'bundle.js'
+    },
+    module: {
+      loaders: [
+        { test: /\.css$/, loader: 'style!css' }
+      ]
+    }
+  };
+
+}
