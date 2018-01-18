@@ -218,6 +218,10 @@ class FileManagerPlugin {
           break;
 
         case "delete":
+          if (!Array.isArray(fileOptions)) {
+            throw Error(`  - FileManagerPlugin: Fail - delete parameters has to be type of 'strings array' but was '${typeof fileOptions}'. Process canceled.`);
+          }
+
           for (let key in fileOptions) {
             const path = this.replaceHash(fileOptions[key]);
 
@@ -280,13 +284,21 @@ class FileManagerPlugin {
   }
 
   apply(compiler) {
-    compiler.plugin("compilation", compliation => {
-      this.checkOptions("onStart");
+    compiler.plugin("compilation", (compliation) => {
+      try {
+        this.checkOptions("onStart");
+      } catch (error) {
+        compliation.errors.push(error);
+      }
     });
 
     compiler.plugin("after-emit", (compliation, callback) => {
       this.fileHash = compliation.hash;
-      this.checkOptions("onEnd");
+      try {
+        this.checkOptions("onEnd");
+      } catch (error) {
+        compliation.errors.push(error);
+      }
       callback();
     });
   }
