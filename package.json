@@ -1,8 +1,11 @@
 {
   "name": "filemanager-webpack-plugin",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "This Webpack plugin allows you to copy, move, delete files and directories before and after builds",
   "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "npm run prettier && rollup -c",
     "test": "rimraf testing && ava --verbose test.js",

@@ -219,7 +219,9 @@ class FileManagerPlugin {
 
         case "delete":
           if (!Array.isArray(fileOptions)) {
-            throw Error(`  - FileManagerPlugin: Fail - delete parameters has to be type of 'strings array' but was '${typeof fileOptions}'. Process canceled.`);
+            throw Error(
+              `  - FileManagerPlugin: Fail - delete parameters has to be type of 'strings array' but was '${typeof fileOptions}'. Process canceled.`,
+            );
           }
 
           for (let key in fileOptions) {
@@ -284,7 +286,7 @@ class FileManagerPlugin {
   }
 
   apply(compiler) {
-    compiler.plugin("compilation", (compliation) => {
+    compiler.plugin("compilation", compliation => {
       try {
         this.checkOptions("onStart");
       } catch (error) {
