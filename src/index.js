@@ -5,6 +5,7 @@ const fsExtra = require("fs-extra");
 const rimraf = require("rimraf");
 const mv = require("mv");
 const makeDir = require("make-dir");
+const archiver = require("archiver");
 
 class FileManagerPlugin {
   constructor(options) {
@@ -273,6 +274,54 @@ class FileManagerPlugin {
             }
 
             commandOrder.push(() => makeDir(path));
+          }
+
+          break;
+
+        case "archive":
+          for (let key in fileOptions) {
+            const command = {
+              source: this.replaceHash(fileOptions[key].source),
+              destination: fileOptions[key].destination,
+            };
+
+            if (!command.source || !command.destination) {
+              if (this.options.verbose) {
+                console.log(
+                  "  - FileManagerPlugin: Warning - archive parameter has to be formated as follows: { source: <string>, destination: <string> }",
+                );
+              }
+              return;
+            }
+
+            commandOrder.push(
+              () =>
+                new Promise((resolve, reject) => {
+                  const fileRegex = /(\*|\{+|\}+)/g;
+                  const matches = fileRegex.exec(command.source);
+
+                  const isGlob = matches !== null ? true : false;
+
+                  fs.lstat(command.source, (sErr, sStats) => {
+                    const output = fs.createWriteStream(command.destination);
+                    const archive = archiver("zip", {
+                      zlib: { level: 9 },
+                    });
+
+                    archive.on("error", err => {
+                      reject(err);
+                    });
+
+                    archive.pipe(output);
+
+                    if (isGlob) archive.glob(command.source);
+                    else if (sStats.isFile()) archive.file(command.source, { name: path.basename(command.source) });
+                    else if (sStats.isDirectory()) archive.directory(command.source, false);
+
+                    archive.finalize().then(resolve());
+                  });
+                }),
+            );
           }
 
           break;

@@ -9,7 +9,7 @@
 [![dependencies Status](https://david-dm.org/gregnb/filemanager-webpack-plugin/status.svg)](https://david-dm.org/gregnb/filemanager-webpack-plugin)
 [![npm version](https://badge.fury.io/js/filemanager-webpack-plugin.svg)](https://badge.fury.io/js/filemanager-webpack-plugin)
 
-This Webpack plugin allows you to copy, move, delete files and directories before and after builds
+This Webpack plugin allows you to copy, archive (.zip), move, delete files and directories before and after builds
 
 
 ## Install
@@ -48,6 +48,11 @@ module.exports = {
         mkdir: [
          '/path/to/directory/',
          '/another/directory/'
+        ],
+        archive: [
+          { source: '/path/from', destination: '/path/to.zip' },
+          { source: '/path/**/*.js', destination: '/path/to.zip' },
+          { source: '/path/fromfile.txt', destination: '/path/to.zip' },
         ]
       }
     })
@@ -106,3 +111,4 @@ new FileManagerPlugin(object)
 |**`delete`**|Delete individual files or entire directories. |delete: [<br />'file.txt', '/path/to'<br />]
 |**`move`**|Move individual files or entire directories. |move: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }<br />]
 |**`mkdir`**|Create a directory path. Think mkdir -p |mkdir: [ <br />'/path/to/directory/', '/another/path/' <br/> ]
+|**`archive`**|Archive (.zip) individual files or entire directories |archive: [<br />{ source: 'dist/bundle.js', destination: '/home/web/archive.zip'<br /> }<br />]

@@ -80,6 +80,35 @@ test.serial('should successfully copy a [hash] file name to destination when { s
 
 });
 
+
+test.serial('should successfully archive (ZIP) a directory to destination ZIP when { source: "/source", destination: "/dest.zip" } provided', t => {
+
+  const result = fs.existsSync("./testing/test1.zip");
+  t.true(result);
+  t.pass();
+
+});
+
+test.serial('should successfully archive (ZIP) a single file to destination ZIP when { source: "/sourceFile.js", destination: "/dest.zip" } provided', t => {
+
+  const result = fs.existsSync("./testing/test2.zip");
+  t.true(result);
+  t.pass();
+
+});
+
+
+test.serial('should successfully archive (ZIP) a directory glob to destination ZIP when { source: "/source/**/*", destination: "/dest.zip" } provided', t => {
+
+  const result = fs.existsSync("./testing/test3.zip");
+  t.true(result);
+  t.pass();
+
+});
+
+
+
+
 test.serial('should fail webpack build when string provided in delete function instead of array', async t => {
 
   const baseConfig = getBasePlainConfig();

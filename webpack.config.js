@@ -27,6 +27,11 @@ const plainConfig = {
            { source: "./dist/bundle.js", destination: "./testing/newfile.js" },
            { source: "./dist/bundle.js", destination: "./testing/testing6" }
         ],
+        archive: [
+           { source: "./dist", destination: "./testing/test1.zip" },
+           { source: "./dist/bundle.js", destination: "./testing/test2.zip" },
+           { source: "./dist/**/*", destination: "./testing/test3.zip" }
+        ]
       }
       /*
       onEnd: [
