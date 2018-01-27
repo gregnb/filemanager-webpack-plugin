@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme",
   "devDependencies": {
-    "ava": "^0.24.0",
+    "ava": "^0.25.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-plugin-external-helpers": "^6.22.0",
@@ -35,13 +35,13 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "delay": "^2.0.0",
-    "eslint": "^4.5.0",
-    "prettier": "^1.9.2",
-    "rollup": "^0.49.1",
+    "eslint": "^4.16.0",
+    "prettier": "^1.10.2",
+    "rollup": "^0.55.1",
     "rollup-plugin-babel": "^3.0.2",
     "rollup-plugin-node-resolve": "^3.0.0",
-    "webpack": "^3.5.5",
-    "webpack-dev-server": "^2.7.1"
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1"
   },
   "dependencies": {
     "archiver": "^2.1.1",
@@ -49,6 +49,6 @@
     "fs-extra": "^5.0.0",
     "make-dir": "^1.1.0",
     "mv": "^2.1.1",
-    "rimraf": "^2.6.1"
+    "rimraf": "^2.6.2"
   }
 }
