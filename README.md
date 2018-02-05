@@ -53,7 +53,7 @@ module.exports = {
           { source: '/path/from', destination: '/path/to.zip' },
           { source: '/path/**/*.js', destination: '/path/to.zip' },
           { source: '/path/fromfile.txt', destination: '/path/to.zip' },
-          { source: '/path/fromfile.txt', destination: '/path/to.zip', format: 'tar },
+          { source: '/path/fromfile.txt', destination: '/path/to.zip', format: 'tar' },
           { 
              source: '/path/fromfile.txt', 
              destination: '/path/to.tar.gz', 
@@ -124,4 +124,4 @@ new FileManagerPlugin(object)
 |**`delete`**|Delete individual files or entire directories. |delete: [<br />'file.txt', '/path/to'<br />]
 |**`move`**|Move individual files or entire directories. |move: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }<br />]
 |**`mkdir`**|Create a directory path. Think mkdir -p |mkdir: [ <br />'/path/to/directory/', '/another/path/' <br/> ]
-|**`archive`**|Archive (.zip) individual files or entire directories. Defaults to .zip unless 'format' and 'options' provided. Uses [node-archiver](https://github.com/archiverjs/node-archiver) |archive: [<br />{ source: 'dist/bundle.js', destination: '/home/web/archive.zip'<br />format: 'tar' or 'zip'<br />options: { options passed to archiver }<br /> }<br />]
+|**`archive`**|Archive individual files or entire directories. Defaults to .zip unless 'format' and 'options' provided. Uses [node-archiver](https://github.com/archiverjs/node-archiver) |archive: [<br />{ source: 'dist/bundle.js', destination: '/home/web/archive.zip'<br />format: 'tar' or 'zip'<br />options: { options passed to archiver }<br /> }<br />]
