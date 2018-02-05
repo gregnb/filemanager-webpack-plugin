@@ -9,7 +9,7 @@
 [![dependencies Status](https://david-dm.org/gregnb/filemanager-webpack-plugin/status.svg)](https://david-dm.org/gregnb/filemanager-webpack-plugin)
 [![npm version](https://badge.fury.io/js/filemanager-webpack-plugin.svg)](https://badge.fury.io/js/filemanager-webpack-plugin)
 
-This Webpack plugin allows you to copy, archive (.zip), move, delete files and directories before and after builds
+This Webpack plugin allows you to copy, archive (.zip/.tar/.tar.gz), move, delete files and directories before and after builds
 
 
 ## Install
@@ -53,6 +53,19 @@ module.exports = {
           { source: '/path/from', destination: '/path/to.zip' },
           { source: '/path/**/*.js', destination: '/path/to.zip' },
           { source: '/path/fromfile.txt', destination: '/path/to.zip' },
+          { source: '/path/fromfile.txt', destination: '/path/to.zip', format: 'tar },
+          { 
+             source: '/path/fromfile.txt', 
+             destination: '/path/to.tar.gz', 
+             format: 'tar',
+             options: {
+               gzip: true,
+               gzipOptions: {
+                level: 1
+               }
+             }
+           }
+
         ]
       }
     })
@@ -111,4 +124,4 @@ new FileManagerPlugin(object)
 |**`delete`**|Delete individual files or entire directories. |delete: [<br />'file.txt', '/path/to'<br />]
 |**`move`**|Move individual files or entire directories. |move: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }<br />]
 |**`mkdir`**|Create a directory path. Think mkdir -p |mkdir: [ <br />'/path/to/directory/', '/another/path/' <br/> ]
-|**`archive`**|Archive (.zip) individual files or entire directories |archive: [<br />{ source: 'dist/bundle.js', destination: '/home/web/archive.zip'<br /> }<br />]
+|**`archive`**|Archive (.zip) individual files or entire directories. Defaults to .zip unless 'format' and 'options' provided. Uses [node-archiver](https://github.com/archiverjs/node-archiver) |archive: [<br />{ source: 'dist/bundle.js', destination: '/home/web/archive.zip'<br />format: 'tar' or 'zip'<br />options: { options passed to archiver }<br /> }<br />]

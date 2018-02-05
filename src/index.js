@@ -283,6 +283,8 @@ class FileManagerPlugin {
             const command = {
               source: this.replaceHash(fileOptions[key].source),
               destination: fileOptions[key].destination,
+              format: fileOptions[key].format ? fileOptions[key].format : "zip",
+              options: fileOptions[key].options ? fileOptions[key].options : { zlib: { level: 9 } },
             };
 
             if (!command.source || !command.destination) {
@@ -304,9 +306,7 @@ class FileManagerPlugin {
 
                   fs.lstat(command.source, (sErr, sStats) => {
                     const output = fs.createWriteStream(command.destination);
-                    const archive = archiver("zip", {
-                      zlib: { level: 9 },
-                    });
+                    const archive = archiver(command.format, command.options);
 
                     archive.on("error", err => {
                       reject(err);

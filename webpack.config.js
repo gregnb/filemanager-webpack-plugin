@@ -30,7 +30,19 @@ const plainConfig = {
         archive: [
            { source: "./dist", destination: "./testing/test1.zip" },
            { source: "./dist/bundle.js", destination: "./testing/test2.zip" },
-           { source: "./dist/**/*", destination: "./testing/test3.zip" }
+           { source: "./dist/**/*", destination: "./testing/test3.zip" },
+           { source: "./dist/**/*", destination: "./testing/test4.tar", format: 'tar' },
+           { 
+             source: "./dist/**/*", 
+             destination: "./testing/test5.tar.gz", 
+             format: 'tar',
+             options: {
+               gzip: true,
+               gzipOptions: {
+                level: 1
+               }
+             }
+           }
         ]
       }
       /*

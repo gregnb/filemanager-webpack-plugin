@@ -107,7 +107,21 @@ test.serial('should successfully archive (ZIP) a directory glob to destination Z
 });
 
 
+test.serial('should successfully archive (TAR) a directory glob to destination TAR when { source: "/source/**/*", destination: "/dest.zip", format: "tar" } provided', t => {
 
+  const result = fs.existsSync("./testing/test4.tar");
+  t.true(result);
+  t.pass();
+
+});
+
+test.serial('should successfully archive (TAR.GZ) a directory glob to destination TAR.GZ when { source: "/source/**/*", destination: "/dest.tar.gz", format: "tar" } provided', t => {
+
+  const result = fs.existsSync("./testing/test5.tar.gz");
+  t.true(result);
+  t.pass();
+
+});
 
 test.serial('should fail webpack build when string provided in delete function instead of array', async t => {
 
