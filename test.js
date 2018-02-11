@@ -5,6 +5,7 @@ import webpack from 'webpack';
 import delay from 'delay';
 import options from './webpack.config.js';
 import rimraf from 'rimraf';
+import glob from 'glob';
 import FileManagerPlugin from './lib';
 
 test.before(async () => {
@@ -80,6 +81,14 @@ test.serial('should successfully copy a [hash] file name to destination when { s
 
 });
 
+
+test.serial('should successfully copy a file to hashed destination when { source: "/sourceFile.js", destination: "[hash]-destFile.js" } provided', t => {
+
+  const result = glob.sync("./testing/**/*-hashbundlecheck.js");
+  t.true(result.length > 0 ? true : false);
+  t.pass();
+
+});
 
 test.serial('should successfully archive (ZIP) a directory to destination ZIP when { source: "/source", destination: "/dest.zip" } provided', t => {
 

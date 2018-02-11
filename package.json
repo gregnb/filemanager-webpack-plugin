@@ -36,6 +36,7 @@
     "babel-preset-env": "^1.6.1",
     "delay": "^2.0.0",
     "eslint": "^4.16.0",
+    "glob": "^7.1.2",
     "prettier": "^1.10.2",
     "rollup": "^0.55.1",
     "rollup-plugin-babel": "^3.0.2",

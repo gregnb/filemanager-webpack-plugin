@@ -81,7 +81,8 @@ const hashConfig = {
     new FileManagerPlugin({
       onEnd: {
         copy: [
-           { source: "./dist/bundle-[hash].js", destination: "./testing/hashed-bundle.js" }
+           { source: "./dist/bundle-[hash].js", destination: "./testing/hashed-bundle.js" },
+           { source: "./dist/bundle-[hash].js", destination: "./testing/[hash]-hashbundlecheck.js" }
         ],
       }
     })
