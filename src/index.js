@@ -318,7 +318,7 @@ class FileManagerPlugin {
                     else if (sStats.isFile()) archive.file(command.source, { name: path.basename(command.source) });
                     else if (sStats.isDirectory()) archive.directory(command.source, false);
 
-                    archive.finalize().then(resolve());
+                    archive.finalize().then(() => resolve());
                   });
                 }),
             );
