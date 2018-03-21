@@ -132,9 +132,9 @@ class FileManagerPlugin {
                           }
 
                           /*
-                           * If the supplied destination is a directory copy inside.
-                           * If the supplied destination is a directory that does not exist yet create it & copy inside                      
-                           */
+                                                                                                                                   * If the supplied destination is a directory copy inside.
+                                                                                                                                   * If the supplied destination is a directory that does not exist yet create it & copy inside
+                                                                                                                                   */
 
                           const pathInfo = path.parse(destination);
 
@@ -335,23 +335,35 @@ class FileManagerPlugin {
   }
 
   apply(compiler) {
-    compiler.plugin("compilation", compliation => {
-      try {
-        this.checkOptions("onStart");
-      } catch (error) {
-        compliation.errors.push(error);
-      }
-    });
+    const that = this;
 
-    compiler.plugin("after-emit", (compliation, callback) => {
-      this.fileHash = compliation.hash;
+    const comp = compilation => {
       try {
-        this.checkOptions("onEnd");
+        that.checkOptions("onStart");
       } catch (error) {
-        compliation.errors.push(error);
+        compilation.errors.push(error);
       }
-      callback();
-    });
+    };
+
+    const afterEmit = (compilation, cb) => {
+      that.fileHash = compilation.hash;
+
+      try {
+        that.checkOptions("onEnd");
+      } catch (error) {
+        compilation.errors.push(error);
+      }
+
+      cb();
+    };
+
+    if (compiler.hooks) {
+      compiler.hooks.compilation.tap("compilation", comp);
+      compiler.hooks.afterEmit.tapAsync("afterEmit", afterEmit);
+    } else {
+      compiler.plugin("compilation", comp);
+      compiler.plugin("after-emit", afterEmit);
+    }
   }
 }
 
