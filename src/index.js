@@ -133,7 +133,7 @@ class FileManagerPlugin {
 
                           /*
                            * If the supplied destination is a directory copy inside.
-                           * If the supplied destination is a directory that does not exist yet create it & copy inside                      
+                           * If the supplied destination is a directory that does not exist yet create it & copy inside
                            */
 
                           const pathInfo = path.parse(destination);
@@ -335,7 +335,7 @@ class FileManagerPlugin {
   }
 
   apply(compiler) {
-    compiler.plugin("compilation", compliation => {
+    compiler.hooks.compilation.tap("compilation", compliation => {
       try {
         this.checkOptions("onStart");
       } catch (error) {
@@ -343,14 +343,13 @@ class FileManagerPlugin {
       }
     });
 
-    compiler.plugin("after-emit", (compliation, callback) => {
+    compiler.hooks.afterEmit.tap("afterEmit", compliation => {
       this.fileHash = compliation.hash;
       try {
         this.checkOptions("onEnd");
       } catch (error) {
         compliation.errors.push(error);
       }
-      callback();
     });
   }
 }
