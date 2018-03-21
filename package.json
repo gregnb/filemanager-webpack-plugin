@@ -1,6 +1,6 @@
 {
   "name": "filemanager-webpack-plugin",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "This Webpack plugin allows you to copy, archive (.zip), move, delete files and directories before and after builds",
   "main": "lib/index.js",
   "files": [
