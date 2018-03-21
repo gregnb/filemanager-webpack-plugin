@@ -1,12 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 
-const FileManagerPlugin = require('./lib');
+const FileManagerPlugin = require('../../lib');
 
 const plainConfig = {
-  entry: path.resolve(__dirname, 'example/index.js'),
+  entry: path.resolve(__dirname, '../../example/index.js'),
   stats: "verbose",
-  mode: "development",
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js'
@@ -67,9 +66,8 @@ const plainConfig = {
 };
 
 const hashConfig = {
-  entry: path.resolve(__dirname, 'example/index.js'),
+  entry: path.resolve(__dirname, '../../example/index.js'),
   stats: "verbose",
-  mode: "development",
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle-[hash].js'
@@ -95,4 +93,3 @@ module.exports = [
   plainConfig,
   hashConfig
 ];
-

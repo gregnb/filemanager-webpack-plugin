@@ -1,12 +1,14 @@
 import fs from 'fs';
 import test from 'ava';
 import path from 'path';
-import webpack from 'webpack';
+//import webpack from 'webpack';
 import delay from 'delay';
-import options from './webpack.config.js';
 import rimraf from 'rimraf';
 import glob from 'glob';
-import FileManagerPlugin from './lib';
+import FileManagerPlugin from '../lib';
+
+const webpack = require('./' + process.env.WEBPACK_CONFIG_PATH + '/node_modules/webpack');
+const options = require('./' + process.env.WEBPACK_CONFIG_PATH + '/webpack.config.js');
 
 test.before(async () => {
   console.log("running webpack build..");

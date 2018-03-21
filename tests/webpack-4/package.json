@@ -1,0 +1,32 @@
+{
+  "description": "Test Webpack 4",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "rimraf testing && cross-env WEBPACK_CONFIG_PATH=webpack-4 ava --verbose ../test.js",
+    "webpack": "webpack --progress",
+    "webpack-dev-server": "webpack-dev-server --colors --progress"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gregnb/filemanager-webpack-plugin.git"
+  },
+  "keywords": [
+    "webpack"
+  ],
+  "author": "gregnb",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gregnb/filemanager-webpack-plugin/issues"
+  },
+  "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme",
+  "devDependencies": {
+    "webpack": "^4.2.0",
+    "webpack-cli": "2.0.12",
+    "webpack-dev-server": "^3.1.1",
+    "ava": "^0.25.0"
+  },
+  "dependencies": {
+    "cross-env": "^5.1.4",
+    "rimraf": "^2.6.2"
+  }
+}

@@ -132,9 +132,9 @@ class FileManagerPlugin {
                           }
 
                           /*
-                                                                                                                                   * If the supplied destination is a directory copy inside.
-                                                                                                                                   * If the supplied destination is a directory that does not exist yet create it & copy inside
-                                                                                                                                   */
+                           * If the supplied destination is a directory copy inside.
+                           * If the supplied destination is a directory that does not exist yet create it & copy inside
+                           */
 
                           const pathInfo = path.parse(destination);
 

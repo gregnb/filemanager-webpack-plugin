@@ -8,7 +8,9 @@
   ],
   "scripts": {
     "build": "npm run prettier && rollup -c",
-    "test": "rimraf testing && ava --verbose test.js",
+    "test": "npm run test-webpack3 && npm run test-webpack4",
+    "test-webpack3": "cd tests/webpack-3 && npm install && npm run test",
+    "test-webpack4": "cd tests/webpack-4 && npm install && npm run test",
     "prettier": "prettier --write src/index.js",
     "webpack": "webpack --progress",
     "webpack-dev-server": "webpack-dev-server --colors --progress"
@@ -38,12 +40,12 @@
     "eslint": "^4.16.0",
     "glob": "^7.1.2",
     "prettier": "^1.10.2",
-    "rollup": "^0.57.1",
-    "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-node-resolve": "^3.0.0",
     "webpack": "^4.2.0",
     "webpack-cli": "2.0.12",
-    "webpack-dev-server": "^3.1.1"
+    "webpack-dev-server": "^3.1.1",
+    "rollup": "^0.57.1",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0"
   },
   "dependencies": {
     "archiver": "^2.1.1",
