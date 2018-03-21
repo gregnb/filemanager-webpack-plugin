@@ -164,7 +164,7 @@ function getBasePlainConfig() {
       filename: 'bundle.js'
     },
     module: {
-      loaders: [
+      rules: [
         { test: /\.css$/, loader: 'style!css' }
       ]
     }
