@@ -216,6 +216,9 @@ class FileManagerPlugin {
                   }),
               );
             }
+            else {
+              process.emitWarning('  - FileManagerPlugin: Could not move ' + command.source + ': path does not exist')
+            }
           }
 
           break;
