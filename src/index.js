@@ -126,7 +126,7 @@ class FileManagerPlugin {
                           if (this.options.verbose) {
                             console.log(
                               `  - FileManagerPlugin: Start copy source: ${
-                                command.source
+                              command.source
                               } to destination: ${destination}`,
                             );
                           }
@@ -183,37 +183,39 @@ class FileManagerPlugin {
               return;
             }
 
-            commandOrder.push(
-              () =>
-                new Promise((resolve, reject) => {
-                  if (this.options.verbose) {
-                    console.log(
-                      `  - FileManagerPlugin: Start move source: ${command.source} to destination: ${
-                        command.destination
-                      }`,
-                    );
-                  }
-
-                  mv(command.source, command.destination, { mkdirp: this.options.moveWithMkdirp }, err => {
-                    if (err) {
-                      if (this.options.verbose) {
-                        console.log("  - FileManagerPlugin: Error - move failed", err);
-                      }
-                      reject(err);
-                    }
-
+            if (fs.existsSync(command.source)) {
+              commandOrder.push(
+                () =>
+                  new Promise((resolve, reject) => {
                     if (this.options.verbose) {
                       console.log(
-                        `  - FileManagerPlugin: Finished move source: ${command.source} to destination: ${
-                          command.destination
+                        `  - FileManagerPlugin: Start move source: ${command.source} to destination: ${
+                        command.destination
                         }`,
                       );
                     }
 
-                    resolve();
-                  });
-                }),
-            );
+                    mv(command.source, command.destination, { mkdirp: this.options.moveWithMkdirp }, err => {
+                      if (err) {
+                        if (this.options.verbose) {
+                          console.log("  - FileManagerPlugin: Error - move failed", err);
+                        }
+                        reject(err);
+                      }
+
+                      if (this.options.verbose) {
+                        console.log(
+                          `  - FileManagerPlugin: Finished move source: ${command.source} to destination: ${
+                          command.destination
+                          }`,
+                        );
+                      }
+
+                      resolve();
+                    });
+                  }),
+              );
+            }
           }
 
           break;
