@@ -126,7 +126,7 @@ class FileManagerPlugin {
                           if (this.options.verbose) {
                             console.log(
                               `  - FileManagerPlugin: Start copy source: ${
-                              command.source
+                                command.source
                               } to destination: ${destination}`,
                             );
                           }
@@ -190,7 +190,7 @@ class FileManagerPlugin {
                     if (this.options.verbose) {
                       console.log(
                         `  - FileManagerPlugin: Start move source: ${command.source} to destination: ${
-                        command.destination
+                          command.destination
                         }`,
                       );
                     }
@@ -206,7 +206,7 @@ class FileManagerPlugin {
                       if (this.options.verbose) {
                         console.log(
                           `  - FileManagerPlugin: Finished move source: ${command.source} to destination: ${
-                          command.destination
+                            command.destination
                           }`,
                         );
                       }
@@ -215,9 +215,8 @@ class FileManagerPlugin {
                     });
                   }),
               );
-            }
-            else {
-              process.emitWarning('  - FileManagerPlugin: Could not move ' + command.source + ': path does not exist')
+            } else {
+              process.emitWarning("  - FileManagerPlugin: Could not move " + command.source + ": path does not exist");
             }
           }
 
