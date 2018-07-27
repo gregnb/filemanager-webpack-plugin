@@ -62,6 +62,9 @@ module.exports = {
                gzip: true,
                gzipOptions: {
                 level: 1
+               },
+               globOptions: {
+                nomount: true
                }
              }
            }

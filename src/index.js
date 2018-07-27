@@ -318,7 +318,7 @@ class FileManagerPlugin {
 
                     archive.pipe(output);
 
-                    if (isGlob) archive.glob(command.source);
+                    if (isGlob) archive.glob(command.source, command.options.globOptions || {});
                     else if (sStats.isFile()) archive.file(command.source, { name: path.basename(command.source) });
                     else if (sStats.isDirectory()) archive.directory(command.source, false);
 
