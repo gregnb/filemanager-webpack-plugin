@@ -52,7 +52,7 @@ class FileManagerPlugin {
 
     if (operationList.length) {
       operationList.reduce((previous, fn) => {
-        return previous.then(retVal => fn(retVal));
+        return previous.then(retVal => fn(retVal)).catch(err => console.log(err));
       }, Promise.resolve());
     }
   }
@@ -116,6 +116,8 @@ class FileManagerPlugin {
 
                   if (matches === null) {
                     fs.lstat(command.source, (sErr, sStats) => {
+                      if (sErr) return reject(sErr);
+
                       fs.lstat(command.destination, (dErr, dStats) => {
                         if (sStats.isFile()) {
                           const destination =

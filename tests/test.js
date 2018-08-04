@@ -75,6 +75,14 @@ test.serial('should successfully first create destination if it does not exist a
 
 });
 
+test.serial('should unsuccesfully copy a file that does not exist { source: "/filedoesnotexist.js", destination: "/destFolder" } provided', t => {
+
+  const result = fs.existsSync("./testing/wontexist.js");
+  t.false(result);
+  t.pass();
+
+});
+
 test.serial('should successfully copy a [hash] file name to destination when { source: "/sourceFile-[hash].js", destination: "/destFolder" } provided', t => {
 
   const result = fs.existsSync("./testing/hashed-bundle.js");
