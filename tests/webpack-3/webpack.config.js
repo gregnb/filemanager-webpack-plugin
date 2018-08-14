@@ -44,6 +44,9 @@ const plainConfig = {
                }
              }
            }
+        ],
+        mkdir: [
+          './testing/testdir'
         ]
       }
       /*
