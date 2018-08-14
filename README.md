@@ -115,11 +115,11 @@ module.exports = {
 new FileManagerPlugin(fileEvents, options)
 ```
 
-#### File Event Options
+#### File Events
 * `onStart`: Commands to execute before Webpack begins the bundling process
 * `onEnd`: Commands to execute after Webpack has finished the bundling process
 
-#### File Action Options
+#### File Actions
 
 |Name|Description|Example
 |:--:|:----------|:-----|
