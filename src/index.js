@@ -1,23 +1,8 @@
-const cpx = require("cpx");
-const fs = require("fs");
-const path = require("path");
-const fsExtra = require("fs-extra");
-const rimraf = require("rimraf");
-const mv = require("mv");
-const makeDir = require("make-dir");
-const archiver = require("archiver");
+import { copyAction, moveAction, mkdirAction, archiveAction, deleteAction } from './actions';
 
 class FileManagerPlugin {
   constructor(options) {
     this.options = this.setOptions(options);
-    this.isWin = /^win/.test(process.platform);
-
-    /* cpx options */
-    this.cpxOptions = {
-      clean: false,
-      includeEmptyDirs: true,
-      update: false,
-    };
   }
 
   setOptions(userOptions) {
@@ -57,285 +42,82 @@ class FileManagerPlugin {
     }
   }
 
-  copyDirectory(source, destination, resolve, reject) {
-    if (this.options.verbose) {
-      console.log(`  - FileManagerPlugin: Start copy source file: ${source} to destination file: ${destination}`);
-    }
-
-    cpx.copy(source, destination, this.cpxOptions, err => {
-      if (err && this.options.verbose) {
-        console.log("  - FileManagerPlugin: Error - copy failed", err);
-        reject(err);
-      }
-
-      if (this.options.verbose) {
-        console.log(`  - FileManagerPlugin: Finished copy source: ${source} to destination: ${destination}`);
-      }
-
-      resolve();
-    });
+  replaceHash(filename) {
+    return filename.replace('[hash]', this.fileHash);
   }
 
-  replaceHash(filename) {
-    return filename.replace("[hash]", this.fileHash);
+  processAction(action, params, commandOrder) {
+    const result = action(params, this.options);
+
+    if (result !== null) {
+      commandOrder.push(result);
+    }
   }
 
   parseFileOptions(options, preserveOrder = false) {
-    const optKeys = Object.keys(options);
-
     let commandOrder = [];
 
-    for (let i = 0; i < optKeys.length; i++) {
-      const fileAction = optKeys[i];
-      const fileOptions = options[fileAction];
+    Object.keys(options).forEach(actionType => {
+      const actionOptions = options[actionType];
+      let actionParams = null;
 
-      switch (fileAction) {
-        case "copy":
-          for (let key in fileOptions) {
-            const command = {
-              source: this.replaceHash(fileOptions[key].source),
-              destination: this.replaceHash(fileOptions[key].destination),
-            };
-
-            if (!command.source || !command.destination) {
-              if (this.options.verbose) {
-                console.log(
-                  "  - FileManagerPlugin: Warning - copy parameter has to be formated as follows: { source: <string>, destination: <string> }",
-                );
-              }
-              return;
-            }
-
-            commandOrder.push(
-              () =>
-                new Promise((resolve, reject) => {
-                  // if source is a file, just copyFile()
-                  // if source is a NOT a glob pattern, simply append **/*
-                  const fileRegex = /(\*|\{+|\}+)/g;
-                  const matches = fileRegex.exec(command.source);
-
-                  if (matches === null) {
-                    fs.lstat(command.source, (sErr, sStats) => {
-                      if (sErr) return reject(sErr);
-
-                      fs.lstat(command.destination, (dErr, dStats) => {
-                        if (sStats.isFile()) {
-                          const destination =
-                            dStats && dStats.isDirectory()
-                              ? command.destination + "/" + path.basename(command.source)
-                              : command.destination;
-
-                          if (this.options.verbose) {
-                            console.log(
-                              `  - FileManagerPlugin: Start copy source: ${
-                                command.source
-                              } to destination: ${destination}`,
-                            );
-                          }
-
-                          /*
-                           * If the supplied destination is a directory copy inside.
-                           * If the supplied destination is a directory that does not exist yet create it & copy inside
-                           */
-
-                          const pathInfo = path.parse(destination);
-
-                          const execCopy = (src, dest) => {
-                            fsExtra.copy(src, dest, err => {
-                              if (err) reject(err);
-                              resolve();
-                            });
-                          };
-
-                          if (pathInfo.ext === "") {
-                            makeDir(destination).then(mPath => {
-                              execCopy(command.source, destination + "/" + path.basename(command.source));
-                            });
-                          } else {
-                            execCopy(command.source, destination);
-                          }
-                        } else {
-                          const sourceDir = command.source + (command.source.substr(-1) !== "/" ? "/" : "") + "**/*";
-                          this.copyDirectory(sourceDir, command.destination, resolve, reject);
-                        }
-                      });
-                    });
-                  } else {
-                    this.copyDirectory(command.source, command.destination, resolve, reject);
-                  }
-                }),
+      actionOptions.forEach(actionItem => {
+        switch (actionType) {
+          case 'copy':
+            actionParams = Object.assign(
+              { source: this.replaceHash(actionItem.source) },
+              actionItem.destination && { destination: actionItem.destination },
             );
-          }
 
-          break;
+            this.processAction(copyAction, actionParams, commandOrder);
 
-        case "move":
-          for (let key in fileOptions) {
-            const command = {
-              source: this.replaceHash(fileOptions[key].source),
-              destination: this.replaceHash(fileOptions[key].destination),
-            };
+            break;
 
-            if (!command.source || !command.destination) {
-              if (this.options.verbose) {
-                console.log(
-                  "  - FileManagerPlugin: Warning - move parameter has to be formated as follows: { source: <string>, destination: <string> }",
-                );
-              }
-              return;
-            }
+          case 'move':
+            actionParams = Object.assign(
+              { source: this.replaceHash(actionItem.source) },
+              actionItem.destination && { destination: actionItem.destination },
+            );
 
-            if (fs.existsSync(command.source)) {
-              commandOrder.push(
-                () =>
-                  new Promise((resolve, reject) => {
-                    if (this.options.verbose) {
-                      console.log(
-                        `  - FileManagerPlugin: Start move source: ${command.source} to destination: ${
-                          command.destination
-                        }`,
-                      );
-                    }
+            this.processAction(moveAction, actionParams, commandOrder);
 
-                    mv(command.source, command.destination, { mkdirp: this.options.moveWithMkdirp }, err => {
-                      if (err) {
-                        if (this.options.verbose) {
-                          console.log("  - FileManagerPlugin: Error - move failed", err);
-                        }
-                        reject(err);
-                      }
+            break;
 
-                      if (this.options.verbose) {
-                        console.log(
-                          `  - FileManagerPlugin: Finished move source: ${command.source} to destination: ${
-                            command.destination
-                          }`,
-                        );
-                      }
-
-                      resolve();
-                    });
-                  }),
+          case 'delete':
+            if (!Array.isArray(actionOptions)) {
+              throw Error(
+                `  - FileManagerPlugin: Fail - delete parameters has to be type of 'strings array' but was '${typeof actionOptions}'. Process canceled.`,
               );
-            } else {
-              process.emitWarning("  - FileManagerPlugin: Could not move " + command.source + ": path does not exist");
-            }
-          }
-
-          break;
-
-        case "delete":
-          if (!Array.isArray(fileOptions)) {
-            throw Error(
-              `  - FileManagerPlugin: Fail - delete parameters has to be type of 'strings array' but was '${typeof fileOptions}'. Process canceled.`,
-            );
-          }
-
-          for (let key in fileOptions) {
-            const path = this.replaceHash(fileOptions[key]);
-
-            commandOrder.push(
-              () =>
-                new Promise((resolve, reject) => {
-                  if (this.options.verbose) {
-                    console.log(`  - FileManagerPlugin: Starting delete path ${path}`);
-                  }
-
-                  if (typeof path !== "string") {
-                    if (this.options.verbose) {
-                      console.log(
-                        "  - FileManagerPlugin: Warning - delete parameter has to be type of string. Process canceled.",
-                      );
-                    }
-                    reject();
-                  }
-
-                  rimraf(path, {}, response => {
-                    if (this.options.verbose && response === null) {
-                      console.log(`  - FileManagerPlugin: Finished delete path ${path}`);
-                    }
-                    resolve();
-                  });
-                }),
-            );
-          }
-
-          break;
-
-        case "mkdir":
-          for (let key in fileOptions) {
-            const path = this.replaceHash(fileOptions[key]);
-
-            if (this.options.verbose) {
-              console.log(`  - FileManagerPlugin: Creating path ${path}`);
             }
 
-            if (typeof path !== "string") {
-              if (this.options.verbose) {
-                console.log(
-                  "  - FileManagerPlugin: Warning - mkdir parameter has to be type of string. Process canceled.",
-                );
-              }
-              return;
-            }
+            actionParams = Object.assign({ source: this.replaceHash(actionItem.source) });
+            this.processAction(deleteAction, actionParams, commandOrder);
 
-            commandOrder.push(() => makeDir(path));
-          }
+            break;
 
-          break;
+          case 'mkdir':
+            actionParams = { source: this.replaceHash(actionItem) };
+            this.processAction(mkdirAction, actionParams, commandOrder);
 
-        case "archive":
-          for (let key in fileOptions) {
-            const command = {
-              source: this.replaceHash(fileOptions[key].source),
-              destination: fileOptions[key].destination,
-              format: fileOptions[key].format ? fileOptions[key].format : "zip",
-              options: fileOptions[key].options ? fileOptions[key].options : { zlib: { level: 9 } },
+            break;
+
+          case 'archive':
+            actionParams = {
+              source: this.replaceHash(actionItem.source),
+              destination: actionItem.destination,
+              format: actionItem.format ? actionItem.format : 'zip',
+              options: actionItem.options ? actionItem.options : { zlib: { level: 9 } },
             };
 
-            if (!command.source || !command.destination) {
-              if (this.options.verbose) {
-                console.log(
-                  "  - FileManagerPlugin: Warning - archive parameter has to be formated as follows: { source: <string>, destination: <string> }",
-                );
-              }
-              return;
-            }
+            this.processAction(archiveAction, actionParams, commandOrder);
 
-            commandOrder.push(
-              () =>
-                new Promise((resolve, reject) => {
-                  const fileRegex = /(\*|\{+|\}+)/g;
-                  const matches = fileRegex.exec(command.source);
+            break;
 
-                  const isGlob = matches !== null ? true : false;
-
-                  fs.lstat(command.source, (sErr, sStats) => {
-                    const output = fs.createWriteStream(command.destination);
-                    const archive = archiver(command.format, command.options);
-
-                    archive.on("error", err => {
-                      reject(err);
-                    });
-
-                    archive.pipe(output);
-
-                    if (isGlob) archive.glob(command.source, command.options.globOptions || {});
-                    else if (sStats.isFile()) archive.file(command.source, { name: path.basename(command.source) });
-                    else if (sStats.isDirectory()) archive.directory(command.source, false);
-
-                    archive.finalize().then(() => resolve());
-                  });
-                }),
-            );
-          }
-
-          break;
-
-        default:
-          break;
-      }
-    }
+          default:
+            break;
+        }
+      });
+    });
 
     return commandOrder;
   }
@@ -345,7 +127,7 @@ class FileManagerPlugin {
 
     const comp = compilation => {
       try {
-        that.checkOptions("onStart");
+        that.checkOptions('onStart');
       } catch (error) {
         compilation.errors.push(error);
       }
@@ -355,7 +137,7 @@ class FileManagerPlugin {
       that.fileHash = compilation.hash;
 
       try {
-        that.checkOptions("onEnd");
+        that.checkOptions('onEnd');
       } catch (error) {
         compilation.errors.push(error);
       }
@@ -364,11 +146,11 @@ class FileManagerPlugin {
     };
 
     if (compiler.hooks) {
-      compiler.hooks.compilation.tap("compilation", comp);
-      compiler.hooks.afterEmit.tapAsync("afterEmit", afterEmit);
+      compiler.hooks.compilation.tap('compilation', comp);
+      compiler.hooks.afterEmit.tapAsync('afterEmit', afterEmit);
     } else {
-      compiler.plugin("compilation", comp);
-      compiler.plugin("after-emit", afterEmit);
+      compiler.plugin('compilation', comp);
+      compiler.plugin('after-emit', afterEmit);
     }
   }
 }

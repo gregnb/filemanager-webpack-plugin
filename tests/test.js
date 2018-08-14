@@ -1,7 +1,6 @@
 import fs from 'fs';
 import test from 'ava';
 import path from 'path';
-//import webpack from 'webpack';
 import delay from 'delay';
 import rimraf from 'rimraf';
 import glob from 'glob';
@@ -10,11 +9,12 @@ import FileManagerPlugin from '../lib';
 const webpack = require('./' + process.env.WEBPACK_CONFIG_PATH + '/node_modules/webpack');
 const options = require('./' + process.env.WEBPACK_CONFIG_PATH + '/webpack.config.js');
 
-test.before(async () => {
+test.before(async t => {
   console.log("running webpack build..");
+  console.log(t);
   webpack(options, function(err, stats) {
     if (err) return done(err);
-    if (stats.hasErrors()) return done(new Error(stats.toString()));
+    if (stats.hasErrors()) return t.end(new Error(stats.toString()));
   });
   await delay(3000);
 });
@@ -96,6 +96,14 @@ test.serial('should successfully copy a file to hashed destination when { source
 
   const result = glob.sync("./testing/**/*-hashbundlecheck.js");
   t.true(result.length > 0 ? true : false);
+  t.pass();
+
+});
+
+test.serial('should successfully mkdir (ZIP) a directory when [\'/path/to/dir\'] provided', t => {
+
+  const result = fs.existsSync("./testing/testdir");
+  t.true(result);
   t.pass();
 
 });

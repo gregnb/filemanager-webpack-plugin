@@ -11,7 +11,7 @@
     "test": "npm run test-webpack3 && npm run test-webpack4",
     "test-webpack3": "cd tests/webpack-3 && npm install && npm run test",
     "test-webpack4": "cd tests/webpack-4 && npm install && npm run test",
-    "prettier": "prettier --write src/index.js",
+    "prettier": "find src | xargs prettier --write",
     "webpack": "webpack --progress",
     "webpack-dev-server": "webpack-dev-server --colors --progress"
   },
@@ -31,21 +31,23 @@
   "devDependencies": {
     "ava": "^0.25.0",
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "delay": "^2.0.0",
     "eslint": "^4.16.0",
     "glob": "^7.1.2",
     "prettier": "^1.10.2",
+    "rollup": "^0.63.5",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-commonjs": "^9.1.4",
+    "rollup-plugin-includepaths": "^0.2.3",
+    "rollup-plugin-node-resolve": "^3.0.0",
     "webpack": "^4.2.0",
     "webpack-cli": "2.0.12",
-    "webpack-dev-server": "^3.1.1",
-    "rollup": "^0.57.1",
-    "rollup-plugin-babel": "^3.0.2",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "webpack-dev-server": "^3.1.1"
   },
   "dependencies": {
     "archiver": "^2.1.1",
