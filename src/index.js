@@ -90,7 +90,13 @@ class FileManagerPlugin {
               );
             }
 
-            actionParams = Object.assign({ source: this.replaceHash(actionItem.source) });
+            if (typeof actionItem !== 'string') {
+              throw Error(
+                `  - FileManagerPlugin: Fail - delete parameters has to be type of 'strings array' but was '${typeof actionItem} array'. Process canceled.`,
+              );
+            }
+
+            actionParams = Object.assign({ source: this.replaceHash(actionItem) });
             this.processAction(deleteAction, actionParams, commandOrder);
 
             break;
