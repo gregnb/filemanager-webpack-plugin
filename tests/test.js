@@ -150,6 +150,53 @@ test.serial('should successfully archive (TAR.GZ) a directory glob to destinatio
 
 });
 
+test.serial('should successfully delete file when array of strings provided in delete function', async t => {
+  const baseConfig = getBasePlainConfig();
+  fs.writeFileSync('./testing/deletable-file.js', '');
+  const configWithStringArrayInDelete = Object.assign(baseConfig, {
+    plugins: [
+      new FileManagerPlugin({
+        onStart: {
+          delete: ["./testing/deletable-file.js"],
+        }
+      })
+    ]
+  });
+  webpack(configWithStringArrayInDelete, function (err, stats) {
+    if (err || stats.hasErrors()) {
+      t.fail();
+      return;
+    }
+    
+    t.false(fs.existsSync('./testing/deletable-file.js'));
+    t.pass();
+  });
+
+  await delay(1000);
+});
+
+
+
+test.serial('should fail webpack build when delete function receives anything other than an array of strings', async t => {
+  const baseConfig = getBasePlainConfig();
+  const configWithStringInDelete = Object.assign(baseConfig, {
+    plugins: [
+      new FileManagerPlugin({
+        onStart: {
+          delete: [{ source: "object instead of string" }],
+        }
+      })
+    ]
+  });
+
+  webpack(configWithStringInDelete, function (err, stats) {
+    if (err || stats.hasErrors()) t.pass();
+    else t.fail();
+  });
+
+  await delay(1000);
+});
+
 test.serial('should fail webpack build when string provided in delete function instead of array', async t => {
 
   const baseConfig = getBasePlainConfig();
@@ -175,7 +222,7 @@ test.serial('should fail webpack build when string provided in delete function i
 function getBasePlainConfig() {
 
   return {
-    entry: path.resolve(__dirname, 'example/index.js'),
+    entry: path.resolve('../../example/index.js'),
     stats: "verbose",
     output: {
       path: path.resolve(__dirname, 'dist'),
