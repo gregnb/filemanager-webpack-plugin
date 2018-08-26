@@ -84,16 +84,8 @@ class FileManagerPlugin {
             break;
 
           case 'delete':
-            if (!Array.isArray(actionOptions)) {
-              throw Error(
-                `  - FileManagerPlugin: Fail - delete parameters has to be type of 'strings array' but was '${typeof actionOptions}'. Process canceled.`,
-              );
-            }
-
-            if (typeof actionItem !== 'string') {
-              throw Error(
-                `  - FileManagerPlugin: Fail - delete parameters has to be type of 'strings array' but was '${typeof actionItem} array'. Process canceled.`,
-              );
+            if (!Array.isArray(actionOptions) || typeof actionItem !== 'string') {
+              throw Error(`  - FileManagerPlugin: Fail - delete parameters has to be an array of strings`);
             }
 
             actionParams = Object.assign({ source: this.replaceHash(actionItem) });
