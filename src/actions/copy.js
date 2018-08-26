@@ -103,7 +103,7 @@ function copyDirectory(source, destination, resolve, reject, options) {
   }
 
   cpx.copy(source, destination, cpxOptions, err => {
-    if (err && this.options.verbose) {
+    if (err && options.verbose) {
       console.log('  - FileManagerPlugin: Error - copy failed', err);
       reject(err);
     }
