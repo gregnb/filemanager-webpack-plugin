@@ -3,6 +3,7 @@ import test from 'ava';
 import path from 'path';
 import delay from 'delay';
 import rimraf from 'rimraf';
+import JSZip from 'jszip';
 import glob from 'glob';
 import FileManagerPlugin from '../lib';
 
@@ -148,6 +149,19 @@ test.serial('should successfully archive (TAR.GZ) a directory glob to destinatio
   t.true(result);
   t.pass();
 
+});
+
+// https://github.com/gregnb/filemanager-webpack-plugin/issues/37
+test.serial('should successfully exclude archive (ZIP) from destination ZIP when { source: "/source", destination: "/source/dest.zip" } provided', async t => {
+
+	async function getResult() {
+		const data = fs.readFileSync("./testing/test7.zip");
+		const zip = await JSZip.loadAsync(data);
+		return !Object.keys(zip.files).includes('test7.zip');
+	}
+
+	const result = await getResult();
+	t.true(await result);
 });
 
 test.serial('should successfully delete file when array of strings provided in delete function', async t => {
