@@ -44,8 +44,9 @@ const plainConfig = {
                 level: 1
                }
              }
-           }
-        ],
+           },
+           { source: "./testing/", destination: "./testing/test7.zip" }
+		],
         mkdir: [
           './testing/testdir'
         ]
