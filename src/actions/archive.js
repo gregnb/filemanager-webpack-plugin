@@ -44,7 +44,6 @@ function archiveAction(command, options) {
 			cwd: command.source,
 			ignore: destFile
 		});
-        
         archive.finalize().then(() => resolve());
       });
     });
