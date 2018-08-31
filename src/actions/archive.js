@@ -40,7 +40,10 @@ function archiveAction(command, options) {
 
         if (isGlob) archive.glob(command.source, globOptions);
 		else if (sStats.isFile()) archive.file(command.source, { name: path.basename(command.source) });
-        else if (sStats.isDirectory()) archive.glob(`${ command.source }/*/**`, globOptions);
+		else if (sStats.isDirectory()) archive.glob('**/*', {
+			cwd: command.source,
+			ignore: destFile
+		});
         
         archive.finalize().then(() => resolve());
       });
