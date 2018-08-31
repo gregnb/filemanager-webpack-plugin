@@ -164,6 +164,18 @@ test.serial('should successfully exclude archive (ZIP) from destination ZIP when
 	t.true(await result);
 });
 
+test.serial('should successfully include root-level files in the archive (ZIP) from destination ZIP when { source: "/source", destination: "/source/dest.zip" } provided', async t => {
+
+	async function getResult() {
+		const data = fs.readFileSync("./testing/test7.zip");
+		const zip = await JSZip.loadAsync(data);
+		return Object.keys(zip.files).includes('newfile.js');
+	}
+
+	const result = await getResult();
+	t.true(await result);
+});
+
 test.serial('should successfully delete file when array of strings provided in delete function', async t => {
   const baseConfig = getBasePlainConfig();
   fs.writeFileSync('./testing/deletable-file.js', '');
