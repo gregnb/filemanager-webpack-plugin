@@ -36,12 +36,14 @@ function archiveAction(command, options) {
 
         // Exclude destination file from archive
         const destFile = path.basename(command.destination);
-        const globOptions = Object.assign({ ignore: destFile }, command.options.globOptions || {});
+        const globOptions = Object.assign({ ignore: destFile }, (command.options.globOptions || {}) );
 
         if (isGlob) archive.glob(command.source, globOptions);
-        else if (sStats.isFile()) archive.file(command.source, { name: path.basename(command.source) });
-        else if (sStats.isDirectory()) archive.glob(`${command.source}/*/**`, globOptions);
-
+		else if (sStats.isFile()) archive.file(command.source, { name: path.basename(command.source) });
+		else if (sStats.isDirectory()) archive.glob('**/*', {
+			cwd: command.source,
+			ignore: destFile
+		});
         archive.finalize().then(() => resolve());
       });
     });
