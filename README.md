@@ -6,6 +6,7 @@
 # Webpack File Manager Plugin
 
 [![Build Status](https://travis-ci.org/gregnb/filemanager-webpack-plugin.svg?branch=master)](https://travis-ci.org/gregnb/filemanager-webpack-plugin)
+[![NPM Downloads](https://img.shields.io/npm/dt/filemanager-webpack-plugin.svg?style=flat)](https://npmcharts.com/compare/filemanager-webpack-plugin?minimal=true)
 [![dependencies Status](https://david-dm.org/gregnb/filemanager-webpack-plugin/status.svg)](https://david-dm.org/gregnb/filemanager-webpack-plugin)
 [![npm version](https://badge.fury.io/js/filemanager-webpack-plugin.svg)](https://badge.fury.io/js/filemanager-webpack-plugin)
 
