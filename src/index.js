@@ -36,8 +36,12 @@ class FileManagerPlugin {
     }
 
     if (operationList.length) {
-      operationList.reduce((previous, fn) => {
-        return previous.then(retVal => fn(retVal)).catch(err => console.log(err));
+      return operationList.reduce((previous, fn) => {
+        return previous
+          .then(retVal => fn(retVal))
+          .catch(err => {
+            throw err
+          });
       }, Promise.resolve());
     }
   }
@@ -135,12 +139,14 @@ class FileManagerPlugin {
       that.fileHash = compilation.hash;
 
       try {
-        that.checkOptions('onEnd');
+        that.checkOptions('onEnd')
+          .then(() => cb())
+          .catch(err => {
+            throw err
+          });
       } catch (error) {
         compilation.errors.push(error);
       }
-
-      cb();
     };
 
     if (compiler.hooks) {
