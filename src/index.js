@@ -9,6 +9,7 @@ class FileManagerPlugin {
     const defaultOptions = {
       verbose: false,
       moveWithMkdirp: false,
+      runOnceInWatchMode: false,
       onStart: {},
       onEnd: {},
     };
@@ -122,24 +123,28 @@ class FileManagerPlugin {
 
   apply(compiler) {
     const that = this;
+    let watchRunCount = 0;
 
     const comp = compilation => {
-      try {
-        that.checkOptions('onStart');
-      } catch (error) {
-        compilation.errors.push(error);
+      if (!that.runOnceInWatchMode || watchRunCount < 1) {
+        try {
+          that.checkOptions('onStart');
+        } catch (error) {
+          compilation.errors.push(error);
+        }
       }
     };
 
     const afterEmit = (compilation, cb) => {
-      that.fileHash = compilation.hash;
-
-      try {
-        that.checkOptions('onEnd');
-      } catch (error) {
-        compilation.errors.push(error);
+      if (!that.runOnceInWatchMode || watchRunCount < 1) {
+        that.fileHash = compilation.hash;
+        try {
+          that.checkOptions('onEnd');
+        } catch (error) {
+          compilation.errors.push(error);
+        }
+        watchRunCount++;
       }
-
       cb();
     };
 
