@@ -36,6 +36,14 @@ test.serial('should successfully copy when { source: "/source/**/*", destination
 
 });
 
+test.serial('should successfully copy a file when using a glob pattern { source: "/source/**/*", destination: "/dest" } provided', t => {
+
+  const result = fs.existsSync("./testing/testingglob.js");
+  t.true(result);
+  t.pass();
+
+});
+
 test.serial('should successfully copy and create destination directory { source: "/source", destination: "/dest/doesnt-exist-yet" } provided', t => {
 
   const result = fs.existsSync("./testing/testing3");
