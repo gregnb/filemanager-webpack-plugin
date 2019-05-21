@@ -20,6 +20,7 @@ const plainConfig = {
       onEnd: {
         copy: [
            { source: "./dist/*", destination: "./testing/testing1" },
+           { source: "./dist/*.js", destination: "./testing/testingglob.js" },
            { source: "./dist/**/*", destination: "./testing/testing2"},
            { source: "./dist", destination: "./testing/testing3" },
            { source: "./dist/**/*.{html,js}", destination: "./testing/testing4" },

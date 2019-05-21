@@ -38,7 +38,9 @@ test.serial('should successfully copy when { source: "/source/**/*", destination
 
 test.serial('should successfully copy a file when using a glob pattern { source: "/source/**/*", destination: "/dest" } provided', t => {
 
-  const result = fs.existsSync("./testing/testingglob.js");
+  // NOTE: using `statSync` instead of `existsSync` since it returns true for
+  // both files _and_ directories. Explicitly checking for a file (not directory).
+  const result = fs.statSync("./testing/testingglob.js").isFile();
   t.true(result);
   t.pass();
 
