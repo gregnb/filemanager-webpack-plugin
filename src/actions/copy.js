@@ -60,7 +60,7 @@ function copyAction(command, options) {
                 });
               };
 
-              if (pathInfo.ext === '') {
+              if (pathInfo.ext === '' && commande.toType !== 'file') {
                 makeDir(destination).then(mPath => {
                   execCopy(command.source, destination + '/' + path.basename(command.source));
                 });
