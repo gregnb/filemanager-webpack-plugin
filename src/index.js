@@ -67,6 +67,7 @@ class FileManagerPlugin {
             actionParams = Object.assign(
               { source: this.replaceHash(actionItem.source) },
               actionItem.destination && { destination: actionItem.destination },
+              actionItem.toType && { toType: actionItem.toType },
             );
 
             this.processAction(copyAction, actionParams, commandOrder);
