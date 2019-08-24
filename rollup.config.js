@@ -1,8 +1,8 @@
-import babel from "rollup-plugin-babel";
-import nodeResolve from "rollup-plugin-node-resolve";
+import babel from 'rollup-plugin-babel';
+import nodeResolve from 'rollup-plugin-node-resolve';
 
 export default {
-  input: "src/index.js",
+  input: 'src/index.js',
   plugins: [
     babel(),
     nodeResolve({
@@ -10,8 +10,8 @@ export default {
     })
   ],
   output: {
-    file: "lib/index.js",
-    format: "cjs",
+    file: 'lib/index.js',
+    format: 'cjs',
     sourcemap: true
   }
 };
