@@ -43,8 +43,6 @@
     "prettier": "^1.18.2",
     "rollup": "^1.20.1",
     "rollup-plugin-babel": "^4.3.3",
-    "rollup-plugin-commonjs": "^10.0.2",
-    "rollup-plugin-includepaths": "^0.2.3",
     "rollup-plugin-node-resolve": "^5.2.0",
     "webpack": "^4.39.2",
     "webpack-cli": "3.3.7",
