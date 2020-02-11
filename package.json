@@ -32,21 +32,21 @@
     "node": ">= 8"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
     "ava": "^2.3.0",
     "delay": "^4.3.0",
-    "glob": "^7.1.4",
+    "glob": "^7.1.6",
     "jszip": "^3.2.2",
-    "prettier": "^1.18.2",
-    "rollup": "^1.20.1",
+    "prettier": "^1.19.1",
+    "rollup": "^1.31.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "webpack": "^4.39.2",
-    "webpack-cli": "3.3.7",
-    "webpack-dev-server": "^3.8.0"
+    "webpack": "^4.41.5",
+    "webpack-cli": "3.3.10",
+    "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
     "archiver": "^3.1.1",
@@ -54,6 +54,6 @@
     "fs-extra": "^8.1.0",
     "make-dir": "^3.0.0",
     "mv": "^2.1.1",
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.2"
   }
 }
