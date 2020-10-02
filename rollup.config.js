@@ -6,12 +6,12 @@ export default {
   plugins: [
     babel(),
     nodeResolve({
-      jsnext: true
-    })
+      jsnext: true,
+    }),
   ],
   output: {
     file: 'lib/index.js',
     format: 'cjs',
-    sourcemap: true
-  }
+    sourcemap: true,
+  },
 };

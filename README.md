@@ -1,4 +1,3 @@
-
 <div align="center">
   <img src="https://user-images.githubusercontent.com/19170080/29996498-a5ed1944-8fcd-11e7-8729-625eb997dbfe.png" />
 </div>
@@ -11,7 +10,6 @@
 [![npm version](https://badge.fury.io/js/filemanager-webpack-plugin.svg)](https://badge.fury.io/js/filemanager-webpack-plugin)
 
 This Webpack plugin allows you to copy, archive (.zip/.tar/.tar.gz), move, delete files and directories before and after builds
-
 
 ## Install
 
@@ -55,9 +53,9 @@ module.exports = {
           { source: '/path/**/*.js', destination: '/path/to.zip' },
           { source: '/path/fromfile.txt', destination: '/path/to.zip' },
           { source: '/path/fromfile.txt', destination: '/path/to.zip', format: 'tar' },
-          { 
-             source: '/path/fromfile.txt', 
-             destination: '/path/to.tar.gz', 
+          {
+             source: '/path/fromfile.txt',
+             destination: '/path/to.tar.gz',
              format: 'tar',
              options: {
                gzip: true,
@@ -108,24 +106,23 @@ module.exports = {
 
 ```
 
-
 ## Options
 
-
 ```js
-new FileManagerPlugin(fileEvents, options)
+new FileManagerPlugin(fileEvents, options);
 ```
 
 #### File Events
-* `onStart`: Commands to execute before Webpack begins the bundling process
-* `onEnd`: Commands to execute after Webpack has finished the bundling process
+
+- `onStart`: Commands to execute before Webpack begins the bundling process
+- `onEnd`: Commands to execute after Webpack has finished the bundling process
 
 #### File Actions
 
-|Name|Description|Example
-|:--:|:----------|:-----|
-|**`copy`**|Copy individual files or entire directories from a source folder to a destination folder. Also supports glob pattern |copy: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }<br />]
-|**`delete`**|Delete individual files or entire directories. |delete: [<br />'file.txt', '/path/to'<br />]
-|**`move`**|Move individual files or entire directories. |move: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }<br />]
-|**`mkdir`**|Create a directory path. Think mkdir -p |mkdir: [ <br />'/path/to/directory/', '/another/path/' <br/> ]
-|**`archive`**|Archive individual files or entire directories. Defaults to .zip unless 'format' and 'options' provided. Uses [node-archiver](https://github.com/archiverjs/node-archiver) |archive: [<br />{ source: 'dist/bundle.js', destination: '/home/web/archive.zip'<br />format: 'tar' or 'zip'<br />options: { options passed to archiver }<br /> }<br />]
+|     Name      | Description                                                                                                                                                                | Example                                                                                                                                                                  |
+| :-----------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  **`copy`**   | Copy individual files or entire directories from a source folder to a destination folder. Also supports glob pattern                                                       | copy: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }<br />]                                                                                    |
+| **`delete`**  | Delete individual files or entire directories.                                                                                                                             | delete: [<br />'file.txt', '/path/to'<br />]                                                                                                                             |
+|  **`move`**   | Move individual files or entire directories.                                                                                                                               | move: [<br /> { source: 'dist/bundle.js', destination: '/home/web/js/'<br /> }<br />]                                                                                    |
+|  **`mkdir`**  | Create a directory path. Think mkdir -p                                                                                                                                    | mkdir: [ <br />'/path/to/directory/', '/another/path/' <br/> ]                                                                                                           |
+| **`archive`** | Archive individual files or entire directories. Defaults to .zip unless 'format' and 'options' provided. Uses [node-archiver](https://github.com/archiverjs/node-archiver) | archive: [<br />{ source: 'dist/bundle.js', destination: '/home/web/archive.zip'<br />format: 'tar' or 'zip'<br />options: { options passed to archiver }<br /> }<br />] |

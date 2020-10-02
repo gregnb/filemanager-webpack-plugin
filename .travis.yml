@@ -7,12 +7,12 @@ node_js:
   - 13
 
 os:
-- linux
-- osx
+  - linux
+  - osx
 
 install:
-- npm install
+  - npm install
 
 script:
- - npm run -s build
- - npm run -s test
+  - npm run -s build
+  - npm run -s test

@@ -1,6 +1,5 @@
 /* simple dummy project */
 
-const test = () => {
-}
+const test = () => {};
 
 export default test;

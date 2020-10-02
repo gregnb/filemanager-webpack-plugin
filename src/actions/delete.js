@@ -23,7 +23,7 @@ function deleteAction(command, options) {
         reject();
       }
 
-      rimraf(command.source, {}, response => {
+      rimraf(command.source, {}, (response) => {
         if (verbose && response === null) {
           console.log(`  - FileManagerPlugin: Finished delete path ${command.source}`);
         }
