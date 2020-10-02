@@ -28,34 +28,32 @@
     "url": "https://github.com/gregnb/filemanager-webpack-plugin/issues"
   },
   "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme",
+  "engines": {
+    "node": ">= 8"
+  },
   "devDependencies": {
-    "ava": "^0.25.0",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "delay": "^2.0.0",
-    "eslint": "^4.16.0",
-    "glob": "^7.1.2",
-    "jszip": "^3.1.5",
-    "prettier": "^1.10.2",
-    "rollup": "^0.63.5",
-    "rollup-plugin-babel": "^3.0.7",
-    "rollup-plugin-commonjs": "^9.1.4",
-    "rollup-plugin-includepaths": "^0.2.3",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "webpack": "^4.2.0",
-    "webpack-cli": "2.0.12",
-    "webpack-dev-server": "^3.1.1"
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "ava": "^2.3.0",
+    "delay": "^4.3.0",
+    "glob": "^7.1.6",
+    "jszip": "^3.2.2",
+    "prettier": "^1.19.1",
+    "rollup": "^1.31.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "webpack": "^4.41.5",
+    "webpack-cli": "3.3.10",
+    "webpack-dev-server": "^3.10.3"
   },
   "dependencies": {
-    "archiver": "^3.0.0",
+    "archiver": "^3.1.1",
     "cpx": "^1.5.0",
-    "fs-extra": "^7.0.0",
-    "make-dir": "^1.1.0",
+    "fs-extra": "^8.1.0",
+    "make-dir": "^3.0.0",
     "mv": "^2.1.1",
-    "rimraf": "^2.6.2"
+    "rimraf": "^3.0.2"
   }
 }

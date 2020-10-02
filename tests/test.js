@@ -2,7 +2,6 @@ import fs from 'fs';
 import test from 'ava';
 import path from 'path';
 import delay from 'delay';
-import rimraf from 'rimraf';
 import JSZip from 'jszip';
 import glob from 'glob';
 import FileManagerPlugin from '../lib';
