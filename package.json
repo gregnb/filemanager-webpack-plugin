@@ -26,11 +26,9 @@
     "webpack"
   ],
   "scripts": {
-    "build": "npm run prettier && rollup -c",
+    "build": "rollup -c",
     "test": "rimraf tests/fixtures/testing && ava",
-    "prettier": "prettier . --write",
-    "webpack": "webpack --progress",
-    "webpack-dev-server": "webpack-dev-server --colors --progress"
+    "prettier": "prettier . --write"
   },
   "dependencies": {
     "archiver": "^5.0.2",
@@ -48,8 +46,10 @@
     "@rollup/plugin-node-resolve": "^9.0.0",
     "ava": "^3.13.0",
     "glob": "^7.1.6",
+    "husky": "^4.3.0",
     "jszip": "^3.5.0",
     "prettier": "^2.1.2",
+    "pretty-quick": "^3.0.2",
     "regenerator-runtime": "^0.13.7",
     "rollup": "^2.28.2",
     "webpack": "^4.44.2",
