@@ -8,9 +8,7 @@
   ],
   "scripts": {
     "build": "npm run prettier && rollup -c",
-    "test": "npm run test-webpack3 && npm run test-webpack4",
-    "test-webpack3": "cd tests/webpack-3 && npm install && npm run test",
-    "test-webpack4": "cd tests/webpack-4 && npm install && npm run test",
+    "test": "rimraf tests/webpack/testing && cd tests/webpack && npm run test",
     "prettier": "prettier . --write",
     "webpack": "webpack --progress",
     "webpack-dev-server": "webpack-dev-server --colors --progress"
@@ -29,7 +27,7 @@
   },
   "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme",
   "engines": {
-    "node": ">= 8"
+    "node": ">= 10"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
@@ -44,9 +42,9 @@
     "rollup": "^1.31.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "webpack": "^4.41.5",
-    "webpack-cli": "3.3.10",
-    "webpack-dev-server": "^3.10.3"
+    "webpack": "^4.44.2",
+    "webpack-cli": "3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
     "archiver": "^3.1.1",
