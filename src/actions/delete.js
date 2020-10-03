@@ -23,7 +23,7 @@ function deleteAction(command, options) {
         reject();
       }
 
-      const source =  path.resolve(context, command.source)
+      const source = path.resolve(context, command.source);
 
       rimraf(source, {}, (response) => {
         if (verbose && response === null) {

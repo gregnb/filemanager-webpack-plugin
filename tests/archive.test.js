@@ -144,7 +144,7 @@ test.serial(
 test.serial(
   'should include root-level files in the archive (ZIP) from destination ZIP when { source: "/source", destination: "/source/dest.zip" } provided',
   async (t) => {
-    await writeFile('testing/random-file.js', '')
+    await writeFile('testing/random-file.js', '');
 
     const config = {
       onEnd: {
