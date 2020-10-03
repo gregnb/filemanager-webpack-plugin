@@ -31,6 +31,10 @@ function archiveAction(command, options) {
       const isGlob = matches !== null;
 
       fs.lstat(source, (sErr, sStats) => {
+        if (!fs.existsSync(path.dirname(destination))) {
+          fs.mkdirSync(path.dirname(destination), { recursive: true })
+        }
+        
         const output = fs.createWriteStream(destination);
         const archive = archiver(command.format, command.options);
 

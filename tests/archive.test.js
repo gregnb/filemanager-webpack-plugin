@@ -12,7 +12,7 @@ import FileManagerPlugin from '../lib';
 
 const fixturesDir = path.resolve(__dirname, 'fixtures');
 
-const { existsSync, readFile } = fsFixtures(fixturesDir);
+const { existsSync, readFile, writeFile } = fsFixtures(fixturesDir);
 const compiler = getCompiler(fixturesDir);
 
 test.serial(
@@ -144,6 +144,8 @@ test.serial(
 test.serial(
   'should include root-level files in the archive (ZIP) from destination ZIP when { source: "/source", destination: "/source/dest.zip" } provided',
   async (t) => {
+    await writeFile('testing/random-file.js', '')
+
     const config = {
       onEnd: {
         archive: [{ source: './testing/', destination: './testing/test7.zip' }],
@@ -156,7 +158,7 @@ test.serial(
     async function getResult() {
       const data = await readFile('./testing/test7.zip');
       const zip = await JSZip.loadAsync(data);
-      return Object.keys(zip.files).includes('newfile.js');
+      return Object.keys(zip.files).includes('random-file.js');
     }
 
     const result = await getResult();
