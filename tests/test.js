@@ -1,21 +1,37 @@
 import fs from 'fs';
-import test from 'ava';
 import path from 'path';
+
+import test from 'ava';
 import delay from 'delay';
 import JSZip from 'jszip';
 import glob from 'glob';
+import webpack from 'webpack'
+
 import FileManagerPlugin from '../lib';
 
-const webpack = require('./' + process.env.WEBPACK_CONFIG_PATH + '/node_modules/webpack');
-const options = require('./' + process.env.WEBPACK_CONFIG_PATH + '/webpack.config.js');
+const options = require('./webpack/webpack.config.js');
+
+const compile = (options) => {
+  return new Promise((resolve, reject) => {
+    webpack(options, function (err, stats) {
+
+      if (err) {
+        return reject(err);
+      }
+
+      if (stats.hasErrors()) {
+        return reject(new Error(stats.toString()));
+      }
+
+
+      return resolve(stats)
+    })
+  })
+}
 
 test.before(async (t) => {
   console.log('running webpack build..');
-  console.log(t);
-  webpack(options, function (err, stats) {
-    if (err) return done(err);
-    if (stats.hasErrors()) return t.end(new Error(stats.toString()));
-  });
+  await compile(options)
   await delay(3000);
 });
 
@@ -162,7 +178,7 @@ test.serial(
     }
 
     const result = await getResult();
-    t.true(await result);
+    t.true(result);
   }
 );
 
@@ -176,7 +192,7 @@ test.serial(
     }
 
     const result = await getResult();
-    t.true(await result);
+    t.true(result);
   }
 );
 

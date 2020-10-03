@@ -143,13 +143,8 @@ class FileManagerPlugin {
       cb();
     };
 
-    if (compiler.hooks) {
-      compiler.hooks.compilation.tap('compilation', comp);
-      compiler.hooks.afterEmit.tapAsync('afterEmit', afterEmit);
-    } else {
-      compiler.plugin('compilation', comp);
-      compiler.plugin('after-emit', afterEmit);
-    }
+    compiler.hooks.compilation.tap('compilation', comp);
+    compiler.hooks.afterEmit.tapAsync('afterEmit', afterEmit);
   }
 }
 
