@@ -1,4 +1,4 @@
-const fs = require('fs-extra');
+const fs = require('fs');
 const path = require('path');
 const archiver = require('archiver');
 
@@ -9,7 +9,10 @@ const archiver = require('archiver');
  * @return {Function|null} - Function that returns a promise or null
  */
 function archiveAction(command, options) {
-  const { verbose } = options;
+  const { verbose, context } = options;
+
+  const source = path.resolve(context, command.source);
+  const destination = path.resolve(context, command.destination);
 
   return () =>
     new Promise((resolve, reject) => {
@@ -27,25 +30,39 @@ function archiveAction(command, options) {
 
       const isGlob = matches !== null;
 
-      fs.lstat(command.source, (sErr, sStats) => {
-        const output = fs.createWriteStream(command.destination);
+      fs.lstat(source, (sErr, sStats) => {
+        if (!fs.existsSync(path.dirname(destination))) {
+          fs.mkdirSync(path.dirname(destination), { recursive: true })
+        }
+        
+        const output = fs.createWriteStream(destination);
         const archive = archiver(command.format, command.options);
 
         archive.on('error', (err) => reject(err));
         archive.pipe(output);
 
         // Exclude destination file from archive
-        const destFile = path.basename(command.destination);
+        const destFile = path.basename(destination);
         const globOptions = Object.assign({ ignore: destFile }, command.options.globOptions || {});
 
-        if (isGlob) archive.glob(command.source, globOptions);
-        else if (sStats.isFile()) archive.file(command.source, { name: path.basename(command.source) });
-        else if (sStats.isDirectory())
+        if (isGlob) {
+          archive.glob(command.source, {
+            ...globOptions,
+            cwd: context,
+          });
+        } else if (sStats.isFile()) {
+          archive.file(source, {
+            name: path.basename(command.source),
+            cwd: context,
+          });
+        } else if (sStats.isDirectory()) {
           archive.glob('**/*', {
-            cwd: command.source,
+            cwd: source,
             ignore: destFile,
           });
-        archive.finalize().then(() => resolve());
+        }
+
+        archive.finalize().then(resolve);
       });
     });
 }

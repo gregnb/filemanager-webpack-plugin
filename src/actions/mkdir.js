@@ -1,3 +1,4 @@
+const path = require('path');
 const makeDir = require('make-dir');
 
 /**
@@ -7,7 +8,7 @@ const makeDir = require('make-dir');
  * @return {Function|null} - Function that returns a promise or null
  */
 function mkdirAction(command, options) {
-  const { verbose } = options;
+  const { verbose, context } = options;
 
   return () => {
     if (verbose) {
@@ -21,7 +22,8 @@ function mkdirAction(command, options) {
       return null;
     }
 
-    return makeDir(command.source);
+    const source = path.resolve(context, command.source);
+    return makeDir(source);
   };
 }
 
