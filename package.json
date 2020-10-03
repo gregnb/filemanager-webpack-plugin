@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme",
   "engines": {
-    "node": ">= 8"
+    "node": ">= 10"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
