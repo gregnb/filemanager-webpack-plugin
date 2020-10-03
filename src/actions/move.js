@@ -13,7 +13,7 @@ function moveAction(command, options) {
   if (!command.source || !command.destination) {
     if (verbose) {
       console.log(
-        '  - FileManagerPlugin: Warning - move parameter has to be formated as follows: { source: <string>, destination: <string> }',
+        '  - FileManagerPlugin: Warning - move parameter has to be formated as follows: { source: <string>, destination: <string> }'
       );
     }
     return null;
@@ -24,11 +24,11 @@ function moveAction(command, options) {
       new Promise((resolve, reject) => {
         if (verbose) {
           console.log(
-            `  - FileManagerPlugin: Start move source: ${command.source} to destination: ${command.destination}`,
+            `  - FileManagerPlugin: Start move source: ${command.source} to destination: ${command.destination}`
           );
         }
 
-        mv(command.source, command.destination, { mkdirp: false }, err => {
+        mv(command.source, command.destination, { mkdirp: false }, (err) => {
           if (err) {
             if (verbose) {
               console.log('  - FileManagerPlugin: Error - move failed', err);
@@ -38,7 +38,7 @@ function moveAction(command, options) {
 
           if (verbose) {
             console.log(
-              `  - FileManagerPlugin: Finished move source: ${command.source} to destination: ${command.destination}`,
+              `  - FileManagerPlugin: Finished move source: ${command.source} to destination: ${command.destination}`
             );
           }
 

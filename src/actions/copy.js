@@ -16,7 +16,7 @@ function copyAction(command, options) {
   if (!command.source || !command.destination) {
     if (verbose) {
       console.log(
-        '  - FileManagerPlugin: Warning - copy parameter has to be formated as follows: { source: <string>, destination: <string> }',
+        '  - FileManagerPlugin: Warning - copy parameter has to be formated as follows: { source: <string>, destination: <string> }'
       );
     }
     return null;
@@ -42,7 +42,7 @@ function copyAction(command, options) {
 
               if (verbose) {
                 console.log(
-                  `  - FileManagerPlugin: Start copy source: ${command.source} to destination: ${destination}`,
+                  `  - FileManagerPlugin: Start copy source: ${command.source} to destination: ${destination}`
                 );
               }
 
@@ -54,14 +54,14 @@ function copyAction(command, options) {
               const pathInfo = path.parse(destination);
 
               const execCopy = (src, dest) => {
-                fsExtra.copy(src, dest, err => {
+                fsExtra.copy(src, dest, (err) => {
                   if (err) reject(err);
                   resolve();
                 });
               };
 
               if (pathInfo.ext === '') {
-                makeDir(destination).then(mPath => {
+                makeDir(destination).then((mPath) => {
                   execCopy(command.source, destination + '/' + path.basename(command.source));
                 });
               } else {
@@ -102,7 +102,7 @@ function copyDirectory(source, destination, resolve, reject, options) {
     console.log(`  - FileManagerPlugin: Start copy source file: ${source} to destination file: ${destination}`);
   }
 
-  cpx.copy(source, destination, cpxOptions, err => {
+  cpx.copy(source, destination, cpxOptions, (err) => {
     if (err && options.verbose) {
       console.log('  - FileManagerPlugin: Error - copy failed', err);
       reject(err);

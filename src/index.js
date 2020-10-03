@@ -30,14 +30,14 @@ class FileManagerPlugin {
     let operationList = [];
 
     if (this.options[stage] && Array.isArray(this.options[stage])) {
-      this.options[stage].map(opts => operationList.push(...this.parseFileOptions(opts, true)));
+      this.options[stage].map((opts) => operationList.push(...this.parseFileOptions(opts, true)));
     } else {
       operationList.push(...this.parseFileOptions(this.options[stage]));
     }
 
     if (operationList.length) {
       operationList.reduce((previous, fn) => {
-        return previous.then(retVal => fn(retVal)).catch(err => console.log(err));
+        return previous.then((retVal) => fn(retVal)).catch((err) => console.log(err));
       }, Promise.resolve());
     }
   }
@@ -57,16 +57,16 @@ class FileManagerPlugin {
   parseFileOptions(options, preserveOrder = false) {
     let commandOrder = [];
 
-    Object.keys(options).forEach(actionType => {
+    Object.keys(options).forEach((actionType) => {
       const actionOptions = options[actionType];
       let actionParams = null;
 
-      actionOptions.forEach(actionItem => {
+      actionOptions.forEach((actionItem) => {
         switch (actionType) {
           case 'copy':
             actionParams = Object.assign(
               { source: this.replaceHash(actionItem.source) },
-              actionItem.destination && { destination: actionItem.destination },
+              actionItem.destination && { destination: actionItem.destination }
             );
 
             this.processAction(copyAction, actionParams, commandOrder);
@@ -76,7 +76,7 @@ class FileManagerPlugin {
           case 'move':
             actionParams = Object.assign(
               { source: this.replaceHash(actionItem.source) },
-              actionItem.destination && { destination: actionItem.destination },
+              actionItem.destination && { destination: actionItem.destination }
             );
 
             this.processAction(moveAction, actionParams, commandOrder);
@@ -123,7 +123,7 @@ class FileManagerPlugin {
   apply(compiler) {
     const that = this;
 
-    const comp = compilation => {
+    const comp = (compilation) => {
       try {
         that.checkOptions('onStart');
       } catch (error) {

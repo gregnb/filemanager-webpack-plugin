@@ -16,7 +16,7 @@ function archiveAction(command, options) {
       if (!command.source || !command.destination) {
         if (verbose) {
           console.log(
-            '  - FileManagerPlugin: Warning - archive parameter has to be formated as follows: { source: <string>, destination: <string> }',
+            '  - FileManagerPlugin: Warning - archive parameter has to be formated as follows: { source: <string>, destination: <string> }'
           );
         }
         reject();
@@ -31,7 +31,7 @@ function archiveAction(command, options) {
         const output = fs.createWriteStream(command.destination);
         const archive = archiver(command.format, command.options);
 
-        archive.on('error', err => reject(err));
+        archive.on('error', (err) => reject(err));
         archive.pipe(output);
 
         // Exclude destination file from archive
