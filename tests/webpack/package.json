@@ -1,7 +1,0 @@
-{
-  "description": "Test Webpack 4",
-  "private": true,
-  "scripts": {
-    "test": "rimraf testing && ava --verbose ../test.js"
-  }
-}

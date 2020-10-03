@@ -47,14 +47,18 @@ class FileManagerPlugin {
   }
 
   processAction(action, params, commandOrder) {
-    const result = action(params, this.options);
+    const options = {
+      ...this.options,
+      context: this.context,
+    };
+    const result = action(params, options);
 
     if (result !== null) {
       commandOrder.push(result);
     }
   }
 
-  parseFileOptions(options, preserveOrder = false) {
+  parseFileOptions(options) {
     let commandOrder = [];
 
     Object.keys(options).forEach((actionType) => {
@@ -121,21 +125,21 @@ class FileManagerPlugin {
   }
 
   apply(compiler) {
-    const that = this;
+    this.context = compiler.options.context;
 
     const comp = (compilation) => {
       try {
-        that.checkOptions('onStart');
+        this.checkOptions('onStart');
       } catch (error) {
         compilation.errors.push(error);
       }
     };
 
     const afterEmit = (compilation, cb) => {
-      that.fileHash = compilation.hash;
+      this.fileHash = compilation.hash;
 
       try {
-        that.checkOptions('onEnd');
+        this.checkOptions('onEnd');
       } catch (error) {
         compilation.errors.push(error);
       }

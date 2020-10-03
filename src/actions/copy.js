@@ -1,8 +1,9 @@
 const fs = require('fs');
 const path = require('path');
-const cpx = require('cpx');
-const fsExtra = require('fs-extra');
 const makeDir = require('make-dir');
+
+const cpy = require('cpy');
+const cpFile = require('cp-file');
 
 /**
  * Execute copy action
@@ -11,7 +12,7 @@ const makeDir = require('make-dir');
  * @return {Function|null} - Function that returns a promise or null
  */
 function copyAction(command, options) {
-  const { verbose } = options;
+  const { verbose, context } = options;
 
   if (!command.source || !command.destination) {
     if (verbose) {
@@ -30,15 +31,17 @@ function copyAction(command, options) {
       const matches = fileRegex.exec(command.source);
 
       if (matches === null) {
-        fs.lstat(command.source, (sErr, sStats) => {
+        const source = path.resolve(context, command.source);
+
+        fs.lstat(source, (sErr, sStats) => {
           if (sErr) return reject(sErr);
 
           fs.lstat(command.destination, (dErr, dStats) => {
             if (sStats.isFile()) {
               const destination =
                 dStats && dStats.isDirectory()
-                  ? command.destination + '/' + path.basename(command.source)
-                  : command.destination;
+                  ? path.resolve(context, command.destination + '/' + path.basename(command.source))
+                  : path.resolve(context, command.destination);
 
               if (verbose) {
                 console.log(
@@ -46,35 +49,24 @@ function copyAction(command, options) {
                 );
               }
 
-              /*
-               * If the supplied destination is a directory copy inside.
-               * If the supplied destination is a directory that does not exist yet create it & copy inside
-               */
-
               const pathInfo = path.parse(destination);
-
-              const execCopy = (src, dest) => {
-                fsExtra.copy(src, dest, (err) => {
-                  if (err) reject(err);
-                  resolve();
-                });
-              };
-
               if (pathInfo.ext === '') {
-                makeDir(destination).then((mPath) => {
-                  execCopy(command.source, destination + '/' + path.basename(command.source));
+                makeDir(destination).then(() => {
+                  cpFile(source, path.resolve(destination, path.basename(source)))
+                    .then(resolve)
+                    .catch(reject);
                 });
               } else {
-                execCopy(command.source, destination);
+                cpFile(source, destination).then(resolve).catch(reject);
               }
             } else {
               const sourceDir = command.source + (command.source.substr(-1) !== '/' ? '/' : '') + '**/*';
-              copyDirectory(sourceDir, command.destination, resolve, reject, options);
+              copy(sourceDir, command.destination, resolve, reject, options);
             }
           });
         });
       } else {
-        copyDirectory(command.source, command.destination, resolve, reject, options);
+        copy(command.source, command.destination, resolve, reject, options);
       }
     });
 }
@@ -88,32 +80,32 @@ function copyAction(command, options) {
  * @param {Function} reject - function used to reject a Promise
  * @return {void}
  */
-function copyDirectory(source, destination, resolve, reject, options) {
-  const { verbose } = options;
+function copy(source, destination, resolve, reject, options) {
+  const { verbose, context } = options;
 
-  /* cpx options */
-  const cpxOptions = {
-    clean: false,
-    includeEmptyDirs: true,
-    update: false,
+  /* cpy options */
+  const cpyOptions = {
+    cwd: context,
   };
 
   if (verbose) {
     console.log(`  - FileManagerPlugin: Start copy source file: ${source} to destination file: ${destination}`);
   }
 
-  cpx.copy(source, destination, cpxOptions, (err) => {
-    if (err && options.verbose) {
-      console.log('  - FileManagerPlugin: Error - copy failed', err);
-      reject(err);
-    }
+  cpy(source, destination, cpyOptions)
+    .then(() => {
+      if (verbose) {
+        console.log(`  - FileManagerPlugin: Finished copy source: ${source} to destination: ${destination}`);
+      }
 
-    if (verbose) {
-      console.log(`  - FileManagerPlugin: Finished copy source: ${source} to destination: ${destination}`);
-    }
-
-    resolve();
-  });
+      resolve();
+    })
+    .catch((err) => {
+      if (err && options.verbose) {
+        console.log('  - FileManagerPlugin: Error - copy failed', err);
+        return reject(err);
+      }
+    });
 }
 
 export default copyAction;
