@@ -29,8 +29,8 @@ test.serial('should delete file when array of strings provided in delete functio
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const result = existsSync('./testing/testdir');
-  t.true(result);
+  const result = existsSync('./testing/deletable-file.js');
+  t.false(result);
   t.pass();
 });
 

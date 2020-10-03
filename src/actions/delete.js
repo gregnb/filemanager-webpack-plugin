@@ -1,4 +1,4 @@
-const fs = require('fs');
+const path = require('path');
 const rimraf = require('rimraf');
 
 /**
@@ -8,7 +8,7 @@ const rimraf = require('rimraf');
  * @return {Function|null} - Function that returns a promise or null
  */
 function deleteAction(command, options) {
-  const { verbose } = options;
+  const { verbose, context } = options;
 
   return () =>
     new Promise((resolve, reject) => {
@@ -23,7 +23,9 @@ function deleteAction(command, options) {
         reject();
       }
 
-      rimraf(command.source, {}, (response) => {
+      const source =  path.resolve(context, command.source)
+
+      rimraf(source, {}, (response) => {
         if (verbose && response === null) {
           console.log(`  - FileManagerPlugin: Finished delete path ${command.source}`);
         }
