@@ -27,14 +27,11 @@ node_modules
 # Optional npm cache directory
 .npm
 
-# Build Data
-dist/*
-lib/*
-
-testing/*
-tests/**/*/testing
-tests/**/*/dist
-
 # Optional REPL history
 .node_repl_history
 .idea/
+
+# Artifcats
+dist/
+lib/
+testing/

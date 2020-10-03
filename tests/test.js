@@ -5,7 +5,7 @@ import test from 'ava';
 import delay from 'delay';
 import JSZip from 'jszip';
 import glob from 'glob';
-import webpack from 'webpack'
+import webpack from 'webpack';
 
 import FileManagerPlugin from '../lib';
 
@@ -14,7 +14,6 @@ const options = require('./webpack/webpack.config.js');
 const compile = (options) => {
   return new Promise((resolve, reject) => {
     webpack(options, function (err, stats) {
-
       if (err) {
         return reject(err);
       }
@@ -23,15 +22,14 @@ const compile = (options) => {
         return reject(new Error(stats.toString()));
       }
 
-
-      return resolve(stats)
-    })
-  })
-}
+      return resolve(stats);
+    });
+  });
+};
 
 test.before(async (t) => {
   console.log('running webpack build..');
-  await compile(options)
+  await compile(options);
   await delay(3000);
 });
 
