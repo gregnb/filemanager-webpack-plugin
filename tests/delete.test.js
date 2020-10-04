@@ -11,7 +11,6 @@ import FileManagerPlugin from '../lib';
 const fixturesDir = path.resolve(__dirname, 'fixtures');
 
 const { mkdir, writeFile, existsSync } = fsFixtures(fixturesDir);
-const compiler = getCompiler(fixturesDir);
 
 test.before(async () => {
   await mkdir('./testing');
@@ -26,6 +25,7 @@ test.serial('should delete file when array of strings provided in delete functio
     },
   };
 
+  const compiler = getCompiler(fixturesDir);
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
@@ -45,6 +45,7 @@ test.serial('should support glob', async (t) => {
     },
   };
 
+  const compiler = getCompiler(fixturesDir);
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
@@ -62,6 +63,8 @@ test.serial(
         delete: [{ source: 'object instead of string' }],
       },
     };
+
+    const compiler = getCompiler(fixturesDir);
 
     try {
       new FileManagerPlugin(config).apply(compiler);

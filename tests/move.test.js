@@ -11,13 +11,18 @@ import FileManagerPlugin from '../lib';
 
 const fixturesDir = path.resolve(__dirname, 'fixtures');
 
-const { existsSync } = fsFixtures(fixturesDir);
-const compiler = getCompiler(fixturesDir);
+const { existsSync, writeFile } = fsFixtures(fixturesDir);
 
-test.serial("should create a directory when ['/path/to/dir'] provided", async (t) => {
+test.serial('should move files from source to destination', async (t) => {
   const config = {
     onEnd: {
-      mkdir: ['./testing/testdir'],
+      copy: [
+        {
+          source: './dist',
+          destination: './testing-temp',
+        },
+      ],
+      move: [{ source: './testing-temp', destination: './testing-moved' }],
     },
   };
 
@@ -25,7 +30,6 @@ test.serial("should create a directory when ['/path/to/dir'] provided", async (t
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const result = existsSync('./testing/testdir');
-  t.true(result);
+  t.true(existsSync('./testing-moved/bundle.js'));
   t.pass();
 });

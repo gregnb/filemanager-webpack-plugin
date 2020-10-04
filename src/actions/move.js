@@ -1,4 +1,6 @@
 import fs from 'fs';
+import path from 'path';
+
 import mv from 'mv';
 
 /**
@@ -8,9 +10,12 @@ import mv from 'mv';
  * @return {Function|null} - Function that returns a promise or null
  */
 function moveAction(command, options) {
-  const { verbose } = options;
+  const { verbose, context } = options;
 
-  if (fs.existsSync(command.source)) {
+  const source = path.resolve(context, command.source);
+  const destination = path.resolve(context, command.destination);
+
+  if (fs.existsSync(source)) {
     return () =>
       new Promise((resolve, reject) => {
         if (verbose) {
@@ -19,7 +24,7 @@ function moveAction(command, options) {
           );
         }
 
-        mv(command.source, command.destination, { mkdirp: false }, (err) => {
+        mv(source, destination, { mkdirp: false }, (err) => {
           if (err) {
             if (verbose) {
               console.log('  - FileManagerPlugin: Error - move failed', err);

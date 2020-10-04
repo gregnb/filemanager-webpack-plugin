@@ -12,9 +12,6 @@ import FileManagerPlugin from '../lib';
 const fixturesDir = path.resolve(__dirname, 'fixtures');
 const { existsSync } = fsFixtures(fixturesDir);
 
-const compiler = getCompiler(fixturesDir);
-const hashedCompiler = getCompiler(fixturesDir, 'bundle-[hash].js');
-
 test.serial('should copy when { source: "/source/*", destination: "/dest" } provided', async (t) => {
   const config = {
     onEnd: {
@@ -22,6 +19,7 @@ test.serial('should copy when { source: "/source/*", destination: "/dest" } prov
     },
   };
 
+  const compiler = getCompiler(fixturesDir);
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
@@ -37,6 +35,7 @@ test.serial('should copy when { source: "/source/**/*", destination: "/dest" } p
     },
   };
 
+  const compiler = getCompiler(fixturesDir);
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
@@ -54,6 +53,7 @@ test.serial(
       },
     };
 
+    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
@@ -72,6 +72,7 @@ test.serial(
       },
     };
 
+    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
@@ -90,6 +91,7 @@ test.serial(
       },
     };
 
+    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
@@ -106,6 +108,7 @@ test.serial('should copy when { source: "/sourceFile.js", destination: "/destFil
     },
   };
 
+  const compiler = getCompiler(fixturesDir);
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
@@ -123,6 +126,7 @@ test.serial(
       },
     };
 
+    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
@@ -141,6 +145,7 @@ test.serial(
       },
     };
 
+    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
@@ -159,6 +164,7 @@ test.serial(
       },
     };
 
+    const hashedCompiler = getCompiler(fixturesDir, 'bundle-[hash].js');
     new FileManagerPlugin(config).apply(hashedCompiler);
     await compile(hashedCompiler);
 
@@ -177,6 +183,7 @@ test.serial(
       },
     };
 
+    const hashedCompiler = getCompiler(fixturesDir, 'bundle-[hash].js');
     new FileManagerPlugin(config).apply(hashedCompiler);
     await compile(hashedCompiler);
 

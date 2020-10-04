@@ -13,7 +13,6 @@ import FileManagerPlugin from '../lib';
 const fixturesDir = path.resolve(__dirname, 'fixtures');
 
 const { existsSync, readFile, writeFile } = fsFixtures(fixturesDir);
-const compiler = getCompiler(fixturesDir);
 
 test.serial(
   'should archive (ZIP) a directory to destination ZIP when { source: "/source", destination: "/dest.zip" } provided',
@@ -24,6 +23,7 @@ test.serial(
       },
     };
 
+    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
@@ -42,6 +42,7 @@ test.serial(
       },
     };
 
+    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
@@ -60,6 +61,7 @@ test.serial(
       },
     };
 
+    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
@@ -78,6 +80,7 @@ test.serial(
       },
     };
 
+    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
@@ -108,6 +111,7 @@ test.serial(
       },
     };
 
+    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
@@ -127,6 +131,7 @@ test.serial(
       },
     };
 
+    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
@@ -152,6 +157,7 @@ test.serial(
       },
     };
 
+    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 

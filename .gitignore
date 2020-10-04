@@ -35,3 +35,4 @@ node_modules
 dist/
 lib/
 testing/
+testing*/
