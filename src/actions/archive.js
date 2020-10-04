@@ -16,15 +16,6 @@ function archiveAction(command, options) {
 
   return () =>
     new Promise((resolve, reject) => {
-      if (!command.source || !command.destination) {
-        if (verbose) {
-          console.log(
-            '  - FileManagerPlugin: Warning - archive parameter has to be formated as follows: { source: <string>, destination: <string> }'
-          );
-        }
-        reject();
-      }
-
       const fileRegex = /(\*|\{+|\}+)/g;
       const matches = fileRegex.exec(command.source);
 

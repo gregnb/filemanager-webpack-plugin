@@ -43,28 +43,10 @@ test.serial(
       },
     };
 
-    new FileManagerPlugin(config).apply(compiler);
-
     try {
-      await compile(compiler);
+      new FileManagerPlugin(config).apply(compiler);
     } catch {
       t.pass();
     }
   }
 );
-
-test.serial('should fail webpack build when string provided in delete function instead of array', async (t) => {
-  const config = {
-    onStart: {
-      delete: 'string instead of array',
-    },
-  };
-
-  new FileManagerPlugin(config).apply(compiler);
-
-  try {
-    await compile(compiler);
-  } catch {
-    t.pass();
-  }
-});

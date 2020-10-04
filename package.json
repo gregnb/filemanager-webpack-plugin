@@ -35,7 +35,8 @@
     "cpy": "^8.1.1",
     "make-dir": "^3.1.0",
     "mv": "^2.1.1",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "schema-utils": "^2.7.1"
   },
   "devDependencies": {
     "@ava/babel": "^1.0.1",
@@ -43,6 +44,8 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/register": "^7.11.5",
     "@rollup/plugin-babel": "^5.2.1",
+    "@rollup/plugin-commonjs": "^15.1.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "ava": "^3.13.0",
     "glob": "^7.1.6",

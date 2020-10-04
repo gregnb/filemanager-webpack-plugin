@@ -14,15 +14,6 @@ const cpFile = require('cp-file');
 function copyAction(command, options) {
   const { verbose, context } = options;
 
-  if (!command.source || !command.destination) {
-    if (verbose) {
-      console.log(
-        '  - FileManagerPlugin: Warning - copy parameter has to be formated as follows: { source: <string>, destination: <string> }'
-      );
-    }
-    return null;
-  }
-
   return () =>
     new Promise((resolve, reject) => {
       // if source is a file, just copyFile()

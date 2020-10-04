@@ -16,13 +16,6 @@ function deleteAction(command, options) {
         console.log(`  - FileManagerPlugin: Starting delete path ${command.source}`);
       }
 
-      if (typeof command.source !== 'string') {
-        if (verbose) {
-          console.log('  - FileManagerPlugin: Warning - delete parameter has to be type of string. Process canceled.');
-        }
-        reject();
-      }
-
       const source = path.resolve(context, command.source);
 
       rimraf(source, {}, (response) => {

@@ -10,15 +10,6 @@ const mv = require('mv');
 function moveAction(command, options) {
   const { verbose } = options;
 
-  if (!command.source || !command.destination) {
-    if (verbose) {
-      console.log(
-        '  - FileManagerPlugin: Warning - move parameter has to be formated as follows: { source: <string>, destination: <string> }'
-      );
-    }
-    return null;
-  }
-
   if (fs.existsSync(command.source)) {
     return () =>
       new Promise((resolve, reject) => {

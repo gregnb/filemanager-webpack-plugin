@@ -1,7 +1,18 @@
+import validateOptions from 'schema-utils';
+
 import { copyAction, moveAction, mkdirAction, archiveAction, deleteAction } from './actions';
+
+import schema from './options-schema';
+
+const PLUGIN_NAME = 'FileManagerPlugin';
 
 class FileManagerPlugin {
   constructor(options) {
+    validateOptions(schema, options, {
+      name: PLUGIN_NAME,
+      baseDataPath: 'options',
+    });
+
     this.options = this.setOptions(options);
   }
 
@@ -147,8 +158,8 @@ class FileManagerPlugin {
       cb();
     };
 
-    compiler.hooks.compilation.tap('compilation', comp);
-    compiler.hooks.afterEmit.tapAsync('afterEmit', afterEmit);
+    compiler.hooks.thisCompilation.tap(PLUGIN_NAME, comp);
+    compiler.hooks.afterEmit.tapAsync(PLUGIN_NAME, afterEmit);
   }
 }
 

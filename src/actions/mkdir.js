@@ -15,13 +15,6 @@ function mkdirAction(command, options) {
       console.log(`  - FileManagerPlugin: Creating path ${command.source}`);
     }
 
-    if (typeof command.source !== 'string') {
-      if (verbose) {
-        console.log('  - FileManagerPlugin: Warning - mkdir parameter has to be type of string. Process canceled.');
-      }
-      return null;
-    }
-
     const source = path.resolve(context, command.source);
     return makeDir(source);
   };
