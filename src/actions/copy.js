@@ -1,9 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const makeDir = require('make-dir');
+import fs from 'fs';
+import path from 'path';
 
-const cpy = require('cpy');
-const cpFile = require('cp-file');
+import makeDir from 'make-dir';
+import cpy from 'cpy';
+import cpFile from 'cp-file';
 
 /**
  * Execute copy action

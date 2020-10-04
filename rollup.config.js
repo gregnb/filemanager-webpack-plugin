@@ -6,13 +6,18 @@ import json from '@rollup/plugin-json';
 export default {
   input: 'src/index.js',
   plugins: [
-    commonjs(),
+    commonjs({
+      include: 'node_modules/**',
+    }),
     json(),
     babel({
       babelHelpers: 'bundled',
     }),
-    nodeResolve(),
+    nodeResolve({
+      preferBuiltins: true,
+    }),
   ],
+  external: ['archiver', 'cpy', 'make-dir', 'mv', 'rimraf', 'schema-utils', 'cp-file', 'fs', 'path'],
   output: {
     file: 'lib/index.js',
     format: 'cjs',

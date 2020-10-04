@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const archiver = require('archiver');
+import fs from 'fs';
+import path from 'path';
+import archiver from 'archiver';
 
 /**
  * Execute mkdir action
@@ -9,7 +9,7 @@ const archiver = require('archiver');
  * @return {Function|null} - Function that returns a promise or null
  */
 function archiveAction(command, options) {
-  const { verbose, context } = options;
+  const { context } = options;
 
   const source = path.resolve(context, command.source);
   const destination = path.resolve(context, command.destination);

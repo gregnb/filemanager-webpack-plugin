@@ -1,5 +1,6 @@
-const path = require('path');
-const makeDir = require('make-dir');
+import path from 'path';
+
+import makeDir from 'make-dir';
 
 /**
  * Execute mkdir action

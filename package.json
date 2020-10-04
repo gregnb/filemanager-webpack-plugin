@@ -28,7 +28,8 @@
   "scripts": {
     "build": "rollup -c",
     "test": "rimraf tests/fixtures/testing && ava",
-    "prettier": "prettier . --write"
+    "prettier": "prettier . --write",
+    "prepublishOnly": "npm run build && npm run test"
   },
   "dependencies": {
     "archiver": "^5.0.2",
