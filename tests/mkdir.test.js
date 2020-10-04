@@ -1,7 +1,6 @@
-import fs from 'fs';
 import path from 'path';
 
-import test from 'ava';
+import { serial as test } from 'ava';
 
 import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
@@ -14,7 +13,7 @@ const fixturesDir = path.resolve(__dirname, 'fixtures');
 const { existsSync } = fsFixtures(fixturesDir);
 const compiler = getCompiler(fixturesDir);
 
-test.serial("should create a directory when ['/path/to/dir'] provided", async (t) => {
+test("should create a directory when ['/path/to/dir'] provided", async (t) => {
   const config = {
     onEnd: {
       mkdir: ['./testing/testdir'],

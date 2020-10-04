@@ -1,6 +1,6 @@
 import path from 'path';
 
-import test from 'ava';
+import { serial as test } from 'ava';
 
 import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
@@ -16,7 +16,7 @@ test.before(async () => {
   await mkdir('./testing');
 });
 
-test.serial('should delete file when array of strings provided in delete function', async (t) => {
+test('should delete file when array of strings provided in delete function', async (t) => {
   await writeFile('./testing/deletable-file.js', '');
 
   const config = {
@@ -34,7 +34,7 @@ test.serial('should delete file when array of strings provided in delete functio
   t.pass();
 });
 
-test.serial('should support glob', async (t) => {
+test('should support glob', async (t) => {
   await writeFile('./testing/deletable-file.js', '');
   await writeFile('./testing/deletable-file2.js', '');
   await writeFile('./testing/deletable-file3.js', '');
@@ -55,21 +55,18 @@ test.serial('should support glob', async (t) => {
   t.pass();
 });
 
-test.serial(
-  'should fail webpack build when delete function receives anything other than an array of strings',
-  async (t) => {
-    const config = {
-      onStart: {
-        delete: [{ source: 'object instead of string' }],
-      },
-    };
+test('should fail webpack build when delete function receives anything other than an array of strings', async (t) => {
+  const config = {
+    onStart: {
+      delete: [{ source: 'object instead of string' }],
+    },
+  };
 
-    const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler(fixturesDir);
 
-    try {
-      new FileManagerPlugin(config).apply(compiler);
-    } catch {
-      t.pass();
-    }
+  try {
+    new FileManagerPlugin(config).apply(compiler);
+  } catch {
+    t.pass();
   }
-);
+});
