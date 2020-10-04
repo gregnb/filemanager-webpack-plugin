@@ -1,5 +1,6 @@
-const path = require('path');
-const rimraf = require('rimraf');
+import path from 'path';
+
+import rimraf from 'rimraf';
 
 /**
  * Execute delete action
