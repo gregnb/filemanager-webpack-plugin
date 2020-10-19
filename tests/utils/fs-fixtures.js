@@ -13,7 +13,7 @@ const fsFixtures = (root) => {
     return fs.promises.mkdir(resolve(p));
   };
 
-  const writeFile = (p, content) => {
+  const writeFile = (p, content = '') => {
     return fs.promises.writeFile(resolve(p), content);
   };
 

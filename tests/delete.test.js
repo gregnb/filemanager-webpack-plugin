@@ -17,8 +17,8 @@ test.before(async () => {
 });
 
 test('should delete file when array of strings provided in delete function', async (t) => {
-  await writeFile('./testing/deletable-file.js', '');
-  await writeFile('./testing/deletable-file2.js', '');
+  await writeFile('./testing/deletable-file.js');
+  await writeFile('./testing/deletable-file2.js');
 
   const config = {
     onStart: {
@@ -40,9 +40,9 @@ test('should delete file when array of strings provided in delete function', asy
 });
 
 test('should support glob', async (t) => {
-  await writeFile('./testing/deletable-file.js', '');
-  await writeFile('./testing/deletable-file2.js', '');
-  await writeFile('./testing/deletable-file3.js', '');
+  await writeFile('./testing/deletable-file.js');
+  await writeFile('./testing/deletable-file2.js');
+  await writeFile('./testing/deletable-file3.js');
 
   const config = {
     onEnd: {
