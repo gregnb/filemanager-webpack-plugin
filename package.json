@@ -27,37 +27,41 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "test": "rimraf tests/fixtures/testing && ava",
+    "test": "del tests/fixtures/testing* && ava",
     "prettier": "prettier . --write",
     "prepublishOnly": "npm run build && npm run test"
+  },
+  "peerDependencies": {
+    "webpack": "^4 || ^5"
   },
   "dependencies": {
     "archiver": "^5.0.2",
     "cpy": "^8.1.1",
-    "make-dir": "^3.1.0",
-    "mv": "^2.1.1",
-    "rimraf": "^3.0.2",
-    "schema-utils": "^2.7.1"
+    "del": "^6.0.0",
+    "fs-extra": "^9.0.1",
+    "is-glob": "^4.0.1",
+    "schema-utils": "^3.0.0"
   },
   "devDependencies": {
     "@ava/babel": "^1.0.1",
-    "@babel/core": "^7.11.6",
-    "@babel/preset-env": "^7.11.5",
-    "@babel/register": "^7.11.5",
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/register": "^7.12.1",
     "@rollup/plugin-babel": "^5.2.1",
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "ava": "^3.13.0",
+    "del-cli": "^3.0.1",
+    "fast-glob": "^3.2.4",
     "glob": "^7.1.6",
+    "html-webpack-plugin": "^4.5.0",
     "husky": "^4.3.0",
     "jszip": "^3.5.0",
     "prettier": "^2.1.2",
-    "pretty-quick": "^3.0.2",
+    "pretty-quick": "^3.1.0",
     "regenerator-runtime": "^0.13.7",
-    "rollup": "^2.28.2",
-    "webpack": "^4.44.2",
-    "webpack-cli": "3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "rollup": "^2.32.0",
+    "webpack": "^4.44.2"
   }
 }

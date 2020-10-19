@@ -17,7 +17,7 @@ export default {
       preferBuiltins: true,
     }),
   ],
-  external: ['archiver', 'cpy', 'make-dir', 'mv', 'rimraf', 'schema-utils', 'cp-file', 'fs', 'path'],
+  external: ['archiver', 'cpy', 'del', 'schema-utils', 'fs', 'path', 'fs-extra'],
   output: {
     file: 'lib/index.js',
     format: 'cjs',

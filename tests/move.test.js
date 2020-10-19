@@ -14,6 +14,7 @@ const { existsSync, mkdir, writeFile } = fsFixtures(fixturesDir);
 
 test('should move files from source to destination', async (t) => {
   await mkdir('testing-move');
+  await writeFile('testing-move/dummy.js');
 
   const config = {
     onEnd: {
@@ -26,5 +27,6 @@ test('should move files from source to destination', async (t) => {
   await compile(compiler);
 
   t.true(existsSync('./testing-moved'));
+  t.true(existsSync('./testing-moved/dummy.js'));
   t.pass();
 });

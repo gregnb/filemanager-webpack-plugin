@@ -13,4 +13,4 @@ const compile = (compiler) =>
     });
   });
 
-module.exports = compile;
+export default compile;

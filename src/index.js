@@ -1,165 +1,109 @@
-import validateOptions from 'schema-utils';
+import path from 'path';
+
+import { validate } from 'schema-utils';
 
 import { copyAction, moveAction, mkdirAction, archiveAction, deleteAction } from './actions';
 
-import schema from './options-schema';
+import schema from './actions-schema';
 
 const PLUGIN_NAME = 'FileManagerPlugin';
 
-class FileManagerPlugin {
-  constructor(options) {
-    validateOptions(schema, options, {
-      name: PLUGIN_NAME,
-      baseDataPath: 'options',
-    });
+const resolvePaths = (stages, context) => {
+  Object.keys(stages).forEach((stage) => {
+    Object.keys(stages[stage]).forEach((action) => {
+      stages[stage][action] = stages[stage][action].map((task) => {
+        const source = typeof task === 'string' ? task : task.source;
 
-    this.options = this.setOptions(options);
-  }
-
-  setOptions(userOptions) {
-    const defaultOptions = {
-      verbose: false,
-      moveWithMkdirp: false,
-      onStart: {},
-      onEnd: {},
-    };
-
-    for (const key in defaultOptions) {
-      if (userOptions.hasOwnProperty(key)) {
-        defaultOptions[key] = userOptions[key];
-      }
-    }
-
-    return defaultOptions;
-  }
-
-  checkOptions(stage) {
-    if (this.options.verbose && Object.keys(this.options[stage]).length) {
-      console.log(`FileManagerPlugin: processing ${stage} event`);
-    }
-
-    let operationList = [];
-
-    if (this.options[stage] && Array.isArray(this.options[stage])) {
-      this.options[stage].map((opts) => operationList.push(...this.parseFileOptions(opts, true)));
-    } else {
-      operationList.push(...this.parseFileOptions(this.options[stage]));
-    }
-
-    if (operationList.length) {
-      operationList.reduce((previous, fn) => {
-        return previous.then((retVal) => fn(retVal)).catch((err) => console.log(err));
-      }, Promise.resolve());
-    }
-  }
-
-  replaceHash(filename) {
-    return filename.replace('[hash]', this.fileHash);
-  }
-
-  processAction(action, params, commandOrder) {
-    const options = {
-      ...this.options,
-      context: this.context,
-    };
-    const result = action(params, options);
-
-    if (result !== null) {
-      commandOrder.push(result);
-    }
-  }
-
-  parseFileOptions(options) {
-    let commandOrder = [];
-
-    Object.keys(options).forEach((actionType) => {
-      const actionOptions = options[actionType];
-      let actionParams = null;
-
-      actionOptions.forEach((actionItem) => {
-        switch (actionType) {
-          case 'copy':
-            actionParams = Object.assign(
-              { source: this.replaceHash(actionItem.source) },
-              actionItem.destination && { destination: actionItem.destination }
-            );
-
-            this.processAction(copyAction, actionParams, commandOrder);
-
-            break;
-
-          case 'move':
-            actionParams = Object.assign(
-              { source: this.replaceHash(actionItem.source) },
-              actionItem.destination && { destination: actionItem.destination }
-            );
-
-            this.processAction(moveAction, actionParams, commandOrder);
-
-            break;
-
-          case 'delete':
-            if (!Array.isArray(actionOptions) || typeof actionItem !== 'string') {
-              throw Error(`  - FileManagerPlugin: Fail - delete parameters has to be an array of strings`);
-            }
-
-            actionParams = Object.assign({ source: this.replaceHash(actionItem) });
-            this.processAction(deleteAction, actionParams, commandOrder);
-
-            break;
-
-          case 'mkdir':
-            actionParams = { source: this.replaceHash(actionItem) };
-            this.processAction(mkdirAction, actionParams, commandOrder);
-
-            break;
-
-          case 'archive':
-            actionParams = {
-              source: this.replaceHash(actionItem.source),
-              destination: actionItem.destination,
-              format: actionItem.format ? actionItem.format : 'zip',
-              options: actionItem.options ? actionItem.options : { zlib: { level: 9 } },
-            };
-
-            this.processAction(archiveAction, actionParams, commandOrder);
-
-            break;
-
-          default:
-            break;
+        if (typeof task === 'string') {
+          return {
+            source,
+            absSource: path.isAbsolute(source) ? source : path.join(context, source),
+          };
         }
+
+        const { destination } = task;
+
+        return {
+          ...task,
+          source: source,
+          absSource: path.isAbsolute(source) ? source : path.join(context, source),
+          destination: destination,
+          absDestination: path.isAbsolute(destination) ? destination : path.join(context, destination),
+          context,
+        };
       });
     });
+  });
 
-    return commandOrder;
+  return stages;
+};
+
+class FileManagerPlugin {
+  constructor(actions) {
+    validate(schema, actions, {
+      name: PLUGIN_NAME,
+      baseDataPath: 'actions',
+    });
+
+    this.actions = actions;
+  }
+
+  async processAction(action, actionParams) {
+    const options = {
+      context: this.context,
+    };
+
+    await action(actionParams, options);
+  }
+
+  async execute(stage) {
+    if (!this.actions[stage]) {
+      return;
+    }
+
+    const stages = Object.keys(this.actions[stage]);
+
+    const executionPromises = stages.map(async (actionType) => {
+      const actionParams = this.actions[stage][actionType];
+
+      switch (actionType) {
+        case 'delete':
+          return this.processAction(deleteAction, actionParams);
+
+        case 'mkdir':
+          return this.processAction(mkdirAction, actionParams);
+
+        case 'copy':
+          return this.processAction(copyAction, actionParams);
+
+        case 'move':
+          return this.processAction(moveAction, actionParams);
+
+        case 'archive':
+          return this.processAction(archiveAction, actionParams);
+
+        default:
+          return;
+      }
+    });
+
+    Promise.all(executionPromises);
   }
 
   apply(compiler) {
     this.context = compiler.options.context;
+    this.actions = resolvePaths(this.actions, this.context);
 
-    const comp = (compilation) => {
-      try {
-        this.checkOptions('onStart');
-      } catch (error) {
-        compilation.errors.push(error);
-      }
+    const onStart = async () => {
+      await this.execute('onStart');
     };
 
-    const afterEmit = (compilation, cb) => {
-      this.fileHash = compilation.hash;
-
-      try {
-        this.checkOptions('onEnd');
-      } catch (error) {
-        compilation.errors.push(error);
-      }
-
-      cb();
+    const onEnd = async () => {
+      await this.execute('onEnd');
     };
 
-    compiler.hooks.thisCompilation.tap(PLUGIN_NAME, comp);
-    compiler.hooks.afterEmit.tapAsync(PLUGIN_NAME, afterEmit);
+    compiler.hooks.beforeRun.tapPromise(PLUGIN_NAME, onStart);
+    compiler.hooks.afterEmit.tapPromise(PLUGIN_NAME, onEnd);
   }
 }
 

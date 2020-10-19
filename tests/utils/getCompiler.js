@@ -1,16 +1,17 @@
 import path from 'path';
 import webpack from 'webpack';
+import HTMLPlugin from 'html-webpack-plugin';
 
-const getCompiler = (context, outputFileName = 'bundle.js') => {
+const getCompiler = (context) => {
   const compiler = webpack({
     context,
     mode: 'production',
     entry: path.resolve(context),
     output: {
       path: path.resolve(context, 'dist'),
-      filename: outputFileName,
+      filename: 'js/bunlde-[contenthash].js',
     },
-    plugins: [],
+    plugins: [new HTMLPlugin()],
   });
 
   return compiler;

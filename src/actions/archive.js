@@ -2,61 +2,58 @@ import fs from 'fs';
 import path from 'path';
 
 import archiver from 'archiver';
+import isGlob from 'is-glob';
+import fsExtra from 'fs-extra';
 
-/**
- * Execute mkdir action
- *
- * @param {Object} command - Command data for given action
- * @return {Function|null} - Function that returns a promise or null
- */
-function archiveAction(command, options) {
-  const { context } = options;
+const archiveAction = async (tasks) => {
+  const actionMap = tasks.map(archive);
+  await Promise.all(actionMap);
+};
 
-  const source = path.resolve(context, command.source);
-  const destination = path.resolve(context, command.destination);
+const archive = async (task) => {
+  const { source, absSource, absDestination, options = {}, context } = task;
+  const format = task.format || path.extname(absDestination).replace('.', '');
 
-  return () =>
-    new Promise((resolve, reject) => {
-      const fileRegex = /(\*|\{+|\}+)/g;
-      const matches = fileRegex.exec(command.source);
+  // Exclude destination file from archive
+  const destFile = path.basename(absDestination);
+  const destDir = path.dirname(absDestination);
+  const globOptions = Object.assign({ ignore: destFile }, options.globOptions || {});
 
-      const isGlob = matches !== null;
+  await fsExtra.ensureDir(destDir);
 
-      fs.lstat(source, (sErr, sStats) => {
-        if (!fs.existsSync(path.dirname(destination))) {
-          fs.mkdirSync(path.dirname(destination), { recursive: true });
-        }
+  const output = fs.createWriteStream(absDestination);
+  const archive = archiver(format, options);
+  archive.pipe(output);
 
-        const output = fs.createWriteStream(destination);
-        const archive = archiver(command.format, command.options);
+  if (isGlob(source)) {
+    const gOptions = {
+      ...globOptions,
+      cwd: context,
+    };
 
-        archive.on('error', (err) => reject(err));
-        archive.pipe(output);
+    await archive.glob(source, gOptions).finalize();
+  } else {
+    const sStat = fs.lstatSync(absSource);
 
-        // Exclude destination file from archive
-        const destFile = path.basename(destination);
-        const globOptions = Object.assign({ ignore: destFile }, command.options.globOptions || {});
+    if (sStat.isDirectory()) {
+      const gOptions = {
+        ...globOptions,
+        cwd: absSource,
+      };
 
-        if (isGlob) {
-          archive.glob(command.source, {
-            ...globOptions,
-            cwd: context,
-          });
-        } else if (sStats.isFile()) {
-          archive.file(source, {
-            name: path.basename(command.source),
-            cwd: context,
-          });
-        } else if (sStats.isDirectory()) {
-          archive.glob('**/*', {
-            cwd: source,
-            ignore: destFile,
-          });
-        }
+      await archive.glob('**/*', gOptions).finalize();
+    }
 
-        archive.finalize().then(resolve);
-      });
-    });
-}
+    if (sStat.isFile()) {
+      const options = {
+        name: path.basename(source),
+      };
+
+      await archive.file(absSource, options).finalize();
+    }
+  }
+
+  // output.close()
+};
 
 export default archiveAction;

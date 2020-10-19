@@ -11,12 +11,14 @@ import FileManagerPlugin from '../lib';
 const fixturesDir = path.resolve(__dirname, 'fixtures');
 
 const { existsSync } = fsFixtures(fixturesDir);
-const compiler = getCompiler(fixturesDir);
 
-test("should create a directory when ['/path/to/dir'] provided", async (t) => {
+test("should create a directory when ['/path/to/dir'] provided via onEnd", async (t) => {
   const config = {
+    onStart: {
+      mkdir: ['testing-mkdir-start', 'testing-mkdir2-start'],
+    },
     onEnd: {
-      mkdir: ['./testing/testdir'],
+      mkdir: ['testing-mkdir-end', 'testing-mkdir2-end'],
     },
   };
 
@@ -24,7 +26,9 @@ test("should create a directory when ['/path/to/dir'] provided", async (t) => {
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const result = existsSync('./testing/testdir');
-  t.true(result);
+  t.true(existsSync('testing-mkdir-start'));
+  t.true(existsSync('testing-mkdir2-start'));
+  t.true(existsSync('testing-mkdir-end'));
+  t.true(existsSync('testing-mkdir2-end'));
   t.pass();
 });

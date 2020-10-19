@@ -13,6 +13,12 @@ const fixturesDir = path.resolve(__dirname, 'fixtures');
 
 const { existsSync, readFile, writeFile } = fsFixtures(fixturesDir);
 
+const zipHasFile = async (zipPath, fileName) => {
+  const data = await readFile(zipPath);
+  const zip = await JSZip.loadAsync(data);
+  return Object.keys(zip.files).includes(fileName);
+};
+
 test('should archive (ZIP) a directory to destination ZIP when { source: "/source", destination: "/dest.zip" } provided', async (t) => {
   const config = {
     onEnd: {
@@ -32,7 +38,7 @@ test('should archive (ZIP) a directory to destination ZIP when { source: "/sourc
 test('should archive (ZIP) a single file to destination ZIP when { source: "/sourceFile.js", destination: "/dest.zip" } provided', async (t) => {
   const config = {
     onEnd: {
-      archive: [{ source: './dist/bundle.js', destination: './testing/test2.zip' }],
+      archive: [{ source: './dist/index.html', destination: './testing/test2.zip' }],
     },
   };
 
@@ -41,14 +47,16 @@ test('should archive (ZIP) a single file to destination ZIP when { source: "/sou
   await compile(compiler);
 
   const result = existsSync('./testing/test2.zip');
+  const fileExist = await zipHasFile('./testing/test2.zip', 'index.html');
   t.true(result);
+  t.true(fileExist);
   t.pass();
 });
 
 test('should archive (ZIP) a directory glob to destination ZIP when { source: "/source/**/*", destination: "/dest.zip" } provided', async (t) => {
   const config = {
     onEnd: {
-      archive: [{ source: './dist/**/*', destination: './testing/test3.zip' }],
+      archive: [{ source: 'dist/**/*', destination: './testing/test3.zip' }],
     },
   };
 
@@ -64,7 +72,7 @@ test('should archive (ZIP) a directory glob to destination ZIP when { source: "/
 test('should archive (TAR) a directory glob to destination TAR when { source: "/source/**/*", destination: "/dest.zip", format: "tar" } provided', async (t) => {
   const config = {
     onEnd: {
-      archive: [{ source: './dist/**/*', destination: './testing/test4.tar', format: 'tar' }],
+      archive: [{ source: 'dist/**/*', destination: './testing/test4.tar', format: 'tar' }],
     },
   };
 
@@ -82,7 +90,7 @@ test('should archive (TAR.GZ) a directory glob to destination TAR.GZ when { sour
     onEnd: {
       archive: [
         {
-          source: './dist/**/*',
+          source: 'dist/**/*',
           destination: './testing/test5.tar.gz',
           format: 'tar',
           options: {
@@ -117,14 +125,8 @@ test('should exclude archive (ZIP) from destination ZIP when { source: "/source"
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  async function getResult() {
-    const data = await readFile('./testing/test7.zip');
-    const zip = await JSZip.loadAsync(data);
-    return !Object.keys(zip.files).includes('test7.zip');
-  }
-
-  const result = await getResult();
-  t.true(result);
+  const result = await zipHasFile('./testing/test7.zip', 'test7.zip');
+  t.false(result);
 });
 
 test('should include root-level files in the archive (ZIP) from destination ZIP when { source: "/source", destination: "/source/dest.zip" } provided', async (t) => {
@@ -132,7 +134,7 @@ test('should include root-level files in the archive (ZIP) from destination ZIP 
 
   const config = {
     onEnd: {
-      archive: [{ source: './testing/', destination: './testing/test7.zip' }],
+      archive: [{ source: './testing/', destination: './testing/test8.zip' }],
     },
   };
 
@@ -140,12 +142,6 @@ test('should include root-level files in the archive (ZIP) from destination ZIP 
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  async function getResult() {
-    const data = await readFile('./testing/test7.zip');
-    const zip = await JSZip.loadAsync(data);
-    return Object.keys(zip.files).includes('random-file.js');
-  }
-
-  const result = await getResult();
+  const result = await zipHasFile('./testing/test8.zip', 'random-file.js');
   t.true(result);
 });

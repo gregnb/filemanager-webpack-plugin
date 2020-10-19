@@ -18,10 +18,14 @@ test.before(async () => {
 
 test('should delete file when array of strings provided in delete function', async (t) => {
   await writeFile('./testing/deletable-file.js', '');
+  await writeFile('./testing/deletable-file2.js', '');
 
   const config = {
     onStart: {
       delete: ['./testing/deletable-file.js'],
+    },
+    onEnd: {
+      delete: ['testing/deletable-file2.js', 'testing/deletable-file3.js'],
     },
   };
 
@@ -29,8 +33,9 @@ test('should delete file when array of strings provided in delete function', asy
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const result = existsSync('./testing/deletable-file.js');
-  t.false(result);
+  t.false(existsSync('./testing/deletable-file.js'));
+  t.false(existsSync('./testing/deletable-file2.js'));
+  t.false(existsSync('./testing/deletable-file3.js'));
   t.pass();
 });
 
@@ -40,7 +45,7 @@ test('should support glob', async (t) => {
   await writeFile('./testing/deletable-file3.js', '');
 
   const config = {
-    onStart: {
+    onEnd: {
       delete: ['./testing/*'],
     },
   };
