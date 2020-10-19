@@ -54,7 +54,6 @@
     "ava": "^3.13.0",
     "del-cli": "^3.0.1",
     "fast-glob": "^3.2.4",
-    "glob": "^7.1.6",
     "html-webpack-plugin": "^4.5.0",
     "husky": "^4.3.0",
     "jszip": "^3.5.0",
