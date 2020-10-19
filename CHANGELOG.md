@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## Unreleased
+
+#### Features
+
+- support webpack 5
+
+#### Enhancements
+
+- removed dependency `mv` and `mkdir`, use `fs-extra` instead
+- run tests in `ubuntu`, `windows` and `mac`
+
+#### Breaking Changes
+
+- requires node 10.13 or above
+- removed verbose option, will be added in upcoming releases
+
 ## v3.0.0-alpha.1 (2020-10-04)
 
 #### Enhancements
