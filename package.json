@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "test": "del tests/fixtures/testing* && ava",
+    "test": "ava",
     "prettier": "prettier . --write",
     "prepublishOnly": "npm run build && npm run test"
   },
