@@ -87,7 +87,9 @@ class FileManagerPlugin {
       }
     });
 
-    Promise.all(executionPromises);
+    for (const execution of executionPromises) {
+      await execution;
+    }
   }
 
   apply(compiler) {

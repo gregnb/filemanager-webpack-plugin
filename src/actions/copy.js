@@ -7,7 +7,10 @@ import isGlob from 'is-glob';
 
 const copyAction = async (tasks) => {
   const taskMap = tasks.map(copy);
-  await Promise.all(taskMap);
+
+  for (const task of taskMap) {
+    await task;
+  }
 };
 
 const copy = async (task) => {

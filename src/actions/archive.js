@@ -6,8 +6,11 @@ import isGlob from 'is-glob';
 import fsExtra from 'fs-extra';
 
 const archiveAction = async (tasks) => {
-  const actionMap = tasks.map(archive);
-  await Promise.all(actionMap);
+  const taskMap = tasks.map(archive);
+
+  for (const task of taskMap) {
+    await task;
+  }
 };
 
 const archive = async (task) => {
