@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## Unreleased
+## v3.0.0-alpha.2 (2020-10-22)
 
 #### Features
 
@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 - removed dependency `mv` and `mkdir`, use `fs-extra` instead
 - run tests in `ubuntu`, `windows` and `mac`
+- added more tests for all actions
 
 #### Breaking Changes
 
