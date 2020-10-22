@@ -11,7 +11,7 @@ import fsFixtures from './utils/fs-fixtures';
 import FileManagerPlugin from '../lib';
 
 const fixturesDir = path.resolve(__dirname, 'fixtures');
-const { existsSync } = fsFixtures(fixturesDir);
+const { existsSync, writeFile } = fsFixtures(fixturesDir);
 
 test.before(async () => {
   await del('*', {
@@ -132,6 +132,24 @@ test('should first create destination if it does not exist and copy inside desti
   await compile(compiler);
 
   const result = existsSync('./testing/testing6/index.html');
+  t.true(result);
+  t.pass();
+});
+
+test('should copy a file without extension to target folder', async (t) => {
+  await writeFile('testing/file-without-ext');
+
+  const config = {
+    onEnd: {
+      copy: [{ source: 'testing/file-without-ext', destination: './testing/no-ext/' }],
+    },
+  };
+
+  const compiler = getCompiler(fixturesDir);
+  new FileManagerPlugin(config).apply(compiler);
+  await compile(compiler);
+
+  const result = existsSync('./testing/no-ext/file-without-ext');
   t.true(result);
   t.pass();
 });
