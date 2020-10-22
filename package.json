@@ -52,7 +52,6 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "ava": "^3.13.0",
-    "del-cli": "^3.0.1",
     "fast-glob": "^3.2.4",
     "html-webpack-plugin": "^4.5.0",
     "husky": "^4.3.0",
@@ -60,7 +59,7 @@
     "prettier": "^2.1.2",
     "pretty-quick": "^3.1.0",
     "regenerator-runtime": "^0.13.7",
-    "rollup": "^2.32.0",
-    "webpack": "^4.44.2"
+    "rollup": "^2.32.1",
+    "webpack": "^5.1.3"
   }
 }
