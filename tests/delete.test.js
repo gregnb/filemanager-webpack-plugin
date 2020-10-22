@@ -1,6 +1,7 @@
 import path from 'path';
 
 import { serial as test } from 'ava';
+import del from 'del';
 
 import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
@@ -13,6 +14,11 @@ const fixturesDir = path.resolve(__dirname, 'fixtures');
 const { mkdir, writeFile, existsSync } = fsFixtures(fixturesDir);
 
 test.before(async () => {
+  await del('*', {
+    cwd: fixturesDir,
+    onlyDirectories: true,
+  });
+
   await mkdir('./testing');
 });
 

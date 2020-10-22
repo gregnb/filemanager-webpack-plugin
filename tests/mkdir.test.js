@@ -1,6 +1,7 @@
 import path from 'path';
 
 import { serial as test } from 'ava';
+import del from 'del';
 
 import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
@@ -11,6 +12,13 @@ import FileManagerPlugin from '../lib';
 const fixturesDir = path.resolve(__dirname, 'fixtures');
 
 const { existsSync } = fsFixtures(fixturesDir);
+
+test.before(async () => {
+  await del('*', {
+    cwd: fixturesDir,
+    onlyDirectories: true,
+  });
+});
 
 test("should create a directory when ['/path/to/dir'] provided via onEnd", async (t) => {
   const config = {

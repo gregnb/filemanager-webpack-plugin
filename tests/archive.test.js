@@ -1,6 +1,7 @@
 import path from 'path';
 
 import { serial as test } from 'ava';
+import del from 'del';
 import JSZip from 'jszip';
 
 import compile from './utils/compile';
@@ -18,6 +19,13 @@ const zipHasFile = async (zipPath, fileName) => {
   const zip = await JSZip.loadAsync(data);
   return Object.keys(zip.files).includes(fileName);
 };
+
+test.before(async () => {
+  await del('*', {
+    cwd: fixturesDir,
+    onlyDirectories: true,
+  });
+});
 
 test('should archive (ZIP) a directory to destination ZIP when { source: "/source", destination: "/dest.zip" } provided', async (t) => {
   const config = {

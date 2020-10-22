@@ -18,7 +18,7 @@ const copy = async (task) => {
       const src = path.posix.join(context, source);
       await cpy(src, absDestination);
     } else {
-      const isFolderTarget = absDestination.endsWith('/');
+      const isFolderTarget = /(?:\\|\/)$/.test(absDestination);
       const isSourceFile = fs.lstatSync(absSource).isFile();
 
       // if source is a file and target is a directory
