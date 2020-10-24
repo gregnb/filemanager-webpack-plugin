@@ -1,8 +1,8 @@
-import fsExtra from 'fs-extra';
+import fs from 'fs';
 
 const mkdirAction = async (tasks) => {
   for (const task of tasks) {
-    await fsExtra.ensureDir(task.absoluteSource);
+    await fs.promises.mkdir(task.absoluteSource, { recursive: true });
   }
 };
 

@@ -147,7 +147,7 @@ Create a directory path with given path
 
 ### Archive
 
-Archive individual files or entire directories. Defaults to .zip unless 'format' and 'options' provided. Uses [node-archiver]
+Archive individual files or entire directories. Defaults to .zip unless 'format' and 'options' provided. Uses [node-archiver](https://github.com/archiverjs/node-archiver)
 
 ```js
 [
@@ -176,8 +176,6 @@ Archive individual files or entire directories. Defaults to .zip unless 'format'
 - destination[`string`] - a file.
 - format[`string`] - Optional. Defaults to extension in destination filename.
 - options[`object`] - Refer https://www.archiverjs.com/archiver
-
-[node-archiver]: https://github.com/archiverjs/node-archiver
 
 ### Order of execution
 
