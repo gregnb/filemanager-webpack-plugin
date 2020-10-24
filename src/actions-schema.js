@@ -102,7 +102,7 @@ export default {
     },
     Events: {
       type: 'object',
-      additionalProperties: true,
+      additionalProperties: false,
       properties: {
         copy: {
           $ref: '#/definitions/Copy',
@@ -124,10 +124,30 @@ export default {
   },
   properties: {
     onStart: {
-      $ref: '#/definitions/Events',
+      oneOf: [
+        {
+          $ref: '#/definitions/Events',
+        },
+        {
+          type: 'array',
+          items: {
+            $ref: '#/definitions/Events',
+          },
+        },
+      ],
     },
     onEnd: {
-      $ref: '#/definitions/Events',
+      oneOf: [
+        {
+          $ref: '#/definitions/Events',
+        },
+        {
+          type: 'array',
+          items: {
+            $ref: '#/definitions/Events',
+          },
+        },
+      ],
     },
   },
 };

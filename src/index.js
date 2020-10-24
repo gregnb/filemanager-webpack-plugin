@@ -2,99 +2,90 @@ import path from 'path';
 
 import { validate } from 'schema-utils';
 
-import { copyAction, moveAction, mkdirAction, archiveAction, deleteAction } from './actions';
-
 import schema from './actions-schema';
+import { copyAction, moveAction, mkdirAction, archiveAction, deleteAction } from './actions';
 
 const PLUGIN_NAME = 'FileManagerPlugin';
 
-const resolvePaths = (stages, context) => {
-  Object.keys(stages).forEach((stage) => {
-    Object.keys(stages[stage]).forEach((action) => {
-      stages[stage][action] = stages[stage][action].map((task) => {
-        const source = typeof task === 'string' ? task : task.source;
+const resolvePaths = (action, context) => {
+  return action.map((task) => {
+    if (typeof task === 'string') {
+      const source = task;
+      return {
+        source,
+        absoluteSource: path.isAbsolute(source) ? source : path.join(context, source),
+      };
+    }
 
-        if (typeof task === 'string') {
-          return {
-            source,
-            absoluteSource: path.isAbsolute(source) ? source : path.join(context, source),
-          };
-        }
+    const { source, destination } = task;
 
-        const { destination } = task;
-
-        return {
-          ...task,
-          source: source,
-          absoluteSource: path.isAbsolute(source) ? source : path.join(context, source),
-          destination: destination,
-          absoluteDestination: path.isAbsolute(destination) ? destination : path.join(context, destination),
-          context,
-        };
-      });
-    });
+    return {
+      ...task,
+      source,
+      absoluteSource: path.isAbsolute(source) ? source : path.join(context, source),
+      destination: destination,
+      absoluteDestination: path.isAbsolute(destination) ? destination : path.join(context, destination),
+      context,
+    };
   });
-
-  return stages;
 };
 
 class FileManagerPlugin {
-  constructor(actions) {
-    validate(schema, actions, {
+  constructor(events) {
+    validate(schema, events, {
       name: PLUGIN_NAME,
       baseDataPath: 'actions',
     });
 
-    this.actions = actions;
+    this.events = events;
   }
 
-  async processAction(action, actionParams) {
-    const options = {
-      context: this.context,
-    };
-
-    await action(actionParams, options);
+  async applyAction(action, actionParams) {
+    await action(resolvePaths(actionParams, this.context));
   }
 
-  async execute(stage) {
-    if (!this.actions[stage]) {
-      return;
-    }
-
-    const stages = Object.keys(this.actions[stage]);
-
-    const executionPromises = stages.map(async (actionType) => {
-      const actionParams = this.actions[stage][actionType];
-
+  async run(event) {
+    for (const actionType in event) {
+      const action = event[actionType];
       switch (actionType) {
         case 'delete':
-          return this.processAction(deleteAction, actionParams);
+          return this.applyAction(deleteAction, action);
 
         case 'mkdir':
-          return this.processAction(mkdirAction, actionParams);
+          return this.applyAction(mkdirAction, action);
 
         case 'copy':
-          return this.processAction(copyAction, actionParams);
+          return this.applyAction(copyAction, action);
 
         case 'move':
-          return this.processAction(moveAction, actionParams);
+          return this.applyAction(moveAction, action);
 
         case 'archive':
-          return this.processAction(archiveAction, actionParams);
+          return this.applyAction(archiveAction, action);
 
         default:
           return;
       }
-    });
-
-    for (const execution of executionPromises) {
-      await execution;
     }
+  }
+
+  async execute(eventName) {
+    if (Array.isArray(this.events[eventName])) {
+      const eventsArr = this.events[eventName];
+
+      for (const event of eventsArr) {
+        await this.run(event);
+      }
+
+      return;
+    }
+
+    const event = this.events[eventName];
+    return await this.run(event);
   }
 
   apply(compiler) {
     this.context = compiler.options.context;
-    this.actions = resolvePaths(this.actions, this.context);
 
     const onStart = async () => {
       await this.execute('onStart');
@@ -104,7 +95,8 @@ class FileManagerPlugin {
       await this.execute('onEnd');
     };
 
-    compiler.hooks.beforeCompile.tapPromise(PLUGIN_NAME, onStart);
+    compiler.hooks.beforeRun.tapPromise(PLUGIN_NAME, onStart);
+    compiler.hooks.watchRun.tapPromise(PLUGIN_NAME, onStart);
     compiler.hooks.afterEmit.tapPromise(PLUGIN_NAME, onEnd);
   }
 }
