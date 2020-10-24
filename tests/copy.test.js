@@ -20,7 +20,7 @@ test.before(async () => {
   });
 });
 
-test('should copy when { source: "/source/*", destination: "/dest" } provided', async (t) => {
+test('should copy files to a directory given a glob source', async (t) => {
   const config = {
     onEnd: {
       copy: [{ source: './dist/*', destination: './testing/testing1' }],
@@ -36,7 +36,7 @@ test('should copy when { source: "/source/*", destination: "/dest" } provided', 
   t.pass();
 });
 
-test('should copy when { source: "/source/**/*", destination: "/dest" } provided', async (t) => {
+test('should deep copy files to directory given a glob source', async (t) => {
   const config = {
     onEnd: {
       copy: [{ source: './dist/**/*', destination: './testing/testing2' }],
@@ -52,7 +52,7 @@ test('should copy when { source: "/source/**/*", destination: "/dest" } provided
   t.pass();
 });
 
-test('should copy and create destination directory { source: "/source", destination: "/dest/doesnt-exist-yet" } provided', async (t) => {
+test(`should create destination directory if it doesn't exist and copy files`, async (t) => {
   const config = {
     onEnd: {
       copy: [{ source: './dist', destination: './testing/testing3' }],
@@ -68,10 +68,10 @@ test('should copy and create destination directory { source: "/source", destinat
   t.pass();
 });
 
-test('should copy and create destination directory when { source: "/source/**/*.{html,js}", destination: "/dest/doesnt-exist-yet" } provided', async (t) => {
+test('should copy and create destination directory given a glob source with extension', async (t) => {
   const config = {
     onEnd: {
-      copy: [{ source: './dist/**/*.{html,js}', destination: './testing/testing4' }],
+      copy: [{ source: './dist/{fake,index}.html', destination: './testing/testing4' }],
     },
   };
 
@@ -79,29 +79,12 @@ test('should copy and create destination directory when { source: "/source/**/*.
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const results = await glob('./testing/testing4/*', { cwd: fixturesDir });
-  const allFilesExist = results.every((fileName) => fileName.endsWith('.html') || fileName.endsWith('.js'));
-  t.true(allFilesExist);
-  t.pass();
-});
-
-test('should copy and create destination directory when { source: "/source/{file1,file2}.js", destination: "/dest/doesnt-exist-yet" } provided', async (t) => {
-  const config = {
-    onEnd: {
-      copy: [{ source: './dist/{fake,index}.html', destination: './testing/testing5' }],
-    },
-  };
-
-  const compiler = getCompiler(fixturesDir);
-  new FileManagerPlugin(config).apply(compiler);
-  await compile(compiler);
-
-  const result = existsSync('./testing/testing5/index.html');
+  const result = existsSync('./testing/testing4/index.html');
   t.true(result);
   t.pass();
 });
 
-test('should copy when { source: "/sourceFile.js", destination: "/destFile.js" } provided', async (t) => {
+test('should copy source file to destination file', async (t) => {
   const config = {
     onEnd: {
       copy: [
@@ -120,10 +103,10 @@ test('should copy when { source: "/sourceFile.js", destination: "/destFile.js" }
   t.pass();
 });
 
-test('should first create destination if it does not exist and copy inside destination when { source: "/sourceFile.js", destination: "/destFolder" } provided', async (t) => {
+test('should copy file into the directory given source is a file and destination is a directory', async (t) => {
   const config = {
     onEnd: {
-      copy: [{ source: './dist/index.html', destination: './testing/testing6/' }],
+      copy: [{ source: './dist/index.html', destination: './testing/testing5/' }],
     },
   };
 
@@ -131,7 +114,7 @@ test('should first create destination if it does not exist and copy inside desti
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const result = existsSync('./testing/testing6/index.html');
+  const result = existsSync('./testing/testing5/index.html');
   t.true(result);
   t.pass();
 });
@@ -154,7 +137,7 @@ test('should copy a file without extension to target folder', async (t) => {
   t.pass();
 });
 
-test('should not copy a file that does not exist { source: "/filedoesnotexist.js", destination: "/destFolder" } provided', async (t) => {
+test('should not copy a file that does not exist', async (t) => {
   const config = {
     onEnd: {
       copy: [{ source: './dist/doesnotexit.js', destination: './testing/wontexist.js' }],

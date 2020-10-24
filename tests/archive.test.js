@@ -12,7 +12,7 @@ import FileManagerPlugin from '../lib';
 
 const fixturesDir = path.resolve(__dirname, 'fixtures');
 
-const { existsSync, readFile, writeFile } = fsFixtures(fixturesDir);
+const { existsSync, readFile, writeFile, mkdir } = fsFixtures(fixturesDir);
 
 const zipHasFile = async (zipPath, fileName) => {
   const data = await readFile(zipPath);
@@ -27,7 +27,7 @@ test.before(async () => {
   });
 });
 
-test('should archive (ZIP) a directory to destination ZIP when { source: "/source", destination: "/dest.zip" } provided', async (t) => {
+test('should archive(ZIP) a directory to a destination ZIP', async (t) => {
   const config = {
     onEnd: {
       archive: [{ source: './dist', destination: './testing/test1.zip' }],
@@ -43,7 +43,7 @@ test('should archive (ZIP) a directory to destination ZIP when { source: "/sourc
   t.pass();
 });
 
-test('should archive (ZIP) a single file to destination ZIP when { source: "/sourceFile.js", destination: "/dest.zip" } provided', async (t) => {
+test('should archive(ZIP) a single file to a destination ZIP', async (t) => {
   const config = {
     onEnd: {
       archive: [{ source: './dist/index.html', destination: './testing/test2.zip' }],
@@ -61,7 +61,7 @@ test('should archive (ZIP) a single file to destination ZIP when { source: "/sou
   t.pass();
 });
 
-test('should archive (ZIP) a directory glob to destination ZIP when { source: "/source/**/*", destination: "/dest.zip" } provided', async (t) => {
+test('should archive(ZIP) a directory glob to destination ZIP', async (t) => {
   const config = {
     onEnd: {
       archive: [{ source: 'dist/**/*', destination: './testing/test3.zip' }],
@@ -77,7 +77,7 @@ test('should archive (ZIP) a directory glob to destination ZIP when { source: "/
   t.pass();
 });
 
-test('should archive (TAR) a directory glob to destination TAR when { source: "/source/**/*", destination: "/dest.zip", format: "tar" } provided', async (t) => {
+test('should archive(TAR) a directory glob to destination TAR when format is provided', async (t) => {
   const config = {
     onEnd: {
       archive: [{ source: 'dist/**/*', destination: './testing/test4.tar', format: 'tar' }],
@@ -93,7 +93,7 @@ test('should archive (TAR) a directory glob to destination TAR when { source: "/
   t.pass();
 });
 
-test('should archive (TAR.GZ) a directory glob to destination TAR.GZ when { source: "/source/**/*", destination: "/dest.tar.gz", format: "tar" } provided', async (t) => {
+test('should archive(TAR.GZ) a directory glob to destination TAR.GZ', async (t) => {
   const config = {
     onEnd: {
       archive: [
@@ -122,7 +122,7 @@ test('should archive (TAR.GZ) a directory glob to destination TAR.GZ when { sour
 });
 
 // https://github.com/gregnb/filemanager-webpack-plugin/issues/37
-test('should exclude archive (ZIP) from destination ZIP when { source: "/source", destination: "/source/dest.zip" } provided', async (t) => {
+test('should not include the output zip into compression', async (t) => {
   const config = {
     onEnd: {
       archive: [{ source: './testing/', destination: './testing/test7.zip' }],
@@ -137,8 +137,10 @@ test('should exclude archive (ZIP) from destination ZIP when { source: "/source"
   t.false(result);
 });
 
-test('should include root-level files in the archive (ZIP) from destination ZIP when { source: "/source", destination: "/source/dest.zip" } provided', async (t) => {
+test('should include files in the archive', async (t) => {
   await writeFile('testing/random-file.js');
+  await mkdir('testing/nested');
+  await writeFile('testing/nested/file.html');
 
   const config = {
     onEnd: {
@@ -150,6 +152,8 @@ test('should include root-level files in the archive (ZIP) from destination ZIP 
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const result = await zipHasFile('./testing/test8.zip', 'random-file.js');
-  t.true(result);
+  const exist = await zipHasFile('./testing/test8.zip', 'random-file.js');
+  const nestedExist = await zipHasFile('./testing/test8.zip', 'nested/file.html');
+  t.true(exist);
+  t.true(nestedExist);
 });

@@ -20,7 +20,7 @@ test.before(async () => {
   });
 });
 
-test("should create a directory when ['/path/to/dir'] provided via onEnd", async (t) => {
+test('should create the given directories', async (t) => {
   const config = {
     onStart: {
       mkdir: ['testing-mkdir-start', 'testing-mkdir2-start'],
