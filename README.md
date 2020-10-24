@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/19170080/29996498-a5ed1944-8fcd-11e7-8729-625eb997dbfe.png" />
+  <img src="assets/filemanager.png" />
 </div>
 
 # Webpack File Manager Plugin
@@ -76,40 +76,10 @@ module.exports = {
 }
 ```
 
-If you need to preserve the order in which operations will run you can set the onStart and onEnd events to be Arrays. In this example below, in the onEnd event the copy action will run first, and then the delete after:
-
-```js
-const FileManagerPlugin = require('filemanager-webpack-plugin');
-
-module.exports = {
-  ...
-  ...
-  plugins: [
-    new FileManagerPlugin({
-      onEnd: [
-        {
-          copy: [
-            { source: "./dist/bundle.js", destination: "./newfile.js" }
-          ]
-        },
-        {
-          delete: [
-            "./dist/bundle.js"
-          ]
-        }
-      ]
-    })
-  ],
-  ...
-}
-
-
-```
-
 ## Options
 
 ```js
-new FileManagerPlugin(fileEvents, options);
+new FileManagerPlugin(fileEvents);
 ```
 
 #### File Events
