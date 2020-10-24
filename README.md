@@ -1,19 +1,33 @@
 <div align="center">
   <img src="assets/filemanager.png" />
-  <h1>FileManager Webpack Plugin</p>
+  <h1>FileManager Webpack Plugin</h1>
+  <p>This Webpack plugin allows you to copy, archive (.zip/.tar/.tar.gz), move, delete files and directories before and after builds</p>
+  <p>
+    <a href="https://github.com/gregnb/filemanager-webpack-plugin/actions?query=workflow%3ATests" alt="Testst">
+      <img src="https://github.com/gregnb/filemanager-webpack-plugin/workflows/Tests/badge.svg">
+    </a>
+    <a href="https://npmcharts.com/compare/filemanager-webpack-plugin?minimal=true" alt="NPM weekly downloads">
+      <img src="https://badgen.net/npm/dw/filemanager-webpack-plugin">
+    </a>
+    <a href="https://www.npmtrends.com/filemanager-webpack-plugin" alt="NPM total downloads">
+      <img src="https://badgen.net/npm/dt/filemanager-webpack-plugin">
+    </a>
+    <a href="https://npmjs.com/filemanager-webpack-plugin" alt="NPM version">
+      <img src="https://badgen.net/npm/v/filemanager-webpack-plugin">
+    </a>
+    <a href="https://david-dm.org/gregnb/filemanager-webpack-plugin" alt="Dependencies status">
+      <img src="https://david-dm.org/gregnb/filemanager-webpack-plugin/status.svg">
+    </a>
+  </p>
 </div>
-
-[![Tests](https://github.com/gregnb/filemanager-webpack-plugin/workflows/Tests/badge.svg)](https://github.com/gregnb/filemanager-webpack-plugin/actions?query=workflow%3ATests)
-[![NPM Weekly Downloads](https://badgen.net/npm/dw/filemanager-webpack-plugin)](https://npmcharts.com/compare/filemanager-webpack-plugin?minimal=true)
-[![NPM Total Downloads](https://badgen.net/npm/dt/filemanager-webpack-plugin)](https://www.npmtrends.com/filemanager-webpack-plugin)
-[![dependencies Status](https://david-dm.org/gregnb/filemanager-webpack-plugin/status.svg)](https://david-dm.org/gregnb/filemanager-webpack-plugin)
-[![npm version](https://badge.fury.io/js/filemanager-webpack-plugin.svg)](https://badge.fury.io/js/filemanager-webpack-plugin)
-
-This Webpack plugin allows you to copy, archive (.zip/.tar/.tar.gz), move, delete files and directories before and after builds
 
 ## Install
 
-`npm install filemanager-webpack-plugin --save-dev `
+```bash
+npm install filemanager-webpack-plugin --save-dev
+# or
+yarn add filemanager-webpack-plugin --dev
+```
 
 ## Usage
 
