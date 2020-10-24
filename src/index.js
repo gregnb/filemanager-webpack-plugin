@@ -17,7 +17,7 @@ const resolvePaths = (stages, context) => {
         if (typeof task === 'string') {
           return {
             source,
-            absSource: path.isAbsolute(source) ? source : path.join(context, source),
+            absoluteSource: path.isAbsolute(source) ? source : path.join(context, source),
           };
         }
 
@@ -26,9 +26,9 @@ const resolvePaths = (stages, context) => {
         return {
           ...task,
           source: source,
-          absSource: path.isAbsolute(source) ? source : path.join(context, source),
+          absoluteSource: path.isAbsolute(source) ? source : path.join(context, source),
           destination: destination,
-          absDestination: path.isAbsolute(destination) ? destination : path.join(context, destination),
+          absoluteDestination: path.isAbsolute(destination) ? destination : path.join(context, destination),
           context,
         };
       });

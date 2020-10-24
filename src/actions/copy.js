@@ -14,29 +14,29 @@ const copyAction = async (tasks) => {
 };
 
 const copy = async (task) => {
-  const { source, absSource, absDestination, context } = task;
+  const { source, absoluteSource, absoluteDestination, context } = task;
 
   try {
     if (isGlob(source)) {
       const src = path.posix.join(context, source);
-      await cpy(src, absDestination);
+      await cpy(src, absoluteDestination);
     } else {
-      const isFolderTarget = /(?:\\|\/)$/.test(absDestination);
-      const isSourceFile = fs.lstatSync(absSource).isFile();
+      const isFolderTarget = /(?:\\|\/)$/.test(absoluteDestination);
+      const isSourceFile = fs.lstatSync(absoluteSource).isFile();
 
       // if source is a file and target is a directory
       // create the directory and copy the file into that directory
       if (isSourceFile && isFolderTarget) {
-        await fsExtra.ensureDir(absDestination);
+        await fsExtra.ensureDir(absoluteDestination);
 
-        const sourceFileName = path.basename(absSource);
-        const filePath = path.resolve(absDestination, sourceFileName);
+        const sourceFileName = path.basename(absoluteSource);
+        const filePath = path.resolve(absoluteDestination, sourceFileName);
 
-        await fsExtra.copy(absSource, filePath);
+        await fsExtra.copy(absoluteSource, filePath);
         return;
       }
 
-      await fsExtra.copy(absSource, absDestination);
+      await fsExtra.copy(absoluteSource, absoluteDestination);
     }
   } catch (err) {}
 };

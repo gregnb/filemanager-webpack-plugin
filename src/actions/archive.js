@@ -14,17 +14,17 @@ const archiveAction = async (tasks) => {
 };
 
 const archive = async (task) => {
-  const { source, absSource, absDestination, options = {}, context } = task;
-  const format = task.format || path.extname(absDestination).replace('.', '');
+  const { source, absoluteSource, absoluteDestination, options = {}, context } = task;
+  const format = task.format || path.extname(absoluteDestination).replace('.', '');
 
   // Exclude destination file from archive
-  const destFile = path.basename(absDestination);
-  const destDir = path.dirname(absDestination);
+  const destFile = path.basename(absoluteDestination);
+  const destDir = path.dirname(absoluteDestination);
   const globOptions = Object.assign({ ignore: destFile }, options.globOptions || {});
 
   await fsExtra.ensureDir(destDir);
 
-  const output = fs.createWriteStream(absDestination);
+  const output = fs.createWriteStream(absoluteDestination);
   const archive = archiver(format, options);
   archive.pipe(output);
 
@@ -36,12 +36,12 @@ const archive = async (task) => {
 
     await archive.glob(source, gOptions).finalize();
   } else {
-    const sStat = fs.lstatSync(absSource);
+    const sStat = fs.lstatSync(absoluteSource);
 
     if (sStat.isDirectory()) {
       const gOptions = {
         ...globOptions,
-        cwd: absSource,
+        cwd: absoluteSource,
       };
 
       await archive.glob('**/*', gOptions).finalize();
@@ -52,7 +52,7 @@ const archive = async (task) => {
         name: path.basename(source),
       };
 
-      await archive.file(absSource, options).finalize();
+      await archive.file(absoluteSource, options).finalize();
     }
   }
 
