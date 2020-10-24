@@ -104,7 +104,7 @@ class FileManagerPlugin {
       await this.execute('onEnd');
     };
 
-    compiler.hooks.beforeRun.tapPromise(PLUGIN_NAME, onStart);
+    compiler.hooks.beforeCompile.tapPromise(PLUGIN_NAME, onStart);
     compiler.hooks.afterEmit.tapPromise(PLUGIN_NAME, onEnd);
   }
 }
