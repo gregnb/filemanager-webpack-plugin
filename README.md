@@ -178,3 +178,20 @@ Archive individual files or entire directories. Defaults to .zip unless 'format'
 - options[`object`] - Refer https://www.archiverjs.com/archiver
 
 [node-archiver]: https://github.com/archiverjs/node-archiver
+
+### Order of execution
+
+If you need to preserve the order in which operations will run you can set the onStart and onEnd events to be Arrays. In this example below, in the onEnd event the copy action will run first, and then the delete after:
+
+```js
+{
+  onEnd: [
+    {
+      copy: [{ source: './dist/bundle.js', destination: './newfile.js' }],
+    },
+    {
+      delete: ['./dist/bundle.js'],
+    },
+  ];
+}
+```
