@@ -18,6 +18,9 @@
     <a href="https://david-dm.org/gregnb/filemanager-webpack-plugin" alt="Dependencies status">
       <img src="https://david-dm.org/gregnb/filemanager-webpack-plugin/status.svg">
     </a>
+    <a href="https://packagephobia.com/result?p=filemanager-webpack-plugin" alt="Dependencies status">
+      <img src="https://badgen.net/packagephobia/install/filemanager-webpack-plugin">
+    </a>
   </p>
 </div>
 
