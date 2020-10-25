@@ -85,6 +85,17 @@ new FileManagerPlugin(fileEvents);
 ## File Events
 
 - `onStart`: Commands to execute before Webpack begins the bundling process
+
+**Note:**
+
+OnStart might execute twice for file changes in webpack context.
+
+```js
+new webpack.WatchIgnorePlugin({
+  paths: [/copied-directory/],
+});
+```
+
 - `onEnd`: Commands to execute after Webpack has finished the bundling process
 
 ## File Actions
