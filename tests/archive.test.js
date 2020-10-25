@@ -29,8 +29,10 @@ test.before(async () => {
 
 test('should archive(ZIP) a directory to a destination ZIP', async (t) => {
   const config = {
-    onEnd: {
-      archive: [{ source: './dist', destination: './testing/test1.zip' }],
+    events: {
+      onEnd: {
+        archive: [{ source: './dist', destination: './testing/test1.zip' }],
+      },
     },
   };
 
@@ -45,8 +47,10 @@ test('should archive(ZIP) a directory to a destination ZIP', async (t) => {
 
 test('should archive(ZIP) a single file to a destination ZIP', async (t) => {
   const config = {
-    onEnd: {
-      archive: [{ source: './dist/index.html', destination: './testing/test2.zip' }],
+    events: {
+      onEnd: {
+        archive: [{ source: './dist/index.html', destination: './testing/test2.zip' }],
+      },
     },
   };
 
@@ -63,8 +67,10 @@ test('should archive(ZIP) a single file to a destination ZIP', async (t) => {
 
 test('should archive(ZIP) a directory glob to destination ZIP', async (t) => {
   const config = {
-    onEnd: {
-      archive: [{ source: 'dist/**/*', destination: './testing/test3.zip' }],
+    events: {
+      onEnd: {
+        archive: [{ source: 'dist/**/*', destination: './testing/test3.zip' }],
+      },
     },
   };
 
@@ -79,8 +85,10 @@ test('should archive(ZIP) a directory glob to destination ZIP', async (t) => {
 
 test('should archive(TAR) a directory glob to destination TAR when format is provided', async (t) => {
   const config = {
-    onEnd: {
-      archive: [{ source: 'dist/**/*', destination: './testing/test4.tar', format: 'tar' }],
+    events: {
+      onEnd: {
+        archive: [{ source: 'dist/**/*', destination: './testing/test4.tar', format: 'tar' }],
+      },
     },
   };
 
@@ -95,20 +103,22 @@ test('should archive(TAR) a directory glob to destination TAR when format is pro
 
 test('should archive(TAR.GZ) a directory glob to destination TAR.GZ', async (t) => {
   const config = {
-    onEnd: {
-      archive: [
-        {
-          source: 'dist/**/*',
-          destination: './testing/test5.tar.gz',
-          format: 'tar',
-          options: {
-            gzip: true,
-            gzipOptions: {
-              level: 1,
+    events: {
+      onEnd: {
+        archive: [
+          {
+            source: 'dist/**/*',
+            destination: './testing/test5.tar.gz',
+            format: 'tar',
+            options: {
+              gzip: true,
+              gzipOptions: {
+                level: 1,
+              },
             },
           },
-        },
-      ],
+        ],
+      },
     },
   };
 
@@ -124,8 +134,10 @@ test('should archive(TAR.GZ) a directory glob to destination TAR.GZ', async (t) 
 // https://github.com/gregnb/filemanager-webpack-plugin/issues/37
 test('should not include the output zip into compression', async (t) => {
   const config = {
-    onEnd: {
-      archive: [{ source: './testing/', destination: './testing/test7.zip' }],
+    events: {
+      onEnd: {
+        archive: [{ source: './testing/', destination: './testing/test7.zip' }],
+      },
     },
   };
 
@@ -143,8 +155,10 @@ test('should include files in the archive', async (t) => {
   await writeFile('testing/nested/file.html');
 
   const config = {
-    onEnd: {
-      archive: [{ source: './testing/', destination: './testing/test8.zip' }],
+    events: {
+      onEnd: {
+        archive: [{ source: './testing/', destination: './testing/test8.zip' }],
+      },
     },
   };
 

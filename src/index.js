@@ -2,10 +2,17 @@ import path from 'path';
 
 import { validate } from 'schema-utils';
 
-import schema from './actions-schema';
+import optionsSchema from './options-schema';
 import { copyAction, moveAction, mkdirAction, archiveAction, deleteAction } from './actions';
 
 const PLUGIN_NAME = 'FileManagerPlugin';
+
+const defaultOptions = {
+  events: {
+    onStart: [],
+    onEnd: [],
+  },
+};
 
 const resolvePaths = (action, context) => {
   return action.map((task) => {
@@ -31,13 +38,13 @@ const resolvePaths = (action, context) => {
 };
 
 class FileManagerPlugin {
-  constructor(events) {
-    validate(schema, events, {
+  constructor(options) {
+    validate(optionsSchema, options, {
       name: PLUGIN_NAME,
       baseDataPath: 'actions',
     });
 
-    this.events = events;
+    this.options = { ...defaultOptions, ...options };
   }
 
   async applyAction(action, actionParams) {
@@ -47,6 +54,7 @@ class FileManagerPlugin {
   async run(event) {
     for (const actionType in event) {
       const action = event[actionType];
+
       switch (actionType) {
         case 'delete':
           return this.applyAction(deleteAction, action);
@@ -70,8 +78,10 @@ class FileManagerPlugin {
   }
 
   async execute(eventName) {
-    if (Array.isArray(this.events[eventName])) {
-      const eventsArr = this.events[eventName];
+    const events = this.options.events;
+
+    if (Array.isArray(events[eventName])) {
+      const eventsArr = events[eventName];
 
       for (const event of eventsArr) {
         await this.run(event);
@@ -80,8 +90,8 @@ class FileManagerPlugin {
       return;
     }
 
-    const event = this.events[eventName];
-    return await this.run(event);
+    const event = events[eventName];
+    await this.run(event);
   }
 
   apply(compiler) {

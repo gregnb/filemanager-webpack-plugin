@@ -100,7 +100,7 @@ export default {
         },
       ],
     },
-    Events: {
+    Actions: {
       type: 'object',
       additionalProperties: false,
       properties: {
@@ -123,31 +123,37 @@ export default {
     },
   },
   properties: {
-    onStart: {
-      oneOf: [
-        {
-          $ref: '#/definitions/Events',
+    events: {
+      type: 'object',
+      additionalProperties: false,
+      properties: {
+        onStart: {
+          oneOf: [
+            {
+              $ref: '#/definitions/Actions',
+            },
+            {
+              type: 'array',
+              items: {
+                $ref: '#/definitions/Actions',
+              },
+            },
+          ],
         },
-        {
-          type: 'array',
-          items: {
-            $ref: '#/definitions/Events',
-          },
+        onEnd: {
+          oneOf: [
+            {
+              $ref: '#/definitions/Actions',
+            },
+            {
+              type: 'array',
+              items: {
+                $ref: '#/definitions/Actions',
+              },
+            },
+          ],
         },
-      ],
-    },
-    onEnd: {
-      oneOf: [
-        {
-          $ref: '#/definitions/Events',
-        },
-        {
-          type: 'array',
-          items: {
-            $ref: '#/definitions/Events',
-          },
-        },
-      ],
+      },
     },
   },
 };

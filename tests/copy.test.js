@@ -22,8 +22,10 @@ test.before(async () => {
 
 test('should copy files to a directory given a glob source', async (t) => {
   const config = {
-    onEnd: {
-      copy: [{ source: './dist/*', destination: './testing/testing1' }],
+    events: {
+      onEnd: {
+        copy: [{ source: './dist/*', destination: './testing/testing1' }],
+      },
     },
   };
 
@@ -38,8 +40,10 @@ test('should copy files to a directory given a glob source', async (t) => {
 
 test('should deep copy files to directory given a glob source', async (t) => {
   const config = {
-    onEnd: {
-      copy: [{ source: './dist/**/*', destination: './testing/testing2' }],
+    events: {
+      onEnd: {
+        copy: [{ source: './dist/**/*', destination: './testing/testing2' }],
+      },
     },
   };
 
@@ -54,8 +58,10 @@ test('should deep copy files to directory given a glob source', async (t) => {
 
 test(`should create destination directory if it doesn't exist and copy files`, async (t) => {
   const config = {
-    onEnd: {
-      copy: [{ source: './dist', destination: './testing/testing3' }],
+    events: {
+      onEnd: {
+        copy: [{ source: './dist', destination: './testing/testing3' }],
+      },
     },
   };
 
@@ -70,8 +76,10 @@ test(`should create destination directory if it doesn't exist and copy files`, a
 
 test('should copy and create destination directory given a glob source with extension', async (t) => {
   const config = {
-    onEnd: {
-      copy: [{ source: './dist/{fake,index}.html', destination: './testing/testing4' }],
+    events: {
+      onEnd: {
+        copy: [{ source: './dist/{fake,index}.html', destination: './testing/testing4' }],
+      },
     },
   };
 
@@ -86,11 +94,13 @@ test('should copy and create destination directory given a glob source with exte
 
 test('should copy source file to destination file', async (t) => {
   const config = {
-    onEnd: {
-      copy: [
-        { source: './dist/index.html', destination: './testing/newindex.html' },
-        { source: './dist/index.html', destination: './testing/sub/newindex.html' },
-      ],
+    events: {
+      onEnd: {
+        copy: [
+          { source: './dist/index.html', destination: './testing/newindex.html' },
+          { source: './dist/index.html', destination: './testing/sub/newindex.html' },
+        ],
+      },
     },
   };
 
@@ -105,8 +115,10 @@ test('should copy source file to destination file', async (t) => {
 
 test('should copy file into the directory given source is a file and destination is a directory', async (t) => {
   const config = {
-    onEnd: {
-      copy: [{ source: './dist/index.html', destination: './testing/testing5/' }],
+    events: {
+      onEnd: {
+        copy: [{ source: './dist/index.html', destination: './testing/testing5/' }],
+      },
     },
   };
 
@@ -123,8 +135,10 @@ test('should copy a file without extension to target folder', async (t) => {
   await writeFile('testing/file-without-ext');
 
   const config = {
-    onEnd: {
-      copy: [{ source: 'testing/file-without-ext', destination: './testing/no-ext/' }],
+    events: {
+      onEnd: {
+        copy: [{ source: 'testing/file-without-ext', destination: './testing/no-ext/' }],
+      },
     },
   };
 
@@ -139,8 +153,10 @@ test('should copy a file without extension to target folder', async (t) => {
 
 test('should not copy a file that does not exist', async (t) => {
   const config = {
-    onEnd: {
-      copy: [{ source: './dist/doesnotexit.js', destination: './testing/wontexist.js' }],
+    events: {
+      onEnd: {
+        copy: [{ source: './dist/doesnotexit.js', destination: './testing/wontexist.js' }],
+      },
     },
   };
 

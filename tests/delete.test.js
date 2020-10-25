@@ -27,11 +27,13 @@ test('should delete file when array of strings provided in delete function', asy
   await writeFile('./testing/deletable-file2.js');
 
   const config = {
-    onStart: {
-      delete: ['./testing/deletable-file.js'],
-    },
-    onEnd: {
-      delete: ['testing/deletable-file2.js', 'testing/deletable-file3.js'],
+    events: {
+      onStart: {
+        delete: ['./testing/deletable-file.js'],
+      },
+      onEnd: {
+        delete: ['testing/deletable-file2.js', 'testing/deletable-file3.js'],
+      },
     },
   };
 
@@ -51,8 +53,10 @@ test('should support glob', async (t) => {
   await writeFile('./testing/deletable-file3.js');
 
   const config = {
-    onEnd: {
-      delete: ['./testing/*'],
+    events: {
+      onEnd: {
+        delete: ['./testing/*'],
+      },
     },
   };
 
@@ -64,20 +68,4 @@ test('should support glob', async (t) => {
   t.false(existsSync('./testing/deletable-file2.js'));
   t.false(existsSync('./testing/deletable-file3.js'));
   t.pass();
-});
-
-test('should fail webpack build when delete function receives anything other than an array of strings', async (t) => {
-  const config = {
-    onStart: {
-      delete: [{ source: 'object instead of string' }],
-    },
-  };
-
-  const compiler = getCompiler(fixturesDir);
-
-  try {
-    new FileManagerPlugin(config).apply(compiler);
-  } catch {
-    t.pass();
-  }
 });

@@ -22,11 +22,13 @@ test.before(async () => {
 
 test('should create the given directories', async (t) => {
   const config = {
-    onStart: {
-      mkdir: ['testing-mkdir-start', 'testing-mkdir2-start'],
-    },
-    onEnd: {
-      mkdir: ['testing-mkdir-end', 'testing-mkdir2-end'],
+    events: {
+      onStart: {
+        mkdir: ['testing-mkdir-start', 'testing-mkdir2-start'],
+      },
+      onEnd: {
+        mkdir: ['testing-mkdir-end', 'testing-mkdir2-end'],
+      },
     },
   };
 
@@ -43,8 +45,10 @@ test('should create the given directories', async (t) => {
 
 test('should create nested directories', async (t) => {
   const config = {
-    onEnd: {
-      mkdir: ['testing-mkdir/deep', 'testing-mkdir/deep/deep1'],
+    events: {
+      onEnd: {
+        mkdir: ['testing-mkdir/deep', 'testing-mkdir/deep/deep1'],
+      },
     },
   };
 
@@ -62,8 +66,10 @@ test('should not overwite existing directories', async (t) => {
   await writeFile('testing-mkdir-exist/file1');
 
   const config = {
-    onEnd: {
-      mkdir: ['testing-mkdir-exist'],
+    events: {
+      onEnd: {
+        mkdir: ['testing-mkdir-exist'],
+      },
     },
   };
 

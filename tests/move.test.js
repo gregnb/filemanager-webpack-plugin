@@ -25,8 +25,10 @@ test('should move files from source to destination', async (t) => {
   await writeFile('testing-move/dummy.js');
 
   const config = {
-    onEnd: {
-      move: [{ source: './testing-move', destination: './testing-moved' }],
+    events: {
+      onEnd: {
+        move: [{ source: './testing-move', destination: './testing-moved' }],
+      },
     },
   };
 

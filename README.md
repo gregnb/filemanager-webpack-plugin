@@ -39,37 +39,39 @@ const FileManagerPlugin = require('filemanager-webpack-plugin');
 module.exports = {
   plugins: [
     new FileManagerPlugin({
-      onEnd: {
-        copy: [
-          { source: '/path/fromfile.txt', destination: '/path/tofile.txt' },
-          { source: '/path/**/*.js', destination: '/path' },
-        ],
-        move: [
-          { source: '/path/from', destination: '/path/to' },
-          { source: '/path/fromfile.txt', destination: '/path/tofile.txt' },
-        ],
-        delete: ['/path/to/file.txt', '/path/to/directory/'],
-        mkdir: ['/path/to/directory/', '/another/directory/'],
-        archive: [
-          { source: '/path/from', destination: '/path/to.zip' },
-          { source: '/path/**/*.js', destination: '/path/to.zip' },
-          { source: '/path/fromfile.txt', destination: '/path/to.zip' },
-          { source: '/path/fromfile.txt', destination: '/path/to.zip', format: 'tar' },
-          {
-            source: '/path/fromfile.txt',
-            destination: '/path/to.tar.gz',
-            format: 'tar',
-            options: {
-              gzip: true,
-              gzipOptions: {
-                level: 1,
-              },
-              globOptions: {
-                nomount: true,
+      events: {
+        onEnd: {
+          copy: [
+            { source: '/path/fromfile.txt', destination: '/path/tofile.txt' },
+            { source: '/path/**/*.js', destination: '/path' },
+          ],
+          move: [
+            { source: '/path/from', destination: '/path/to' },
+            { source: '/path/fromfile.txt', destination: '/path/tofile.txt' },
+          ],
+          delete: ['/path/to/file.txt', '/path/to/directory/'],
+          mkdir: ['/path/to/directory/', '/another/directory/'],
+          archive: [
+            { source: '/path/from', destination: '/path/to.zip' },
+            { source: '/path/**/*.js', destination: '/path/to.zip' },
+            { source: '/path/fromfile.txt', destination: '/path/to.zip' },
+            { source: '/path/fromfile.txt', destination: '/path/to.zip', format: 'tar' },
+            {
+              source: '/path/fromfile.txt',
+              destination: '/path/to.tar.gz',
+              format: 'tar',
+              options: {
+                gzip: true,
+                gzipOptions: {
+                  level: 1,
+                },
+                globOptions: {
+                  nomount: true,
+                },
               },
             },
-          },
-        ],
+          ],
+        },
       },
     }),
   ],
@@ -79,7 +81,12 @@ module.exports = {
 # Options
 
 ```js
-new FileManagerPlugin(fileEvents);
+new FileManagerPlugin({
+  events: {
+    onStart: {},
+    onEnd: {},
+  },
+});
 ```
 
 ## File Events
@@ -169,8 +176,9 @@ Archive individual files or entire directories. Defaults to .zip unless 'format'
   {
     source: '/path/fromfile.txt',
     destination: '/path/to.tar.gz',
-    format: 'tar',
+    format: 'tar', // optional
     options: {
+      // see https://www.archiverjs.com/archiver
       gzip: true,
       gzipOptions: {
         level: 1,

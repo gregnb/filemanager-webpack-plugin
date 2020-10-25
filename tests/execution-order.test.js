@@ -25,17 +25,19 @@ test('should execute actions in a given order', async (t) => {
   await writeFile('testing-move/dummy.js');
 
   const config = {
-    onStart: [
-      {
-        mkdir: ['testing-seq-dir', 'testing-seq-dir-2'],
-      },
-      {
-        delete: ['testing-seq-dir-2'],
-      },
-      {
-        copy: [{ source: 'testing-seq-dir/', destination: 'testing-seq-dir-copied/' }],
-      },
-    ],
+    events: {
+      onStart: [
+        {
+          mkdir: ['testing-seq-dir', 'testing-seq-dir-2'],
+        },
+        {
+          delete: ['testing-seq-dir-2'],
+        },
+        {
+          copy: [{ source: 'testing-seq-dir/', destination: 'testing-seq-dir-copied/' }],
+        },
+      ],
+    },
   };
 
   const compiler = getCompiler(fixturesDir);
