@@ -4,8 +4,15 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## Unreleased
 
-- Fix onStart Event not executed in watch mode.
-- Execute all tasks in series
+- use native mkdir ([13720b3](https://github.com/gregnb/filemanager-webpack-plugin/commit/13720b3))
+- fix onStart Event not executed in watch mode. ([cb0c180](https://github.com/gregnb/filemanager-webpack-plugin/commit/cb0c180))
+- execute all tasks in series ([5fd2f16](https://github.com/gregnb/filemanager-webpack-plugin/commit/5fd2f16))
+- support execution order ([cb0c180](https://github.com/gregnb/filemanager-webpack-plugin/commit/cb0c180))
+
+#### Breaking Changes
+
+- minimum required node version v10.13 ([5884440](https://github.com/gregnb/filemanager-webpack-plugin/commit/5884440))
+- file events moved into event object. See [README](https://github.com/gregnb/filemanager-webpack-plugin/blob/master/README.md) ([525f35d](https://github.com/gregnb/filemanager-webpack-plugin/commit/525f35d))
 
 ## v3.0.0-alpha.2 (2020-10-22)
 
@@ -28,17 +35,17 @@ All notable changes to this project will be documented in this file. See [standa
 
 #### Enhancements
 
-- reduce build size [[1765520](https://github.com/gregnb/filemanager-webpack-plugin/commit/1765520)]
+- reduce build size ([1765520](https://github.com/gregnb/filemanager-webpack-plugin/commit/1765520))
 
 ## v3.0.0-alpha.0 (2020-10-04)
 
 #### Enhancements
 
-- replace [cpx](https://www.npmjs.com/cpx) with [cpy](https://www.npmjs.com/cpy) [[9c8eff9](https://github.com/gregnb/filemanager-webpack-plugin/commit/9c8eff9)]
-- remove fs-extra dependency [[9c8eff9](https://github.com/gregnb/filemanager-webpack-plugin/commit/9c8eff9)]
-- add schema validation for options [[fec1785](https://github.com/gregnb/filemanager-webpack-plugin/commit/fec1785)]
+- replace [cpx](https://www.npmjs.com/cpx) with [cpy](https://www.npmjs.com/cpy) ([9c8eff9](https://github.com/gregnb/filemanager-webpack-plugin/commit/9c8eff9))
+- remove fs-extra dependency ([9c8eff9](https://github.com/gregnb/filemanager-webpack-plugin/commit/9c8eff9))
+- add schema validation for options ([fec1785](https://github.com/gregnb/filemanager-webpack-plugin/commit/fec1785))
 
 #### Breaking Changes
 
-- drop webpack 3 support [[6d994a6](https://github.com/gregnb/filemanager-webpack-plugin/commit/6d994a6)]
-- update archiver to v5, refer [archiver changelog](https://github.com/archiverjs/node-archiver/blob/master/CHANGELOG.md) for more details [[f584a83](https://github.com/gregnb/filemanager-webpack-plugin/commit/f584a83)]
+- drop webpack 3 support ([6d994a6](https://github.com/gregnb/filemanager-webpack-plugin/commit/6d994a6))
+- update archiver to v5, refer [archiver changelog](https://github.com/archiverjs/node-archiver/blob/master/CHANGELOG.md) for more details ([f584a83](https://github.com/gregnb/filemanager-webpack-plugin/commit/f584a83))
