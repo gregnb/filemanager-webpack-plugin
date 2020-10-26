@@ -5,14 +5,6 @@ import archiver from 'archiver';
 import isGlob from 'is-glob';
 import fsExtra from 'fs-extra';
 
-const archiveAction = async (tasks) => {
-  const taskMap = tasks.map(archive);
-
-  for (const task of taskMap) {
-    await task;
-  }
-};
-
 const archive = async (task) => {
   const { source, absoluteSource, absoluteDestination, options = {}, context } = task;
   const format = task.format || path.extname(absoluteDestination).replace('.', '');
@@ -22,7 +14,7 @@ const archive = async (task) => {
   const destDir = path.dirname(absoluteDestination);
 
   const ignore = ((Array.isArray(options.ignore) && options.ignore) || []).concat(destFile);
-  const archiverOptions = Object.assign({ ignore }, options.globOptions || {});
+  const archiverOptions = { ignore, ...(options.globOptions || {}) };
 
   await fsExtra.ensureDir(destDir);
 
@@ -42,7 +34,7 @@ const archive = async (task) => {
 
     if (sStat.isDirectory()) {
       const opts = {
-        ...globOptions,
+        ...archiverOptions,
         cwd: absoluteSource,
       };
 
@@ -50,15 +42,21 @@ const archive = async (task) => {
     }
 
     if (sStat.isFile()) {
-      const options = {
+      const opts = {
         name: path.basename(source),
       };
 
-      await archive.file(absoluteSource, options).finalize();
+      await archive.file(absoluteSource, opts).finalize();
     }
   }
+};
 
-  // output.close()
+const archiveAction = async (tasks) => {
+  const taskMap = tasks.map(archive);
+
+  for (const task of taskMap) {
+    await task;
+  }
 };
 
 export default archiveAction;

@@ -1,5 +1,5 @@
-const compile = (compiler) =>
-  new Promise((resolve, reject) => {
+const compile = (compiler) => {
+  return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
       if (err) {
         return reject(err);
@@ -12,5 +12,6 @@ const compile = (compiler) =>
       return setTimeout(() => resolve(stats), 500);
     });
   });
+};
 
 export default compile;

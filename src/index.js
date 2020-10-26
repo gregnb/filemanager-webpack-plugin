@@ -32,7 +32,7 @@ const resolvePaths = (action, context) => {
       ...task,
       source,
       absoluteSource: path.isAbsolute(source) ? source : path.join(context, source),
-      destination: destination,
+      destination,
       absoluteDestination: path.isAbsolute(destination) ? destination : path.join(context, destination),
       toType,
       context,
@@ -54,7 +54,7 @@ class FileManagerPlugin {
     await action(resolvePaths(actionParams, this.context));
   }
 
-  async run(event) {
+  run(event) {
     for (const actionType in event) {
       const action = event[actionType];
 
@@ -75,18 +75,19 @@ class FileManagerPlugin {
           return this.applyAction(archiveAction, action);
 
         default:
-          return;
+          return Promise.resolve();
       }
     }
   }
 
   async execute(eventName) {
-    const events = this.options.events;
+    const { events } = this.options;
 
     if (Array.isArray(events[eventName])) {
       const eventsArr = events[eventName];
 
       for (const event of eventsArr) {
+        console.log(this.run().then);
         await this.run(event);
       }
 

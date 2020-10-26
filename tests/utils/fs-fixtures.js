@@ -6,6 +6,10 @@ const fsFixtures = (root) => {
     return path.resolve(root, p);
   };
 
+  const existsSync = (p) => {
+    return fs.existsSync(resolve(p));
+  };
+
   const mkdir = (p) => {
     if (existsSync(p)) {
       return;
@@ -19,10 +23,6 @@ const fsFixtures = (root) => {
 
   const readFile = (p) => {
     return fs.promises.readFile(resolve(p));
-  };
-
-  const existsSync = (p) => {
-    return fs.existsSync(resolve(p));
   };
 
   return {

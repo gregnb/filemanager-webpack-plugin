@@ -1,7 +1,5 @@
-import copyAction from './copy';
-import moveAction from './move';
-import deleteAction from './delete';
-import mkdirAction from './mkdir';
-import archiveAction from './archive';
-
-export { copyAction, moveAction, deleteAction, mkdirAction, archiveAction };
+export { default as copyAction } from './copy';
+export { default as moveAction } from './move';
+export { default as deleteAction } from './delete';
+export { default as mkdirAction } from './mkdir';
+export { default as archiveAction } from './archive';
