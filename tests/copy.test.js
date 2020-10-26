@@ -1,7 +1,6 @@
 import path from 'path';
 
 import { serial as test } from 'ava';
-import glob from 'fast-glob';
 import del from 'del';
 
 import compile from './utils/compile';
