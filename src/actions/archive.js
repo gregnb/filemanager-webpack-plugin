@@ -20,7 +20,9 @@ const archive = async (task) => {
   // Exclude destination file from archive
   const destFile = path.basename(absoluteDestination);
   const destDir = path.dirname(absoluteDestination);
-  const globOptions = Object.assign({ ignore: destFile }, options.globOptions || {});
+
+  const ignore = ((Array.isArray(options.ignore) && options.ignore) || []).concat(destFile);
+  const globOptions = Object.assign({ ignore }, options.globOptions || {});
 
   await fsExtra.ensureDir(destDir);
 
