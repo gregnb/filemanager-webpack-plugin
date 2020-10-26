@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## Unreleased
+## v3.0.0-alpha.3 (2020-10-26)
 
 - use native mkdir ([13720b3](https://github.com/gregnb/filemanager-webpack-plugin/commit/13720b3))
 - fix onStart Event not executed in watch mode. ([cb0c180](https://github.com/gregnb/filemanager-webpack-plugin/commit/cb0c180))
