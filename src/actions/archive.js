@@ -22,7 +22,7 @@ const archive = async (task) => {
   const destDir = path.dirname(absoluteDestination);
 
   const ignore = ((Array.isArray(options.ignore) && options.ignore) || []).concat(destFile);
-  const globOptions = Object.assign({ ignore }, options.globOptions || {});
+  const archiverOptions = Object.assign({ ignore }, options.globOptions || {});
 
   await fsExtra.ensureDir(destDir);
 
@@ -31,22 +31,22 @@ const archive = async (task) => {
   archive.pipe(output);
 
   if (isGlob(source)) {
-    const gOptions = {
-      ...globOptions,
+    const opts = {
+      ...archiverOptions,
       cwd: context,
     };
 
-    await archive.glob(source, gOptions).finalize();
+    await archive.glob(source, opts).finalize();
   } else {
     const sStat = fs.lstatSync(absoluteSource);
 
     if (sStat.isDirectory()) {
-      const gOptions = {
+      const opts = {
         ...globOptions,
         cwd: absoluteSource,
       };
 
-      await archive.glob('**/*', gOptions).finalize();
+      await archive.glob('**/*', opts).finalize();
     }
 
     if (sStat.isFile()) {
