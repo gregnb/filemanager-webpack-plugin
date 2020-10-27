@@ -2,7 +2,10 @@ const defaultTask = async () => {};
 
 const pExec = async (series = false, arr = [], task = defaultTask) => {
   if (series) {
-    await arr.reduce((p, spec) => p.then(() => task(spec)), Promise.resolve(null));
+    await arr.reduce(async (p, spec) => {
+      await p;
+      return task(spec);
+    }, Promise.resolve(null));
     return;
   }
 
