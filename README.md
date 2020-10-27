@@ -89,6 +89,7 @@ new FileManagerPlugin({
     onStart: {},
     onEnd: {},
   },
+  runTasksInSeries: false,
 });
 ```
 
@@ -132,7 +133,7 @@ Copy individual files or entire directories from a source folder to a destinatio
 **Caveats**
 
 - if source is a `glob`, destination must be a directory
-- if souce is a `file`, if destination is a directory, the file will be copied into the directory
+- if souce is a `file` and destination is a directory, the file will be copied into the directory
 
 ### Delete
 
@@ -214,4 +215,17 @@ If you need to preserve the order in which operations will run you can set the o
     },
   ];
 }
+```
+
+## Other Options
+
+- **runTasksInSeries** [`boolean`] - Run tasks in series. Defaults to false
+
+For Example
+
+```js
+copy: [
+  { source: 'dist/index.html', destination: 'dir1/' },
+  { source: 'dir1/index.html', destination: 'dir2/' },
+];
 ```

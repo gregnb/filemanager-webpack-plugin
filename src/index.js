@@ -3,6 +3,7 @@ import path from 'path';
 import { validate } from 'schema-utils';
 
 import optionsSchema from './options-schema';
+import pExec from './utils/p-exec';
 import { copyAction, moveAction, mkdirAction, archiveAction, deleteAction } from './actions';
 
 const PLUGIN_NAME = 'FileManagerPlugin';
@@ -12,6 +13,7 @@ const defaultOptions = {
     onStart: [],
     onEnd: [],
   },
+  runTasksInSeries: false,
 };
 
 const resolvePaths = (action, context) => {
@@ -51,7 +53,11 @@ class FileManagerPlugin {
   }
 
   async applyAction(action, actionParams) {
-    await action(resolvePaths(actionParams, this.context));
+    const opts = {
+      runTasksInSeries: this.options.runTasksInSeries,
+    };
+
+    await action(resolvePaths(actionParams, this.context), opts);
   }
 
   run(event) {
@@ -86,11 +92,7 @@ class FileManagerPlugin {
     if (Array.isArray(events[eventName])) {
       const eventsArr = events[eventName];
 
-      for (const event of eventsArr) {
-        console.log(this.run().then);
-        await this.run(event);
-      }
-
+      await pExec(true, eventsArr, async (event) => await this.run(event));
       return;
     }
 

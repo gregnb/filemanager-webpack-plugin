@@ -5,6 +5,8 @@ import fsExtra from 'fs-extra';
 import cpy from 'cpy';
 import isGlob from 'is-glob';
 
+import pExec from '../utils/p-exec';
+
 const copy = async (task) => {
   const { source, absoluteSource, absoluteDestination, context, toType } = task;
 
@@ -32,12 +34,10 @@ const copy = async (task) => {
   } catch (err) {}
 };
 
-const copyAction = async (tasks) => {
-  const taskMap = tasks.map(copy);
+const copyAction = async (tasks, options) => {
+  const { runTasksInSeries } = options;
 
-  for (const task of taskMap) {
-    await task;
-  }
+  pExec(runTasksInSeries, tasks, async (task) => await copy(task));
 };
 
 export default copyAction;

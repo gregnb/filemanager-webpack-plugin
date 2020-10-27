@@ -155,5 +155,10 @@ export default {
         },
       },
     },
+    runTasksInSeries: {
+      type: 'boolean',
+      default: false,
+      description: 'Run tasks in an action in series',
+    },
   },
 };

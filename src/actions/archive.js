@@ -5,6 +5,8 @@ import archiver from 'archiver';
 import isGlob from 'is-glob';
 import fsExtra from 'fs-extra';
 
+import pExec from '../utils/p-exec';
+
 const archive = async (task) => {
   const { source, absoluteSource, absoluteDestination, options = {}, context } = task;
   const format = task.format || path.extname(absoluteDestination).replace('.', '');
@@ -51,12 +53,9 @@ const archive = async (task) => {
   }
 };
 
-const archiveAction = async (tasks) => {
-  const taskMap = tasks.map(archive);
-
-  for (const task of taskMap) {
-    await task;
-  }
+const archiveAction = async (tasks, options) => {
+  const { runTasksInSeries } = options;
+  await pExec(runTasksInSeries, tasks, async (task) => await archive(task));
 };
 
 export default archiveAction;
