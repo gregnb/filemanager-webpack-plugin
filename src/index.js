@@ -60,28 +60,33 @@ class FileManagerPlugin {
     await action(resolvePaths(actionParams, this.context), opts);
   }
 
-  run(event) {
+  async run(event) {
     for (const actionType in event) {
       const action = event[actionType];
 
       switch (actionType) {
         case 'delete':
-          return this.applyAction(deleteAction, action);
+          await this.applyAction(deleteAction, action);
+          break;
 
         case 'mkdir':
-          return this.applyAction(mkdirAction, action);
+          await this.applyAction(mkdirAction, action);
+          break;
 
         case 'copy':
-          return this.applyAction(copyAction, action);
+          await this.applyAction(copyAction, action);
+          break;
 
         case 'move':
-          return this.applyAction(moveAction, action);
+          await this.applyAction(moveAction, action);
+          break;
 
         case 'archive':
-          return this.applyAction(archiveAction, action);
+          await this.applyAction(archiveAction, action);
+          break;
 
         default:
-          return Promise.resolve();
+          throw Error('Unknown action');
       }
     }
   }
