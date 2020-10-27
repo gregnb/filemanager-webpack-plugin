@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v3.0.0-alpha.4 (2020-10-27)
+
+#### Bug Fixes
+
+- run all actions in the event ([8dc5bab](https://github.com/gregnb/filemanager-webpack-plugin/commit/8dc5bab))
+- fix ignore behaviour in archiver action ([30aa49a](https://github.com/gregnb/filemanager-webpack-plugin/commit/30aa49a))
+
+#### Features
+
+- add option to run tasks in series ([034f645](https://github.com/gregnb/filemanager-webpack-plugin/commit/034f645))
+
 ## v3.0.0-alpha.3 (2020-10-26)
 
 - use native mkdir ([13720b3](https://github.com/gregnb/filemanager-webpack-plugin/commit/13720b3))
