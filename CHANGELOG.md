@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.0.0-alpha.5 (2020-11-04)
+
+#### Bug Fixes
+
+- Fix copy action execution in series ([7837f41](https://github.com/gregnb/filemanager-webpack-plugin/commit/7837f41)), closes [#84](https://github.com/gregnb/filemanager-webpack-plugin/issues/84)
+
 ## v3.0.0-alpha.4 (2020-10-27)
 
 #### Bug Fixes
