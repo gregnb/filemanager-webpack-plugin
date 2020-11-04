@@ -37,7 +37,7 @@ const copy = async (task) => {
 const copyAction = async (tasks, options) => {
   const { runTasksInSeries } = options;
 
-  pExec(runTasksInSeries, tasks, async (task) => await copy(task));
+  await pExec(runTasksInSeries, tasks, async (task) => await copy(task));
 };
 
 export default copyAction;
