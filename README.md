@@ -230,4 +230,4 @@ copy: [
 ];
 ```
 
-- **context** [`boolean`] - The directory, an absolute path, for resolving files. Defaults to [webpack context](https://webpack.js.org/configuration/entry-context/#context).
+- **context** [`string`] - The directory, an absolute path, for resolving files. Defaults to [webpack context](https://webpack.js.org/configuration/entry-context/#context).
