@@ -160,5 +160,9 @@ export default {
       default: false,
       description: 'Run tasks in an action in series',
     },
+    context: {
+      type: 'string',
+      description: 'The directory, an absolute path, for resolving files. Defaults to webpack context',
+    },
   },
 };

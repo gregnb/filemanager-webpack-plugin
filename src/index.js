@@ -14,6 +14,7 @@ const defaultOptions = {
     onEnd: [],
   },
   runTasksInSeries: false,
+  context: null,
 };
 
 const resolvePaths = (action, context) => {
@@ -106,7 +107,7 @@ class FileManagerPlugin {
   }
 
   apply(compiler) {
-    this.context = compiler.options.context;
+    this.context = this.options.context || compiler.options.context;
 
     const onStart = async () => {
       await this.execute('onStart');

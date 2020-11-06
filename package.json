@@ -26,6 +26,7 @@
     "webpack"
   ],
   "scripts": {
+    "dev": "rollup -c -w",
     "build": "rollup -c",
     "test": "ava",
     "prettier": "prettier . --write --ignore-path .gitignore",

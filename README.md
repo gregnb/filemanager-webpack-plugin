@@ -221,7 +221,7 @@ If you need to preserve the order in which operations will run you can set the o
 
 - **runTasksInSeries** [`boolean`] - Run tasks in series. Defaults to false
 
-For Example
+For Example, the following will run one after the other
 
 ```js
 copy: [
@@ -229,3 +229,5 @@ copy: [
   { source: 'dir1/index.html', destination: 'dir2/' },
 ];
 ```
+
+- **context** [`boolean`] - The directory, an absolute path, for resolving files. Defaults to [webpack context](https://webpack.js.org/configuration/entry-context/#context).
