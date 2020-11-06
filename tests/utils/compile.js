@@ -9,7 +9,7 @@ const compile = (compiler) => {
         return reject(new Error(stats.toString()));
       }
 
-      return setTimeout(() => resolve(stats), 500);
+      return resolve(stats);
     });
   });
 };
