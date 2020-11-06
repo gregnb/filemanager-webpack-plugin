@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.0.0-alpha.6 (2020-11-06)
+
+#### Features
+
+- add option to specify `context` ([fac605e](https://github.com/gregnb/filemanager-webpack-plugin/commit/fac605e))
+
 ## v3.0.0-alpha.5 (2020-11-04)
 
 #### Bug Fixes
