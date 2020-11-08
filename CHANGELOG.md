@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.0.0-alpha.7 (2020-11-08)
+
+#### Bug Fixes
+
+- preserve timestamps while copying ([00de8e6](https://github.com/gregnb/filemanager-webpack-plugin/commit/00de8e6)), closes [#48](https://github.com/gregnb/filemanager-webpack-plugin/issues/48)
+
 ## v3.0.0-alpha.6 (2020-11-06)
 
 #### Features
