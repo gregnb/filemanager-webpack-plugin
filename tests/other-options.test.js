@@ -1,65 +1,70 @@
-import path from 'path';
+import { join } from 'path';
 
-import { serial as test } from 'ava';
+import test from 'ava';
 import del from 'del';
 
 import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
-import fsFixtures from './utils/fs-fixtures';
+import getFixtruesDir from './utils/getFixturesDir';
+import tempy from './utils/tempy';
 
 import FileManagerPlugin from '../lib';
+import { existsSync } from 'fs';
+import { dir } from 'console';
 
-const fixturesDir = path.resolve(__dirname, 'fixtures');
+const fixturesDir = getFixtruesDir();
 
-const { existsSync, mkdir } = fsFixtures(fixturesDir);
+test.beforeEach(async (t) => {
+  t.context.tmpdir = await tempy.dir({ suffix: 'other-options' });
+});
 
-test.before(async () => {
-  await del('*', {
-    cwd: fixturesDir,
-    onlyDirectories: true,
-  });
+test.afterEach(async (t) => {
+  await del(t.context.tmpdir);
 });
 
 test(`should tasks in sequence with option 'runTasksInSeries'`, async (t) => {
-  await mkdir('testing-seq-dir1');
-  await mkdir('testing-seq-dir2');
+  const { tmpdir } = t.context;
+
+  const dir1 = tempy.getDirName('/');
+  const dir2 = tempy.getDirName('/');
 
   const config = {
+    context: fixturesDir,
+    runTasksInSeries: true,
     events: {
       onEnd: {
         copy: [
-          { source: 'dist/index.html', destination: 'testing-seq-dir1/' },
-          { source: 'testing-seq-dir1/index.html', destination: 'testing-seq-dir2/' },
+          { source: 'dist/index.html', destination: join(tmpdir, dir1) },
+          { source: join(tmpdir, dir1, 'index.html'), destination: join(tmpdir, dir2) },
         ],
       },
     },
-    runTasksInSeries: true,
   };
 
   const compiler = getCompiler(fixturesDir);
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  t.true(existsSync('./testing-seq-dir1/index.html'));
-  t.true(existsSync('./testing-seq-dir2/index.html'));
-  t.pass();
+  t.true(existsSync(join(tmpdir, dir1, 'index.html')));
+  t.true(existsSync(join(tmpdir, dir2, 'index.html')));
 });
 
 test(`should resolve files from given 'context'`, async (t) => {
+  const distDir = join(fixturesDir, 'dist');
+
   const config = {
     events: {
       onEnd: {
         copy: [{ source: 'index.html', destination: 'index.copied.html' }],
       },
     },
-    context: path.join(fixturesDir, 'dist'),
+    context: distDir,
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  t.true(existsSync('dist/index.html'));
-  t.true(existsSync('dist/index.copied.html'));
-  t.pass();
+  t.true(existsSync(join(distDir, 'index.html')));
+  t.true(existsSync(join(distDir, 'index.copied.html')));
 });

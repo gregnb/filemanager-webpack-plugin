@@ -1,114 +1,138 @@
-import path from 'path';
+import fs, { existsSync } from 'fs';
 
-import { serial as test } from 'ava';
+import test from 'ava';
 import del from 'del';
 import JSZip from 'jszip';
 
 import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
-import fsFixtures from './utils/fs-fixtures';
+import tempy from './utils/tempy';
 
 import FileManagerPlugin from '../lib';
-
-const fixturesDir = path.resolve(__dirname, 'fixtures');
-
-const { existsSync, readFile, writeFile, mkdir } = fsFixtures(fixturesDir);
+import { join } from 'path';
 
 const zipHasFile = async (zipPath, fileName) => {
-  const data = await readFile(zipPath);
+  const data = await fs.promises.readFile(zipPath);
   const zip = await JSZip.loadAsync(data);
   return Object.keys(zip.files).includes(fileName);
 };
 
-test.before(async () => {
-  await del('*', {
-    cwd: fixturesDir,
-    onlyDirectories: true,
-  });
+test.beforeEach(async (t) => {
+  t.context.tmpdir = await tempy.dir({ suffix: 'archive-action' });
+});
+
+test.afterEach(async (t) => {
+  await del(t.context.tmpdir);
 });
 
 test('should archive(ZIP) a directory to a destination ZIP', async (t) => {
+  const { tmpdir } = t.context;
+  await tempy.file(tmpdir, 'file');
+
+  const zipName = tempy.getZipName();
+
   const config = {
+    context: tmpdir,
     events: {
       onEnd: {
-        archive: [{ source: './dist', destination: './testing/test1.zip' }],
+        archive: [{ source: './', destination: zipName }],
       },
     },
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const result = existsSync('./testing/test1.zip');
-  t.true(result);
-  t.pass();
+  const zipPath = join(tmpdir, zipName);
+  t.true(existsSync(zipPath));
 });
 
 test('should archive(ZIP) a single file to a destination ZIP', async (t) => {
+  const { tmpdir } = t.context;
+  await tempy.file(tmpdir, 'file');
+
+  const zipName = tempy.getZipName();
+
   const config = {
+    context: tmpdir,
     events: {
       onEnd: {
-        archive: [{ source: './dist/index.html', destination: './testing/test2.zip' }],
+        archive: [{ source: './', destination: zipName }],
       },
     },
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const result = existsSync('./testing/test2.zip');
-  const fileExist = await zipHasFile('./testing/test2.zip', 'index.html');
-  t.true(result);
-  t.true(fileExist);
-  t.pass();
+  const zipPath = join(tmpdir, zipName);
+  t.true(existsSync(zipPath));
+  t.true(await zipHasFile(zipPath, 'file'));
 });
 
 test('should archive(ZIP) a directory glob to destination ZIP', async (t) => {
+  const { tmpdir } = t.context;
+  await tempy.file(tmpdir, 'file');
+
+  const zipName = tempy.getZipName();
+
   const config = {
+    context: tmpdir,
     events: {
       onEnd: {
-        archive: [{ source: 'dist/**/*', destination: './testing/test3.zip' }],
+        archive: [{ source: '**/*', destination: zipName }],
       },
     },
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const result = existsSync('./testing/test3.zip');
-  t.true(result);
-  t.pass();
+  const zipPath = join(tmpdir, zipName);
+  t.true(existsSync(zipPath));
+  t.true(await zipHasFile(zipPath, 'file'));
 });
 
 test('should archive(TAR) a directory glob to destination TAR when format is provided', async (t) => {
+  const { tmpdir } = t.context;
+  await tempy.file(tmpdir, 'file');
+
+  const zipName = tempy.getZipName('.tar');
+
   const config = {
+    context: tmpdir,
     events: {
       onEnd: {
-        archive: [{ source: 'dist/**/*', destination: './testing/test4.tar', format: 'tar' }],
+        archive: [{ source: '**/*', destination: zipName, format: 'tar' }],
       },
     },
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const result = existsSync('./testing/test4.tar');
-  t.true(result);
-  t.pass();
+  const zipPath = join(tmpdir, zipName);
+  t.true(existsSync(zipPath));
 });
 
 test('should archive(TAR.GZ) a directory glob to destination TAR.GZ', async (t) => {
+  const { tmpdir } = t.context;
+  await tempy.file(tmpdir, 'file');
+
+  const zipName = tempy.getZipName('.tar.gz');
+
   const config = {
+    context: tmpdir,
     events: {
       onEnd: {
         archive: [
           {
-            source: 'dist/**/*',
-            destination: './testing/test5.tar.gz',
+            source: '**/*',
+            destination: zipName,
             format: 'tar',
             options: {
               gzip: true,
@@ -122,52 +146,60 @@ test('should archive(TAR.GZ) a directory glob to destination TAR.GZ', async (t) 
     },
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const result = existsSync('./testing/test5.tar.gz');
-  t.true(result);
-  t.pass();
+  const zipPath = join(tmpdir, zipName);
+  t.true(existsSync(zipPath));
 });
 
 // https://github.com/gregnb/filemanager-webpack-plugin/issues/37
 test('should not include the output zip into compression', async (t) => {
+  const { tmpdir } = t.context;
+  await tempy.file(tmpdir, 'file');
+
+  const zipName = tempy.getZipName();
+
   const config = {
+    context: tmpdir,
     events: {
       onEnd: {
-        archive: [{ source: './testing/', destination: './testing/test7.zip' }],
+        archive: [{ source: './', destination: zipName }],
       },
     },
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const result = await zipHasFile('./testing/test7.zip', 'test7.zip');
-  t.false(result);
+  const zipPath = join(tmpdir, zipName);
+  t.false(await zipHasFile(zipPath, zipName));
 });
 
 test('should include files in the archive', async (t) => {
-  await writeFile('testing/random-file.js');
-  await mkdir('testing/nested');
-  await writeFile('testing/nested/file.html');
+  const { tmpdir } = t.context;
+  await tempy.file(tmpdir, 'file1');
+  await tempy.file(tmpdir, 'file2');
+
+  const zipName = tempy.getZipName();
 
   const config = {
+    context: tmpdir,
     events: {
       onEnd: {
-        archive: [{ source: './testing/', destination: './testing/test8.zip' }],
+        archive: [{ source: './', destination: zipName }],
       },
     },
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  const exist = await zipHasFile('./testing/test8.zip', 'random-file.js');
-  const nestedExist = await zipHasFile('./testing/test8.zip', 'nested/file.html');
-  t.true(exist);
-  t.true(nestedExist);
+  const zipPath = join(tmpdir, zipName);
+
+  t.true(await zipHasFile(zipPath, 'file1'));
+  t.true(await zipHasFile(zipPath, 'file2'));
 });
