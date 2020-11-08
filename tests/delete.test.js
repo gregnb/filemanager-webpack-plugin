@@ -65,7 +65,7 @@ test('should support glob', async (t) => {
     context: tmpdir,
     events: {
       onEnd: {
-        delete: ['**'],
+        delete: ['./*'],
       },
     },
   };

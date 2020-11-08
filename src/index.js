@@ -33,19 +33,21 @@ const resolvePaths = (action, context) => {
     const toType = /(?:\\|\/)$/.test(destination) ? 'dir' : 'file';
 
     let absoluteSource;
-
-    if (isGlob(source)) {
-      if (path.isAbsolute(source)) {
-        absoluteSource = source;
-      } else {
-        absoluteSource = path.posix.join(context, source);
-      }
+    if (path.isAbsolute(source)) {
+      absoluteSource = source;
+    } else if (isGlob(source)) {
+      absoluteSource = path.posix.join(context, source);
     } else {
-      if (path.isAbsolute(source)) {
-        absoluteSource = source;
-      } else {
-        absoluteSource = path.join(context, source);
-      }
+      absoluteSource = path.join(context, source);
+    }
+
+    let absoluteDestination;
+    if (path.isAbsolute(destination)) {
+      absoluteDestination = destination;
+    } else if (isGlob(destination)) {
+      absoluteDestination = path.posix.join(context, destination);
+    } else {
+      absoluteDestination = path.join(context, destination);
     }
 
     return {
@@ -53,7 +55,7 @@ const resolvePaths = (action, context) => {
       source,
       absoluteSource,
       destination,
-      absoluteDestination: path.isAbsolute(destination) ? destination : path.join(context, destination),
+      absoluteDestination,
       toType,
       context,
     };
