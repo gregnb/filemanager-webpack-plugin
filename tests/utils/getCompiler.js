@@ -2,13 +2,17 @@ import path from 'path';
 import webpack from 'webpack';
 import HTMLPlugin from 'html-webpack-plugin';
 
-const getCompiler = (context) => {
+import getFixtruesDir from './getFixturesDir';
+
+const fixturesDir = getFixtruesDir();
+
+const getCompiler = () => {
   const compiler = webpack({
-    context,
+    context: fixturesDir,
     mode: 'production',
-    entry: path.resolve(context),
+    entry: path.resolve(fixturesDir),
     output: {
-      path: path.resolve(context, 'dist'),
+      path: path.resolve(fixturesDir, 'dist'),
       filename: 'js/bunlde-[contenthash].js',
     },
     plugins: [new HTMLPlugin()],

@@ -208,3 +208,4 @@ dist/
 lib/
 testing/
 testing*/
+tests/**/tmp-*

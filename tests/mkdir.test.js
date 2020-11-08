@@ -1,83 +1,90 @@
-import path from 'path';
+import { join, dirname, relative } from 'path';
+import { existsSync } from 'fs';
 
-import { serial as test } from 'ava';
+import test from 'ava';
 import del from 'del';
 
 import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
-import fsFixtures from './utils/fs-fixtures';
+import tempy from './utils/tempy';
 
 import FileManagerPlugin from '../lib';
 
-const fixturesDir = path.resolve(__dirname, 'fixtures');
+test.beforeEach(async (t) => {
+  t.context.tmpdir = await tempy.dir({ suffix: 'mkdir-action' });
+});
 
-const { existsSync, mkdir, writeFile } = fsFixtures(fixturesDir);
-
-test.before(async () => {
-  await del('*', {
-    cwd: fixturesDir,
-    onlyDirectories: true,
-  });
+test.afterEach(async (t) => {
+  await del(t.context.tmpdir);
 });
 
 test('should create the given directories', async (t) => {
+  const { tmpdir } = t.context;
+
   const config = {
+    context: tmpdir,
     events: {
       onStart: {
-        mkdir: ['testing-mkdir-start', 'testing-mkdir2-start'],
+        mkdir: ['dir1', 'dir2'],
       },
       onEnd: {
-        mkdir: ['testing-mkdir-end', 'testing-mkdir2-end'],
+        mkdir: ['dir3', 'dir4'],
       },
     },
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  t.true(existsSync('testing-mkdir-start'));
-  t.true(existsSync('testing-mkdir2-start'));
-  t.true(existsSync('testing-mkdir-end'));
-  t.true(existsSync('testing-mkdir2-end'));
-  t.pass();
+  t.true(existsSync(join(tmpdir, 'dir1')));
+  t.true(existsSync(join(tmpdir, 'dir2')));
+  t.true(existsSync(join(tmpdir, 'dir3')));
+  t.true(existsSync(join(tmpdir, 'dir4')));
 });
 
 test('should create nested directories', async (t) => {
+  const { tmpdir } = t.context;
+
   const config = {
+    context: tmpdir,
     events: {
       onEnd: {
-        mkdir: ['testing-mkdir/deep', 'testing-mkdir/deep/deep1'],
+        mkdir: ['dir/depth1', 'dir/depth1/depth2'],
       },
     },
+    runTasksInSeries: true,
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  t.true(existsSync('testing-mkdir/deep'));
-  t.true(existsSync('testing-mkdir/deep/deep1'));
-  t.pass();
+  t.true(existsSync(join(tmpdir, 'dir')));
+  t.true(existsSync(join(tmpdir, 'dir/depth1')));
+  t.true(existsSync(join(tmpdir, 'dir/depth1/depth2')));
 });
 
 test('should not overwite existing directories', async (t) => {
-  await mkdir('testing-mkdir-exist');
-  await writeFile('testing-mkdir-exist/file1');
+  const { tmpdir } = t.context;
+
+  const dir = await tempy.dir({ root: tmpdir });
+  const file = await tempy.file(dir, 'file');
+  const dirName = relative(tmpdir, dir);
 
   const config = {
+    context: tmpdir,
     events: {
       onEnd: {
-        mkdir: ['testing-mkdir-exist'],
+        mkdir: [dirName],
       },
     },
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  t.true(existsSync('testing-mkdir-exist'));
-  t.true(existsSync('testing-mkdir-exist/file1'));
-  t.pass();
+  t.true(existsSync(dir));
+  t.true(existsSync(join(file)));
 });

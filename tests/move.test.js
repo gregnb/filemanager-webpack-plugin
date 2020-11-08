@@ -1,42 +1,46 @@
-import path from 'path';
+import { join, dirname, relative, basename } from 'path';
 
-import { serial as test } from 'ava';
+import test from 'ava';
 import del from 'del';
 
 import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
-import fsFixtures from './utils/fs-fixtures';
+import tempy from './utils/tempy';
 
 import FileManagerPlugin from '../lib';
+import { existsSync } from 'fs';
 
-const fixturesDir = path.resolve(__dirname, 'fixtures');
+test.beforeEach(async (t) => {
+  t.context.tmpdir = await tempy.dir({ suffix: 'move-action' });
+});
 
-const { existsSync, mkdir, writeFile } = fsFixtures(fixturesDir);
-
-test.before(async () => {
-  await del('*', {
-    cwd: fixturesDir,
-    onlyDirectories: true,
-  });
+test.afterEach(async (t) => {
+  await del(t.context.tmpdir);
 });
 
 test('should move files from source to destination', async (t) => {
-  await mkdir('testing-move');
-  await writeFile('testing-move/dummy.js');
+  const { tmpdir } = t.context;
+
+  const dir = await tempy.dir({ root: tmpdir });
+  const file = await tempy.file(dir, 'file');
+
+  const srcDir = relative(tmpdir, dir);
+  const destDir = tempy.getDirName();
 
   const config = {
+    context: tmpdir,
     events: {
       onEnd: {
-        move: [{ source: './testing-move', destination: './testing-moved' }],
+        move: [{ source: srcDir, destination: destDir }],
       },
     },
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  t.true(existsSync('./testing-moved'));
-  t.true(existsSync('./testing-moved/dummy.js'));
-  t.pass();
+  t.false(existsSync(join(tmpdir, srcDir)));
+  t.true(existsSync(join(tmpdir, destDir)));
+  t.true(existsSync(join(tmpdir, destDir, basename(file))));
 });

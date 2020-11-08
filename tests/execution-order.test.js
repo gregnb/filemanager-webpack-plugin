@@ -1,50 +1,54 @@
-import path from 'path';
+import { existsSync } from 'fs';
+import { join, relative } from 'path';
 
-import { serial as test } from 'ava';
+import test from 'ava';
 import del from 'del';
 
 import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
-import fsFixtures from './utils/fs-fixtures';
+import tempy from './utils/tempy';
 
 import FileManagerPlugin from '../lib';
 
-const fixturesDir = path.resolve(__dirname, 'fixtures');
+test.beforeEach(async (t) => {
+  t.context.tmpdir = await tempy.dir({ suffix: 'execution-order' });
+});
 
-const { existsSync, mkdir, writeFile } = fsFixtures(fixturesDir);
-
-test.before(async () => {
-  await del('*', {
-    cwd: fixturesDir,
-    onlyDirectories: true,
-  });
+test.afterEach(async (t) => {
+  await del(t.context.tmpdir);
 });
 
 test('should execute actions in a given order', async (t) => {
-  await mkdir('testing-move');
-  await writeFile('testing-move/dummy.js');
+  const { tmpdir } = t.context;
+
+  const mDir = await tempy.dir({ root: tmpdir });
+  await tempy.file(mDir, 'file');
+
+  const dirName = relative(tmpdir, mDir);
 
   const config = {
+    context: tmpdir,
     events: {
       onStart: [
         {
-          mkdir: ['testing-seq-dir', 'testing-seq-dir-2'],
+          mkdir: ['dir1', 'dir2'],
         },
         {
-          delete: ['testing-seq-dir-2'],
+          delete: ['dir2'],
         },
         {
-          copy: [{ source: 'testing-seq-dir/', destination: 'testing-seq-dir-copied/' }],
+          copy: [{ source: `${dirName}/`, destination: 'dir-copied/' }],
         },
       ],
     },
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  t.true(existsSync('./testing-seq-dir/'));
-  t.true(existsSync('./testing-seq-dir-copied/'));
-  t.pass();
+  t.true(existsSync(join(tmpdir, 'dir1')));
+  t.false(existsSync(join(tmpdir, 'dir2')));
+  t.false(existsSync(join(tmpdir, 'dir2')));
+  t.true(existsSync(join(tmpdir, 'dir-copied/file')));
 });

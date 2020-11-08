@@ -11,13 +11,17 @@ const fsExtraDefaultOptions = {
   preserveTimestamps: true,
 };
 
+const cpyDefaultOptions = {
+  onlyFiles: false,
+};
+
 const copy = async (task) => {
   const { source, absoluteSource, absoluteDestination, context, toType } = task;
 
   try {
     if (isGlob(source)) {
       const src = path.posix.join(context, source);
-      await cpy(src, absoluteDestination);
+      await cpy(src, absoluteDestination, cpyDefaultOptions);
     } else {
       const isSourceFile = fs.lstatSync(absoluteSource).isFile();
 

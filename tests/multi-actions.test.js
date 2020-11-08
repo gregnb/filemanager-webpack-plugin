@@ -1,43 +1,45 @@
-import path from 'path';
+import { basename, join } from 'path';
+import { existsSync } from 'fs';
 
-import { serial as test } from 'ava';
+import test from 'ava';
 import del from 'del';
 
 import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
-import fsFixtures from './utils/fs-fixtures';
+import tempy from './utils/tempy';
 
 import FileManagerPlugin from '../lib';
 
-const fixturesDir = path.resolve(__dirname, 'fixtures');
+test.beforeEach(async (t) => {
+  t.context.tmpdir = await tempy.dir({ suffix: 'multi-action' });
+});
 
-const { existsSync, mkdir, writeFile } = fsFixtures(fixturesDir);
-
-test.before(async () => {
-  await del('*', {
-    cwd: fixturesDir,
-    onlyDirectories: true,
-  });
+test.afterEach(async (t) => {
+  await del(t.context.tmpdir);
 });
 
 test('should execute given actions in an event', async (t) => {
-  await mkdir('testing-multiple-actions');
-  await writeFile('testing-multiple-actions/index.html');
+  const { tmpdir } = t.context;
+
+  const dirName1 = tempy.getDirName();
+  const destDir = tempy.getDirName();
+  const file = await tempy.file(tmpdir, 'file');
 
   const config = {
+    context: tmpdir,
     events: {
       onEnd: {
-        mkdir: ['testing-multiaction-dir'],
-        copy: [{ source: 'dist/index.html', destination: 'testing-multiple-actions/index.copied.html' }],
+        mkdir: [dirName1],
+        copy: [{ source: basename(file), destination: `${destDir}/file-copied` }],
       },
     },
   };
 
-  const compiler = getCompiler(fixturesDir);
+  const compiler = getCompiler();
   new FileManagerPlugin(config).apply(compiler);
   await compile(compiler);
 
-  t.true(existsSync('./testing-multiaction-dir'));
-  t.true(existsSync('./testing-multiple-actions/index.copied.html'));
-  t.pass();
+  t.true(existsSync(join(tmpdir, dirName1)));
+  t.true(existsSync(file));
+  t.true(existsSync(join(tmpdir, destDir, 'file-copied')));
 });
