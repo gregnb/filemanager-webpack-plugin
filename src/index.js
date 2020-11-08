@@ -1,6 +1,7 @@
 import path from 'path';
 
 import { validate } from 'schema-utils';
+import isGlob from 'is-glob';
 
 import optionsSchema from './options-schema';
 import pExec from './utils/p-exec';
@@ -31,10 +32,26 @@ const resolvePaths = (action, context) => {
 
     const toType = /(?:\\|\/)$/.test(destination) ? 'dir' : 'file';
 
+    let absoluteSource;
+
+    if (isGlob(source)) {
+      if (path.isAbsolute(source)) {
+        absoluteSource = source;
+      } else {
+        absoluteSource = path.posix.join(context, source);
+      }
+    } else {
+      if (path.isAbsolute(source)) {
+        absoluteSource = source;
+      } else {
+        absoluteSource = path.join(context, source);
+      }
+    }
+
     return {
       ...task,
       source,
-      absoluteSource: path.isAbsolute(source) ? source : path.join(context, source),
+      absoluteSource,
       destination,
       absoluteDestination: path.isAbsolute(destination) ? destination : path.join(context, destination),
       toType,
