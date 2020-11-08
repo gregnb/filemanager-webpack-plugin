@@ -32,30 +32,12 @@ const resolvePaths = (action, context) => {
 
     const toType = /(?:\\|\/)$/.test(destination) ? 'dir' : 'file';
 
-    let absoluteSource;
-    if (path.isAbsolute(source)) {
-      absoluteSource = source;
-    } else if (isGlob(source)) {
-      absoluteSource = path.posix.join(context, source);
-    } else {
-      absoluteSource = path.join(context, source);
-    }
-
-    let absoluteDestination;
-    if (path.isAbsolute(destination)) {
-      absoluteDestination = destination;
-    } else if (isGlob(destination)) {
-      absoluteDestination = path.posix.join(context, destination);
-    } else {
-      absoluteDestination = path.join(context, destination);
-    }
-
     return {
       ...task,
       source,
-      absoluteSource,
+      absoluteSource: path.isAbsolute(source) ? source : path.join(context, source),
       destination,
-      absoluteDestination,
+      absoluteDestination: path.isAbsolute(destination) ? destination : path.join(context, destination),
       toType,
       context,
     };
