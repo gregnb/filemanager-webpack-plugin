@@ -1,7 +1,6 @@
 import path from 'path';
 
 import { validate } from 'schema-utils';
-import isGlob from 'is-glob';
 
 import optionsSchema from './options-schema';
 import pExec from './utils/p-exec';
