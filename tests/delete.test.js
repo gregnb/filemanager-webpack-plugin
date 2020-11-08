@@ -1,4 +1,5 @@
 import { existsSync } from 'fs';
+import { posix } from 'path';
 
 import test from 'ava';
 import del from 'del';
@@ -54,7 +55,7 @@ test('should support glob', async (t) => {
   const config = {
     events: {
       onEnd: {
-        delete: [`${tmpdir}/*`],
+        delete: [posix.join(tmpdir, '/*')],
       },
     },
   };
