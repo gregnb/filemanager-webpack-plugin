@@ -7,6 +7,10 @@ import isGlob from 'is-glob';
 
 import pExec from '../utils/p-exec';
 
+const fsExtraDefaultOptions = {
+  preserveTimestamps: true,
+};
+
 const copy = async (task) => {
   const { source, absoluteSource, absoluteDestination, context, toType } = task;
 
@@ -25,11 +29,11 @@ const copy = async (task) => {
         const sourceFileName = path.basename(absoluteSource);
         const filePath = path.resolve(absoluteDestination, sourceFileName);
 
-        await fsExtra.copy(absoluteSource, filePath);
+        await fsExtra.copy(absoluteSource, filePath, fsExtraDefaultOptions);
         return;
       }
 
-      await fsExtra.copy(absoluteSource, absoluteDestination);
+      await fsExtra.copy(absoluteSource, absoluteDestination, fsExtraDefaultOptions);
     }
   } catch (err) {}
 };
