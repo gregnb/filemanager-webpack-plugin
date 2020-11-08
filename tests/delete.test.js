@@ -26,6 +26,7 @@ test('should delete file when array of strings provided in delete function', asy
   const file3 = await tempy.file(tmpdir);
 
   const config = {
+    context: tmpdir,
     events: {
       onStart: {
         delete: [file1],
@@ -53,6 +54,7 @@ test('should support glob', async (t) => {
   const file3 = await tempy.file(tmpdir);
 
   const config = {
+    context: tmpdir,
     events: {
       onEnd: {
         delete: [posix.join(tmpdir, '/*')],
