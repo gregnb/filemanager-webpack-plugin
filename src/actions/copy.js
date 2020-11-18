@@ -11,37 +11,52 @@ const fsExtraDefaultOptions = {
   preserveTimestamps: true,
 };
 
-const copy = async (task) => {
-  const { source, absoluteSource, absoluteDestination, context, toType } = task;
+const copy = async (task, { logger }) => {
+  const { source, absoluteSource, destination, absoluteDestination, context, toType } = task;
 
-  try {
-    if (isGlob(source)) {
-      const src = path.posix.join(context, source);
-      await cpy(src, absoluteDestination);
-    } else {
-      const isSourceFile = fs.lstatSync(absoluteSource).isFile();
+  logger.log(`copying from ${source} to ${destination}`);
 
-      // if source is a file and target is a directory
-      // create the directory and copy the file into that directory
-      if (isSourceFile && toType === 'dir') {
-        await fsExtra.ensureDir(absoluteDestination);
+  if (isGlob(source)) {
+    const src = path.posix.join(context, source);
+    await cpy(src, absoluteDestination);
+  } else {
+    const isSourceFile = fs.lstatSync(absoluteSource).isFile();
 
-        const sourceFileName = path.basename(absoluteSource);
-        const filePath = path.resolve(absoluteDestination, sourceFileName);
+    // if source is a file and target is a directory
+    // create the directory and copy the file into that directory
+    if (isSourceFile && toType === 'dir') {
+      await fsExtra.ensureDir(absoluteDestination);
 
-        await fsExtra.copy(absoluteSource, filePath, fsExtraDefaultOptions);
-        return;
-      }
+      const sourceFileName = path.basename(absoluteSource);
+      const filePath = path.resolve(absoluteDestination, sourceFileName);
 
-      await fsExtra.copy(absoluteSource, absoluteDestination, fsExtraDefaultOptions);
+      await fsExtra.copy(absoluteSource, filePath, fsExtraDefaultOptions);
+      return;
     }
-  } catch (err) {}
+
+    await fsExtra.copy(absoluteSource, absoluteDestination, fsExtraDefaultOptions);
+  }
+
+  logger.info(`copied "${source}" to "${destination}`);
 };
 
 const copyAction = async (tasks, options) => {
-  const { runTasksInSeries } = options;
+  const { runTasksInSeries, logger } = options;
 
-  await pExec(runTasksInSeries, tasks, async (task) => await copy(task));
+  const taskOptions = {
+    logger,
+  };
+
+  logger.debug(`processing copy tasks. tasks: ${tasks}`);
+
+  await pExec(runTasksInSeries, tasks, async (task) => {
+    try {
+      await copy(task, taskOptions);
+    } catch (err) {
+      logger.error(`error while copying. task ${err}`);
+    }
+  });
+  logger.debug(`copy tasks complete. tasks: ${tasks}`);
 };
 
 export default copyAction;

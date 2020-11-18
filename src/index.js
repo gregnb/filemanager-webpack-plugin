@@ -56,6 +56,7 @@ class FileManagerPlugin {
   async applyAction(action, actionParams) {
     const opts = {
       runTasksInSeries: this.options.runTasksInSeries,
+      logger: this.logger,
     };
 
     await action(resolvePaths(actionParams, this.context), opts);
@@ -108,6 +109,7 @@ class FileManagerPlugin {
 
   apply(compiler) {
     this.context = this.options.context || compiler.options.context;
+    this.logger = compiler.getInfrastructureLogger(PLUGIN_NAME);
 
     const onStart = async () => {
       await this.execute('onStart');

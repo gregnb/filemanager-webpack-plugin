@@ -7,7 +7,7 @@ import fsExtra from 'fs-extra';
 
 import pExec from '../utils/p-exec';
 
-const archive = async (task) => {
+const archive = async (task, { logger }) => {
   const { source, absoluteSource, absoluteDestination, options = {}, context } = task;
   const format = task.format || path.extname(absoluteDestination).replace('.', '');
 
@@ -23,6 +23,8 @@ const archive = async (task) => {
   const output = fs.createWriteStream(absoluteDestination);
   const archive = archiver(format, options);
   archive.pipe(output);
+
+  logger.log(`archiving src ${source}`);
 
   if (isGlob(source)) {
     const opts = {
@@ -51,11 +53,26 @@ const archive = async (task) => {
       await archive.file(absoluteSource, opts).finalize();
     }
   }
+
+  logger.info(`archive created at "${absoluteDestination}"`);
 };
 
 const archiveAction = async (tasks, options) => {
-  const { runTasksInSeries } = options;
-  await pExec(runTasksInSeries, tasks, async (task) => await archive(task));
+  const { runTasksInSeries, logger } = options;
+
+  const taskOptions = {
+    logger,
+  };
+
+  logger.debug(`processing archive tasks. tasks: ${tasks}`);
+  await pExec(runTasksInSeries, tasks, async (task) => {
+    try {
+      await archive(task, taskOptions);
+    } catch (err) {
+      logger.error(`error while creating archive. task ${task}`);
+    }
+  });
+  logger.debug(`archive tasks complete. tasks: ${tasks}`);
 };
 
 export default archiveAction;
