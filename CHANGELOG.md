@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.0.0-beta.0 (2020-11-19)
+
+#### Enhancements
+
+- add logs and handle errors ([1fadb46](https://github.com/gregnb/filemanager-webpack-plugin/commit/1fadb46))
+
 ## v3.0.0-alpha.7 (2020-11-08)
 
 #### Bug Fixes
