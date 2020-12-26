@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.0.0 (2020-12-26)
+
+No notable changes since v3.0.0-beta.0
+
 ## v3.0.0-beta.0 (2020-11-19)
 
 #### Enhancements
