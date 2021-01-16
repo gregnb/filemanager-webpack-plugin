@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.1.0 (2020-01-16)
+
+#### Features
+
+- support options to forward to `del` ([fe20026](https://github.com/gregnb/filemanager-webpack-plugin/commit/fe20026))
+
 ## v3.0.0 (2020-12-26)
 
 No notable changes since v3.0.0-beta.0
