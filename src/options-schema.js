@@ -33,7 +33,27 @@ export default {
       minItems: 1,
       additionalItems: true,
       items: {
-        type: 'string',
+        anyOf: [
+          {
+            type: 'object',
+            additionalProperties: false,
+            properties: {
+              source: {
+                type: 'string',
+                minLength: 1,
+              },
+              options: {
+                additionalProperties: true,
+                type: 'object',
+                description: 'Options to forward to del',
+              },
+            },
+          },
+          {
+            type: 'string',
+            minLength: 1,
+          },
+        ],
       },
     },
     Move: {

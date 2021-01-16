@@ -10,7 +10,6 @@ import tempy from './utils/tempy';
 
 import FileManagerPlugin from '../lib';
 import { existsSync } from 'fs';
-import { dir } from 'console';
 
 const fixturesDir = getFixtruesDir();
 

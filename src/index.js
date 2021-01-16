@@ -29,6 +29,14 @@ const resolvePaths = (action, context) => {
 
     const { source, destination } = task;
 
+    if (!destination) {
+      return {
+        ...task,
+        source,
+        absoluteSource: path.isAbsolute(source) ? source : path.join(context, source),
+      };
+    }
+
     const toType = /(?:\\|\/)$/.test(destination) ? 'dir' : 'file';
 
     return {

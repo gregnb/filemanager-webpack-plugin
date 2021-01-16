@@ -1,5 +1,4 @@
 import { existsSync } from 'fs';
-import { posix } from 'path';
 
 import test from 'ava';
 import del from 'del';
@@ -78,4 +77,28 @@ test('should support glob', async (t) => {
   t.false(existsSync(file1));
   t.false(existsSync(file2));
   t.false(existsSync(file3));
+});
+
+test('should accept options', async (t) => {
+  const { tmpdir } = t.context;
+
+  const file = await tempy.file(tmpdir);
+
+  t.true(existsSync(file));
+
+  const config = {
+    context: tmpdir,
+    events: {
+      onEnd: {
+        delete: [{ source: './*', options: { force: true } }, './*'],
+      },
+    },
+  };
+
+  const compiler = getCompiler();
+  new FileManagerPlugin(config).apply(compiler);
+
+  await compile(compiler);
+
+  t.false(existsSync(file));
 });

@@ -1,4 +1,4 @@
-import { join, dirname, relative } from 'path';
+import { join, relative } from 'path';
 import { existsSync } from 'fs';
 
 import test from 'ava';

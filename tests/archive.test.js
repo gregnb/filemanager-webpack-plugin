@@ -1,4 +1,5 @@
 import fs, { existsSync } from 'fs';
+import { join } from 'path';
 
 import test from 'ava';
 import del from 'del';
@@ -9,7 +10,6 @@ import getCompiler from './utils/getCompiler';
 import tempy from './utils/tempy';
 
 import FileManagerPlugin from '../lib';
-import { join } from 'path';
 
 const zipHasFile = async (zipPath, fileName) => {
   const data = await fs.promises.readFile(zipPath);

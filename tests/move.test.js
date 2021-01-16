@@ -1,4 +1,4 @@
-import { join, dirname, relative, basename } from 'path';
+import { join, relative, basename } from 'path';
 
 import test from 'ava';
 import del from 'del';
