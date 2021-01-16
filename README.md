@@ -143,6 +143,19 @@ Delete individual files or entire directories. Also supports glob pattern
 ['/path/to/file.txt', '/path/to/directory/', '/another-path/to/directory/**.js'];
 ```
 
+or
+
+```js
+[
+  {
+    source: '/path/to/file.txt',
+    options: {
+      force: true,
+    },
+  },
+];
+```
+
 ### Move
 
 Move individual files or entire directories.
