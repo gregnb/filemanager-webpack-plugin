@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v4.0.0 (2021-03-07)
+
+#### Breaking Changes
+
+- drop webpack 4 ([4354e86](https://github.com/gregnb/filemanager-webpack-plugin/commit/4354e86))
+
 ## v3.1.1 (2021-03-07)
 
 #### Bug Fixes
