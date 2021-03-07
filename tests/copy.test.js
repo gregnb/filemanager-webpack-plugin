@@ -1,5 +1,5 @@
 import { existsSync } from 'fs';
-import { basename, join } from 'path';
+import { basename, join, posix } from 'path';
 
 import test from 'ava';
 import del from 'del';
@@ -50,7 +50,7 @@ test('should copy files to a directory given a glob absolute source', async (t) 
   const file2 = await tempy.file(tmpdir);
   const dirName = tempy.getDirName();
 
-  const source = join(tmpdir, '*');
+  const source = posix.join(tmpdir, '*');
 
   const config = {
     context: tmpdir,
