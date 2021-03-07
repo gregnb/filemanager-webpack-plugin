@@ -4,26 +4,21 @@
   "description": "This Webpack plugin allows you to copy, archive (.zip), move, delete files and directories before and after builds",
   "author": "gregnb",
   "license": "MIT",
+  "repository": "https://github.com/gregnb/filemanager-webpack-plugin.git",
+  "bugs": "https://github.com/gregnb/filemanager-webpack-plugin/issues",
+  "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme",
   "main": "lib/index.js",
   "engines": {
     "node": ">= 10.13"
   },
-  "files": [
-    "lib"
-  ],
   "contributors": [
     "sibiraj-s"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gregnb/filemanager-webpack-plugin.git"
-  },
-  "bugs": {
-    "url": "https://github.com/gregnb/filemanager-webpack-plugin/issues"
-  },
-  "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme",
   "keywords": [
     "webpack"
+  ],
+  "files": [
+    "lib"
   ],
   "scripts": {
     "dev": "rollup -c -w",
