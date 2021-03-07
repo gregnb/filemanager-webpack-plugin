@@ -17,7 +17,7 @@ const copy = async (task, { logger }) => {
   logger.log(`copying from ${source} to ${destination}`);
 
   if (isGlob(source)) {
-    const src = path.posix.join(context, source);
+    const src = path.isAbsolute(source) ? source : path.posix.join(context, source);
     await cpy(src, absoluteDestination);
   } else {
     const isSourceFile = fs.lstatSync(absoluteSource).isFile();

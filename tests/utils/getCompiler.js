@@ -14,6 +14,7 @@ const getCompiler = () => {
     output: {
       path: path.resolve(fixturesDir, 'dist'),
       filename: 'js/bunlde-[contenthash].js',
+      clean: true,
     },
     plugins: [new HTMLPlugin()],
   });
