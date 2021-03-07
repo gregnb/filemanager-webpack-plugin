@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v3.1.1 (2021-03-07)
+
+#### Bug Fixes
+
+- fix error while copying absolute glob source ([fe20026](https://github.com/gregnb/filemanager-webpack-plugin/commit/fe20026))
+
 ## v3.1.0 (2020-01-16)
 
 #### Features
