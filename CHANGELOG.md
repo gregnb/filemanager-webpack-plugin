@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## v5.0.0 (2021-03-10)
+
+#### Dependency Updates
+
+- update to fs-extras v10 ([3cebee5](https://github.com/gregnb/filemanager-webpack-plugin/commit/3cebee5))
+
+#### Breaking Changes
+
+- drop nodejs 10 support, requires node 12+
+
 ## v4.0.0 (2021-03-07)
 
 #### Breaking Changes
