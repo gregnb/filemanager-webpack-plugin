@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## v5.0.0 (2021-03-10)
+## v5.0.0 (2021-05-10)
 
 #### Dependency Updates
 
