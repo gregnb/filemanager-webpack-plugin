@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## v6.0.0 (2021-06-24)
+
+#### Features
+
+- support ES Modules ([ab86f31](https://github.com/gregnb/filemanager-webpack-plugin/commit/ab86f31))
+
+#### Breaking Changes
+
+- required node versions `^12.20.0 || ^14.13.1 || >=16.0.0` ([ab86f31](https://github.com/gregnb/filemanager-webpack-plugin/commit/ab86f31))
+
 ## v5.0.0 (2021-05-10)
 
 #### Dependency Updates
