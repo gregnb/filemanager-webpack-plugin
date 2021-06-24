@@ -1,4 +1,4 @@
-import path from 'node:path';
+import path from 'path';
 import { validate } from 'schema-utils';
 
 import optionsSchema from './options-schema.js';

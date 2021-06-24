@@ -1,4 +1,4 @@
-import fs from 'node:fs';
+import fs from 'fs';
 
 import pExec from '../utils/p-exec.js';
 

@@ -13,7 +13,7 @@ export default {
       preferBuiltins: true,
     }),
   ],
-  external: ['archiver', 'cpy', 'del', 'fs-extra', 'is-glob', 'schema-utils', 'node:fs', 'node:path'],
+  external: ['archiver', 'cpy', 'del', 'fs-extra', 'is-glob', 'schema-utils', 'fs', 'path'],
   output: {
     file: 'dist/index.cjs',
     format: 'cjs',
