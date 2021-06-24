@@ -8,12 +8,14 @@
   "bugs": "https://github.com/gregnb/filemanager-webpack-plugin/issues",
   "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme",
   "type": "module",
+  "main": "./dist/index.cjs",
+  "exports": {
+    "require": "./dist/index.cjs",
+    "import": "./src/index.js",
+    "default": "./src/index.js"
+  },
   "engines": {
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
-  },
-  "exports": {
-    "require": "./dist/index.js",
-    "default": "./src/index.js"
   },
   "contributors": [
     "sibiraj-s"

@@ -15,7 +15,7 @@ export default {
   ],
   external: ['archiver', 'cpy', 'del', 'fs-extra', 'is-glob', 'schema-utils', 'node:fs', 'node:path'],
   output: {
-    file: 'dist/index.js',
+    file: 'dist/index.cjs',
     format: 'cjs',
     sourcemap: true,
     exports: 'auto',
