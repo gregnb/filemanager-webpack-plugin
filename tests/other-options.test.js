@@ -1,7 +1,7 @@
 import { join } from 'node:path';
+import { existsSync } from 'node:fs';
 import test from 'ava';
 import del from 'del';
-import { existsSync } from 'fs';
 
 import compile from './utils/compile.js';
 import getCompiler from './utils/getCompiler.js';

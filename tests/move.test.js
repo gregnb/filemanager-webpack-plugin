@@ -1,4 +1,5 @@
-import { join, relative, basename } from 'path';
+import { join, relative, basename } from 'node:path';
+import { existsSync } from 'node:fs';
 
 import test from 'ava';
 import del from 'del';
@@ -8,7 +9,6 @@ import getCompiler from './utils/getCompiler.js';
 import tempy from './utils/tempy.js';
 
 import FileManagerPlugin from '../src/index.js';
-import { existsSync } from 'fs';
 
 test.beforeEach(async (t) => {
   t.context.tmpdir = await tempy.dir({ suffix: 'move-action' });

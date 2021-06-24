@@ -1,5 +1,5 @@
-import { existsSync } from 'fs';
-import { basename, join, posix } from 'path';
+import { existsSync } from 'node:fs';
+import { basename, join, posix } from 'node:path';
 
 import test from 'ava';
 import del from 'del';

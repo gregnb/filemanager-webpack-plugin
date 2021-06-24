@@ -1,5 +1,5 @@
 import fs, { existsSync } from 'node:fs';
-import { join } from 'path';
+import { join } from 'node:path';
 
 import test from 'ava';
 import del from 'del';
