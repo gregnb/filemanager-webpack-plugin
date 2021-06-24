@@ -1,11 +1,10 @@
-import fs from 'fs';
-import path from 'path';
-
+import fs from 'node:fs';
+import path from 'node:path';
 import fsExtra from 'fs-extra';
 import cpy from 'cpy';
 import isGlob from 'is-glob';
 
-import pExec from '../utils/p-exec';
+import pExec from '../utils/p-exec.js';
 
 const fsExtraDefaultOptions = {
   preserveTimestamps: true,

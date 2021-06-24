@@ -1,6 +1,6 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
-import pExec from '../utils/p-exec';
+import pExec from '../utils/p-exec.js';
 
 const mkdirAction = async (tasks, options) => {
   const { runTasksInSeries, logger } = options;

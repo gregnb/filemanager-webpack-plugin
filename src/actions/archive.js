@@ -1,11 +1,10 @@
-import fs from 'fs';
-import path from 'path';
-
+import fs from 'node:fs';
+import path from 'node:path';
 import archiver from 'archiver';
 import isGlob from 'is-glob';
 import fsExtra from 'fs-extra';
 
-import pExec from '../utils/p-exec';
+import pExec from '../utils/p-exec.js';
 
 const archive = async (task, { logger }) => {
   const { source, absoluteSource, absoluteDestination, options = {}, context } = task;

@@ -1,6 +1,6 @@
 import del from 'del';
 
-import pExec from '../utils/p-exec';
+import pExec from '../utils/p-exec.js';
 
 const deleteAction = async (tasks, taskOptions) => {
   const { runTasksInSeries, logger } = taskOptions;

@@ -1,15 +1,14 @@
-import { join } from 'path';
-
+import { join } from 'node:path';
 import test from 'ava';
 import del from 'del';
-
-import compile from './utils/compile';
-import getCompiler from './utils/getCompiler';
-import getFixtruesDir from './utils/getFixturesDir';
-import tempy from './utils/tempy';
-
-import FileManagerPlugin from '../lib';
 import { existsSync } from 'fs';
+
+import compile from './utils/compile.js';
+import getCompiler from './utils/getCompiler.js';
+import getFixtruesDir from './utils/getFixturesDir.js';
+import tempy from './utils/tempy.js';
+
+import FileManagerPlugin from '../src/index.js';
 
 const fixturesDir = getFixtruesDir();
 

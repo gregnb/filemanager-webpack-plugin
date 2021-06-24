@@ -1,4 +1,3 @@
-import { babel } from '@rollup/plugin-babel';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
@@ -10,14 +9,11 @@ export default {
       include: 'node_modules/**',
     }),
     json(),
-    babel({
-      babelHelpers: 'bundled',
-    }),
     nodeResolve({
       preferBuiltins: true,
     }),
   ],
-  external: ['archiver', 'cpy', 'del', 'schema-utils', 'fs', 'path', 'fs-extra'],
+  external: ['archiver', 'cpy', 'del', 'fs-extra', 'is-glob', 'schema-utils', 'fs', 'path'],
   output: {
     file: 'lib/index.js',
     format: 'cjs',

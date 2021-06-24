@@ -1,8 +1,8 @@
-import path from 'path';
+import path from 'node:path';
 import webpack from 'webpack';
 import HTMLPlugin from 'html-webpack-plugin';
 
-import getFixtruesDir from './getFixturesDir';
+import getFixtruesDir from './getFixturesDir.js';
 
 const fixturesDir = getFixtruesDir();
 

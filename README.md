@@ -39,7 +39,8 @@ yarn add filemanager-webpack-plugin --dev
 
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 
-module.exports = {
+export default {
+  // ...rest of the config
   plugins: [
     new FileManagerPlugin({
       events: {

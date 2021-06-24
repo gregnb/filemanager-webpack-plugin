@@ -1,10 +1,9 @@
-import path from 'path';
-
+import path from 'node:path';
 import { validate } from 'schema-utils';
 
-import optionsSchema from './options-schema';
-import pExec from './utils/p-exec';
-import { copyAction, moveAction, mkdirAction, archiveAction, deleteAction } from './actions';
+import optionsSchema from './options-schema.js';
+import pExec from './utils/p-exec.js';
+import { copyAction, moveAction, mkdirAction, archiveAction, deleteAction } from './actions/index.js';
 
 const PLUGIN_NAME = 'FileManagerPlugin';
 

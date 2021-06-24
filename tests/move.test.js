@@ -3,11 +3,11 @@ import { join, relative, basename } from 'path';
 import test from 'ava';
 import del from 'del';
 
-import compile from './utils/compile';
-import getCompiler from './utils/getCompiler';
-import tempy from './utils/tempy';
+import compile from './utils/compile.js';
+import getCompiler from './utils/getCompiler.js';
+import tempy from './utils/tempy.js';
 
-import FileManagerPlugin from '../lib';
+import FileManagerPlugin from '../src/index.js';
 import { existsSync } from 'fs';
 
 test.beforeEach(async (t) => {

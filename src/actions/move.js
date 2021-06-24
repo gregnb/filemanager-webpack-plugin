@@ -1,6 +1,6 @@
 import fsExtra from 'fs-extra';
 
-import pExec from '../utils/p-exec';
+import pExec from '../utils/p-exec.js';
 
 const moveAction = async (tasks, options) => {
   const { runTasksInSeries, logger } = options;

@@ -5,11 +5,11 @@ import test from 'ava';
 import del from 'del';
 import JSZip from 'jszip';
 
-import compile from './utils/compile';
-import getCompiler from './utils/getCompiler';
-import tempy from './utils/tempy';
+import compile from './utils/compile.js';
+import getCompiler from './utils/getCompiler.js';
+import tempy from './utils/tempy.js';
 
-import FileManagerPlugin from '../lib';
+import FileManagerPlugin from '../src/index.js';
 
 const zipHasFile = async (zipPath, fileName) => {
   const data = await fs.promises.readFile(zipPath);
