@@ -1,6 +1,6 @@
 {
   "name": "filemanager-webpack-plugin",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "This Webpack plugin allows you to copy, archive (.zip), move, delete files and directories before and after builds",
   "author": "gregnb",
   "license": "MIT",
@@ -48,11 +48,6 @@
     "schema-utils": "^3.0.0"
   },
   "devDependencies": {
-    "@ava/babel": "^1.0.1",
-    "@babel/core": "^7.14.6",
-    "@babel/preset-env": "^7.14.7",
-    "@babel/register": "^7.14.5",
-    "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
@@ -64,7 +59,6 @@
     "jszip": "^3.6.0",
     "prettier": "^2.3.1",
     "pretty-quick": "^3.1.1",
-    "regenerator-runtime": "^0.13.7",
     "rollup": "^2.52.2",
     "webpack": "^5.40.0"
   }
