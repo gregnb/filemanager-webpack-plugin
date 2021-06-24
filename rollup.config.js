@@ -13,11 +13,11 @@ export default {
       preferBuiltins: true,
     }),
   ],
-  external: ['archiver', 'cpy', 'del', 'fs-extra', 'is-glob', 'schema-utils', 'fs', 'path'],
+  external: ['archiver', 'cpy', 'del', 'fs-extra', 'is-glob', 'schema-utils', 'node:fs', 'node:path'],
   output: {
-    file: 'lib/index.js',
+    file: 'dist/index.js',
     format: 'cjs',
     sourcemap: true,
-    exports: 'default',
+    exports: 'auto',
   },
 };

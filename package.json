@@ -7,19 +7,26 @@
   "repository": "https://github.com/gregnb/filemanager-webpack-plugin.git",
   "bugs": "https://github.com/gregnb/filemanager-webpack-plugin/issues",
   "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme",
-  "main": "lib/index.js",
   "type": "module",
   "engines": {
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  },
+  "exports": {
+    "require": "./dist/index.js",
+    "default": "./src/index.js"
   },
   "contributors": [
     "sibiraj-s"
   ],
   "keywords": [
-    "webpack"
+    "webpack",
+    "webpack-copy-plugin",
+    "webpack-archive-plugin",
+    "filemanager-plugin"
   ],
   "files": [
-    "lib"
+    "dist",
+    "src"
   ],
   "scripts": {
     "dev": "rollup -c -w",
