@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v6.1.2 (2021-06-25)
+
+#### Bug Fixes
+
+- remove `node:` protocol for CJS support ([da97771](https://github.com/gregnb/filemanager-webpack-plugin/commit/da97771))
+
 ## v6.1.1 (2021-06-24)
 
 #### Bug Fixes
