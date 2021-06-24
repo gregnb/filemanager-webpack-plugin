@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v6.1.1 (2021-06-24)
+
+#### Bug Fixes
+
+- fix incompatibility with CJS ([e0f92a4](https://github.com/gregnb/filemanager-webpack-plugin/commit/e0f92a4))
+
 ## v6.1.0 (2021-06-24)
 
 #### Features
