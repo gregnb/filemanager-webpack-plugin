@@ -1,4 +1,4 @@
-import fs, { existsSync } from 'fs';
+import fs, { existsSync } from 'node:fs';
 import { join } from 'path';
 
 import test from 'ava';

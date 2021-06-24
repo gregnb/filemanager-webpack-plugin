@@ -1,5 +1,5 @@
 import path from 'node:path';
-import fs from 'node:fs/promises';
+import fs from 'node:fs';
 import crypto from 'node:crypto';
 
 import getFixtruesDir from './getFixturesDir.js';
@@ -12,13 +12,13 @@ const getDirName = (last = '') => `dir-${getRandomId()}${last}`;
 const getFileName = (last = '') => `file-${getRandomId()}${last}`;
 
 const dir = async ({ root = fixturesDir, suffix = 'random' }) => {
-  const tmpDir = await fs.mkdtemp(path.join(root, `tmp-${suffix}-`));
+  const tmpDir = await fs.promises.mkdtemp(path.join(root, `tmp-${suffix}-`));
   return tmpDir;
 };
 
 const file = async (dir, fileName = getFileName()) => {
   const filePath = path.join(dir, fileName);
-  await fs.writeFile(filePath, 'lorem-ipsum', 'utf-8');
+  await fs.promises.writeFile(filePath, 'lorem-ipsum', 'utf-8');
   return filePath;
 };
 
