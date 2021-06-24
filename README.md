@@ -204,7 +204,8 @@ Archive individual files or entire directories. Defaults to .zip unless 'format'
         level: 1,
       },
       globOptions: {
-        nomount: true,
+        // https://github.com/Yqnn/node-readdir-glob#options
+        dot: true,
       },
     },
   },
