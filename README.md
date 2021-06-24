@@ -70,7 +70,8 @@ export default {
                   level: 1,
                 },
                 globOptions: {
-                  nomount: true,
+                  // https://github.com/Yqnn/node-readdir-glob#options
+                  dot: true,
                 },
               },
             },
