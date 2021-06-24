@@ -92,6 +92,7 @@ new FileManagerPlugin({
     onEnd: {},
   },
   runTasksInSeries: false,
+  runOnceInWatchMode: false,
 });
 ```
 
@@ -235,6 +236,7 @@ If you need to preserve the order in which operations will run you can set the o
 ## Other Options
 
 - **runTasksInSeries** [`boolean`] - Run tasks in series. Defaults to false
+- **runOnceInWatchMode** [`boolean`] - The `onStart` event will be run only once in watch mode. Defaults to false
 
 For Example, the following will run one after the other
 

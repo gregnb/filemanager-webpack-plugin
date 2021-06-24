@@ -14,6 +14,7 @@ const defaultOptions = {
   },
   runTasksInSeries: false,
   context: null,
+  runOnceInWatchMode: false,
 };
 
 const resolvePaths = (action, context) => {
@@ -127,8 +128,17 @@ class FileManagerPlugin {
     };
 
     compiler.hooks.beforeRun.tapPromise(PLUGIN_NAME, onStart);
-    compiler.hooks.watchRun.tapPromise(PLUGIN_NAME, onStart);
     compiler.hooks.afterEmit.tapPromise(PLUGIN_NAME, onEnd);
+
+    let watchRunCount = 0;
+    compiler.hooks.watchRun.tapPromise(PLUGIN_NAME, async () => {
+      if (this.options.runOnceInWatchMode && watchRunCount > 0) {
+        return;
+      }
+
+      ++watchRunCount;
+      await onStart();
+    });
   }
 }
 
