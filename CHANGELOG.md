@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v6.1.0 (2021-06-24)
+
+#### Features
+
+- add option `runOnceInWatchMode` ([ab86f31](https://github.com/gregnb/filemanager-webpack-plugin/commit/ab86f31))
+
 ## v6.0.0 (2021-06-24)
 
 #### Features
