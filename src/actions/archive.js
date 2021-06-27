@@ -14,8 +14,10 @@ const archive = async (task, { logger }) => {
   const destFile = path.basename(absoluteDestination);
   const destDir = path.dirname(absoluteDestination);
 
-  const ignore = ((Array.isArray(options.ignore) && options.ignore) || []).concat(destFile);
-  const archiverOptions = { ignore, ...(options.globOptions || {}) };
+  const ignore = Array.isArray(options.ignore) ? [...options.ignore, destFile] : [destFile];
+  const fileToIgnore = typeof options.ignore === 'string' ? [...ignore, options.ignore] : ignore;
+
+  const archiverOptions = { ...(options.globOptions || {}), ignore: fileToIgnore };
 
   await fsExtra.ensureDir(destDir);
 
