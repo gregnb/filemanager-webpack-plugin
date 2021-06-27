@@ -14,10 +14,11 @@ const archive = async (task, { logger }) => {
   const destFile = path.basename(absoluteDestination);
   const destDir = path.dirname(absoluteDestination);
 
-  const ignore = Array.isArray(options.ignore) ? [...options.ignore, destFile] : [destFile];
-  const fileToIgnore = typeof options.ignore === 'string' ? [...ignore, options.ignore] : ignore;
+  const inputGlobOptions = options.globOptions || {};
 
-  const archiverOptions = { ...(options.globOptions || {}), ignore: fileToIgnore };
+  const ignore = Array.isArray(inputGlobOptions.ignore) ? [...inputGlobOptions.ignore, destFile] : [destFile];
+  const fileToIgnore = typeof inputGlobOptions.ignore === 'string' ? [...ignore, inputGlobOptions.ignore] : ignore;
+  const globOptions = { ...inputGlobOptions, ignore: fileToIgnore };
 
   await fsExtra.ensureDir(destDir);
 
@@ -29,7 +30,7 @@ const archive = async (task, { logger }) => {
 
   if (isGlob(source)) {
     const opts = {
-      ...archiverOptions,
+      ...globOptions,
       cwd: context,
     };
 
@@ -39,7 +40,7 @@ const archive = async (task, { logger }) => {
 
     if (sStat.isDirectory()) {
       const opts = {
-        ...archiverOptions,
+        ...globOptions,
         cwd: absoluteSource,
       };
 

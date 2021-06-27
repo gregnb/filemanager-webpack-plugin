@@ -203,3 +203,75 @@ test('should include files in the archive', async (t) => {
   t.true(await zipHasFile(zipPath, 'file1'));
   t.true(await zipHasFile(zipPath, 'file2'));
 });
+
+test('should ignore files in the archive correclty if ignore is an array', async (t) => {
+  const { tmpdir } = t.context;
+  await tempy.file(tmpdir, 'file1');
+  await tempy.file(tmpdir, 'file2');
+
+  const zipName = tempy.getZipName();
+
+  const config = {
+    context: tmpdir,
+    events: {
+      onEnd: {
+        archive: [
+          {
+            source: './',
+            destination: zipName,
+            options: {
+              globOptions: {
+                ignore: ['**/**/file2'],
+              },
+            },
+          },
+        ],
+      },
+    },
+  };
+
+  const compiler = getCompiler();
+  new FileManagerPlugin(config).apply(compiler);
+  await compile(compiler);
+
+  const zipPath = join(tmpdir, zipName);
+
+  t.true(await zipHasFile(zipPath, 'file1'));
+  t.false(await zipHasFile(zipPath, 'file2'));
+});
+
+test('should ignore files in the archive correclty if ignore is a string', async (t) => {
+  const { tmpdir } = t.context;
+  await tempy.file(tmpdir, 'file1');
+  await tempy.file(tmpdir, 'file2');
+
+  const zipName = tempy.getZipName();
+
+  const config = {
+    context: tmpdir,
+    events: {
+      onEnd: {
+        archive: [
+          {
+            source: './',
+            destination: zipName,
+            options: {
+              globOptions: {
+                ignore: '**/**/file2',
+              },
+            },
+          },
+        ],
+      },
+    },
+  };
+
+  const compiler = getCompiler();
+  new FileManagerPlugin(config).apply(compiler);
+  await compile(compiler);
+
+  const zipPath = join(tmpdir, zipName);
+
+  t.true(await zipHasFile(zipPath, 'file1'));
+  t.false(await zipHasFile(zipPath, 'file2'));
+});
