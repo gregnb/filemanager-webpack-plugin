@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v6.1.3 (2021-06-27)
+
+#### Bug Fixes
+
+- consume archiver ignore options correctly ([5c6f84b](https://github.com/gregnb/filemanager-webpack-plugin/commit/5c6f84b)), ([019f8da](https://github.com/gregnb/filemanager-webpack-plugin/commit/019f8da))
+
 ## v6.1.2 (2021-06-25)
 
 #### Bug Fixes
