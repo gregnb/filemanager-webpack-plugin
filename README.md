@@ -198,7 +198,7 @@ Archive individual files or entire directories. Defaults to .zip unless 'format'
     destination: '/path/to.tar.gz',
     format: 'tar', // optional
     options: {
-      // see https://www.archiverjs.com/archiver
+      // see https://www.archiverjs.com/docs/archiver
       gzip: true,
       gzipOptions: {
         level: 1,
