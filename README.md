@@ -15,8 +15,8 @@
     <a href="https://npmjs.com/filemanager-webpack-plugin" alt="NPM version">
       <img src="https://badgen.net/npm/v/filemanager-webpack-plugin">
     </a>
-    <a href="https://david-dm.org/gregnb/filemanager-webpack-plugin" alt="Dependencies status">
-      <img src="https://david-dm.org/gregnb/filemanager-webpack-plugin/status.svg">
+     <a href="https://npmjs.com/filemanager-webpack-plugin" alt="Node version">
+      <img src="https://badgen.net/npm/node/filemanager-webpack-plugin">
     </a>
     <a href="https://packagephobia.com/result?p=filemanager-webpack-plugin" alt="Dependencies status">
       <img src="https://badgen.net/packagephobia/install/filemanager-webpack-plugin">
