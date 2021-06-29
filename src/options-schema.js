@@ -184,5 +184,10 @@ export default {
       type: 'string',
       description: 'The directory, an absolute path, for resolving files. Defaults to webpack context',
     },
+    runOnceInWatchMode: {
+      type: 'boolean',
+      default: false,
+      description: 'Run tasks only at first compilation in watch mode'
+    }
   },
 };
