@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v6.1.4 (2021-06-29)
+
+#### Bug Fixes
+
+- add `runOnceInWatchMode` option to validation schema ([6fe28f1](https://github.com/gregnb/filemanager-webpack-plugin/commit/6fe28f1))
+
 ## v6.1.3 (2021-06-27)
 
 #### Bug Fixes
