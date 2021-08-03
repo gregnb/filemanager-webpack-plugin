@@ -9,6 +9,7 @@
   "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme",
   "type": "module",
   "main": "./dist/index.cjs",
+  "types": "types.d.ts",
   "exports": {
     "require": "./dist/index.cjs",
     "import": "./src/index.js",
