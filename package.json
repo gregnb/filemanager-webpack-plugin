@@ -29,7 +29,8 @@
   ],
   "files": [
     "dist",
-    "src"
+    "src",
+    "types.d.ts"
   ],
   "scripts": {
     "dev": "rollup -c -w",
