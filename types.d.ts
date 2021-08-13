@@ -103,7 +103,9 @@ interface Options {
   context?: string;
 }
 
-export default class implements WebpackPluginInstance {
+declare class FileManagerPlugin implements WebpackPluginInstance {
   constructor(options?: Options);
   apply(compiler: Compiler): void;
 }
+
+export default FileManagerPlugin;
