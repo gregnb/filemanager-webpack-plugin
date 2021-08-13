@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v6.1.5 (2021-08-14)
+
+#### Features
+
+- add type definitions ([1888ce4](https://github.com/gregnb/filemanager-webpack-plugin/commit/1888ce4))
+
 ## v6.1.4 (2021-06-29)
 
 #### Bug Fixes
