@@ -24,9 +24,10 @@ const archive = async (task, { logger }) => {
 
   const output = fs.createWriteStream(absoluteDestination);
   const archive = archiver(format, options);
-  archive.pipe(output);
 
   const streamClose = () => new Promise((resolve) => output.on('close', resolve));
+
+  archive.pipe(output);
 
   logger.log(`archiving src ${source}`);
 
