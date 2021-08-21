@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v6.1.6 (2021-08-21)
+
+#### Bug Fixes
+
+- fix archiver creating invalid archives ([9204617](https://github.com/gregnb/filemanager-webpack-plugin/commit/9204617))
+
 ## v6.1.5 (2021-08-14)
 
 #### Features
