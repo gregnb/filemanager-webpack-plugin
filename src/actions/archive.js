@@ -26,6 +26,8 @@ const archive = async (task, { logger }) => {
   const archive = archiver(format, options);
   archive.pipe(output);
 
+  const streamClose = () => new Promise((resolve) => output.on('close', resolve));
+
   logger.log(`archiving src ${source}`);
 
   if (isGlob(source)) {
@@ -55,6 +57,8 @@ const archive = async (task, { logger }) => {
       await archive.file(absoluteSource, opts).finalize();
     }
   }
+
+  await streamClose();
 
   logger.info(`archive created at "${absoluteDestination}"`);
 };
