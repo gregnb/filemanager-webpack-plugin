@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v6.1.7 (2021-09-10)
+
+#### Bug Fixes
+
+- Revert npm engines requirement ([a794942](https://github.com/gregnb/filemanager-webpack-plugin/commit/a794942))
+
 ## v6.1.6 (2021-08-21)
 
 #### Bug Fixes
