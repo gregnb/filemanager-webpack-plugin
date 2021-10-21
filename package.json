@@ -49,22 +49,22 @@
     "cpy": "^8.1.2",
     "del": "^6.0.0",
     "fs-extra": "^10.0.0",
-    "is-glob": "^4.0.1",
+    "is-glob": "^4.0.3",
     "schema-utils": "^3.1.1"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^20.0.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.0.4",
+    "@rollup/plugin-node-resolve": "^13.0.6",
     "ava": "^3.15.0",
     "fast-glob": "^3.2.7",
-    "html-webpack-plugin": "^5.3.2",
-    "husky": "^7.0.2",
+    "html-webpack-plugin": "^5.4.0",
+    "husky": "^7.0.4",
     "is-ci": "^3.0.0",
     "jszip": "^3.7.1",
-    "prettier": "^2.4.0",
+    "prettier": "^2.4.1",
     "pretty-quick": "^3.1.1",
-    "rollup": "^2.56.3",
-    "webpack": "^5.52.1"
+    "rollup": "^2.58.0",
+    "webpack": "^5.59.1"
   }
 }
