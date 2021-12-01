@@ -1,8 +1,9 @@
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import { defineConfig } from 'rollup';
+import nodeResolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 
-export default {
+const config = defineConfig({
   input: 'src/index.js',
   plugins: [
     commonjs({
@@ -20,4 +21,6 @@ export default {
     sourcemap: true,
     exports: 'auto',
   },
-};
+});
+
+export default config;
