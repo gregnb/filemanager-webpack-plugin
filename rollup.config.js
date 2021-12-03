@@ -10,7 +10,7 @@ const config = defineConfig({
       preferBuiltins: true,
     }),
   ],
-  external: ['archiver', 'cpy', 'del', 'fs-extra', 'is-glob', 'schema-utils', 'fs', 'path'],
+  external: ['normalize-path', 'archiver', 'fast-glob', 'del', 'fs-extra', 'is-glob', 'schema-utils', 'fs', 'path'],
   output: {
     file: 'dist/index.cjs',
     format: 'cjs',

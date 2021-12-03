@@ -1,5 +1,6 @@
 import path from 'path';
 import { validate } from 'schema-utils';
+import normalizePath from 'normalize-path';
 
 import optionsSchema from './options-schema.js';
 import pExec from './utils/p-exec.js';
@@ -39,12 +40,15 @@ const resolvePaths = (action, context) => {
 
     const toType = /(?:\\|\/)$/.test(destination) ? 'dir' : 'file';
 
+    const absoluteSource = path.isAbsolute(source) ? source : path.join(context, source);
+    const absoluteDestination = path.isAbsolute(destination) ? destination : path.join(context, destination);
+
     return {
       ...task,
-      source,
-      absoluteSource: path.isAbsolute(source) ? source : path.join(context, source),
-      destination,
-      absoluteDestination: path.isAbsolute(destination) ? destination : path.join(context, destination),
+      source: normalizePath(source),
+      absoluteSource: normalizePath(absoluteSource),
+      destination: normalizePath(destination),
+      absoluteDestination: normalizePath(absoluteDestination),
       toType,
       context,
     };

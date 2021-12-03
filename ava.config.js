@@ -1,5 +1,5 @@
 export default {
   files: ['tests/*.test.js'],
-  serial: false,
+  serial: true,
   verbose: true,
 };

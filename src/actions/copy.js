@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import fsExtra from 'fs-extra';
-import cpy from 'cpy';
 import isGlob from 'is-glob';
 
 import pExec from '../utils/p-exec.js';
+import globCopy from '../utils/glob-copy.js';
 
 const fsExtraDefaultOptions = {
   preserveTimestamps: true,
@@ -16,8 +16,11 @@ const copy = async (task, { logger }) => {
   logger.log(`copying from ${source} to ${destination}`);
 
   if (isGlob(source)) {
-    const src = path.isAbsolute(source) ? source : path.posix.join(context, source);
-    await cpy(src, absoluteDestination);
+    const cpOptions = {
+      cwd: context,
+    };
+
+    await globCopy(source, absoluteDestination, cpOptions);
   } else {
     const isSourceFile = fs.lstatSync(absoluteSource).isFile();
 
@@ -26,7 +29,7 @@ const copy = async (task, { logger }) => {
     if (isSourceFile && toType === 'dir') {
       await fsExtra.ensureDir(absoluteDestination);
 
-      const sourceFileName = path.basename(absoluteSource);
+      const sourceFileName = path.posix.basename(absoluteSource);
       const filePath = path.resolve(absoluteDestination, sourceFileName);
 
       await fsExtra.copy(absoluteSource, filePath, fsExtraDefaultOptions);
