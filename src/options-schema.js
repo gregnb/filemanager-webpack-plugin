@@ -23,6 +23,33 @@ export default {
               type: 'string',
               minLength: 1,
             },
+            options: {
+              additionalProperties: false,
+              type: 'object',
+              description: 'Options to forward to archiver',
+              properties: {
+                flat: {
+                  description: 'Flatten the directory structure. All copied files will be put in the same directory',
+                  type: 'boolean',
+                  default: false,
+                },
+                overwrite: {
+                  description: 'overwrite existing file or directory',
+                  type: 'boolean',
+                  default: true,
+                },
+                preserveTimestamps: {
+                  description: 'Set last modification and access times to the ones of the original source files',
+                  type: 'boolean',
+                  default: false,
+                },
+              },
+            },
+            globOptions: {
+              additionalProperties: true,
+              type: 'object',
+              description: 'Options to forward to fast-glob',
+            },
           },
         },
       ],
@@ -187,7 +214,7 @@ export default {
     runOnceInWatchMode: {
       type: 'boolean',
       default: false,
-      description: 'Run tasks only at first compilation in watch mode'
-    }
+      description: 'Run tasks only at first compilation in watch mode',
+    },
   },
 };

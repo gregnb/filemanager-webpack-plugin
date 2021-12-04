@@ -11,16 +11,26 @@ const fsExtraDefaultOptions = {
 };
 
 const copy = async (task, { logger }) => {
-  const { source, absoluteSource, destination, absoluteDestination, context, toType } = task;
+  const {
+    source,
+    absoluteSource,
+    destination,
+    absoluteDestination,
+    context,
+    toType,
+    options = {},
+    globOptions = {},
+  } = task;
 
   logger.log(`copying from ${source} to ${destination}`);
 
   if (isGlob(source)) {
     const cpOptions = {
+      ...options,
       cwd: context,
     };
 
-    await globCopy(source, absoluteDestination, cpOptions);
+    await globCopy(source, absoluteDestination, cpOptions, globOptions);
   } else {
     const isSourceFile = fs.lstatSync(absoluteSource).isFile();
 
