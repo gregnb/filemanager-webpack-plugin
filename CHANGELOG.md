@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
-## v7.0.0-alpha.0 (2021-09-10)
+## v7.0.0-alpha.1 (2021-12-04)
+
+#### Features
+
+- support flat copy with glob ([83bf2dd](https://github.com/gregnb/filemanager-webpack-plugin/commit/83bf2dd))
+- add copy options `overwrite` and `preserveTimestamps` ([83bf2dd](https://github.com/gregnb/filemanager-webpack-plugin/commit/83bf2dd))
+
+## v7.0.0-alpha.0 (2021-12-03)
 
 #### Bug Fixes
 
