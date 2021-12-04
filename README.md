@@ -141,7 +141,7 @@ Copy individual files or entire directories from a source folder to a destinatio
 - source[`string`] - a file or a directory or a glob
 - destination[`string`] - a file or a directory.
 - options ['object`] - copy options
-- globOptoons [`object`] - options to forward to glob options
+- globOptions [`object`] - options to forward to glob options
 
 **Caveats**
 
