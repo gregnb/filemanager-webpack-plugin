@@ -118,7 +118,18 @@ Copy individual files or entire directories from a source folder to a destinatio
 ```js
 [
   { source: '/path/from', destination: '/path/to' },
-  { source: '/path/**/*.js', destination: '/path' },
+  {
+    source: '/path/**/*.js',
+    destination: '/path',
+    options: {
+      flat: false,
+      preserveTimestamps: true,
+      overwite: true,
+    },
+    globOptions: {
+      dot: true,
+    },
+  },
   { source: '/path/fromfile.txt', destination: '/path/tofile.txt' },
   { source: '/path/**/*.{html,js}', destination: '/path/to' },
   { source: '/path/{file1,file2}.js', destination: '/path/to' },
@@ -129,6 +140,8 @@ Copy individual files or entire directories from a source folder to a destinatio
 
 - source[`string`] - a file or a directory or a glob
 - destination[`string`] - a file or a directory.
+- options ['object`] - copy options
+- globOptions [`object`] - options to forward to glob options
 
 **Caveats**
 

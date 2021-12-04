@@ -1,6 +1,18 @@
 import type { ArchiverOptions } from 'archiver';
 import type { Options as DelOptions } from 'del';
 import type { Compiler, WebpackPluginInstance } from 'webpack';
+import type { CopyOptions } from 'fs-extra';
+import type { Options as FgOptions } from 'fast-glob';
+
+type FsCopyOptions = Pick<CopyOptions, 'overwrite' | 'preserveTimestamps'>;
+
+interface CopyActionOptions extends FsCopyOptions {
+  /**
+   * Flatten directory structure. All copied files will be put in the same directory.
+   * disabled by default
+   */
+  flat: boolean;
+}
 
 /** Copy individual files or entire directories from a source folder to a destination folder */
 type Copy = {
@@ -8,11 +20,16 @@ type Copy = {
   source: string;
   /** Copy destination */
   destination: string;
+  /** Copy Options */
+  options: CopyActionOptions;
+  /** Glob options */
+  globOptions: Omit<FgOptions, 'absolute' | 'cwd'>;
 }[];
 
 /** Delete individual files or entire directories */
 type Delete = (
   | {
+      /** A folder or file or a glob to delete */
       source: string;
       /** Options to forward to del */
       options: DelOptions;

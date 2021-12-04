@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { basename, join } from 'node:path';
+import { basename, join, sep } from 'node:path';
 
 import test from 'ava';
 import del from 'del';
@@ -94,7 +94,43 @@ test('should deep copy files to directory given a glob source', async (t) => {
 
   t.true(existsSync(join(tmpdir, dirName)));
   t.true(existsSync(join(tmpdir, dirName, basename(file1))));
-  t.true(existsSync(join(nestedDir, basename(file2))));
+  t.true(existsSync(join(tmpdir, dirName, nestedDir.split(sep).pop(), basename(file2))));
+});
+
+test('should flat copy the files to directory given a glob source', async (t) => {
+  const { tmpdir } = t.context;
+
+  const file1 = await tempy.file(tmpdir);
+  const nestedDir = await tempy.dir({ root: tmpdir });
+  const file2 = await tempy.file(nestedDir);
+
+  const dirName = tempy.getDirName();
+
+  const config = {
+    context: tmpdir,
+    events: {
+      onEnd: {
+        copy: [
+          {
+            source: '**/*',
+            destination: dirName,
+            options: {
+              flat: true,
+            },
+            globOptions: {},
+          },
+        ],
+      },
+    },
+  };
+
+  const compiler = getCompiler();
+  new FileManagerPlugin(config).apply(compiler);
+  await compile(compiler);
+
+  t.true(existsSync(join(tmpdir, dirName)));
+  t.true(existsSync(join(tmpdir, dirName, basename(file1))));
+  t.true(existsSync(join(tmpdir, dirName, basename(file2))));
 });
 
 test(`should create destination directory if it doesn't exist and copy files`, async (t) => {
