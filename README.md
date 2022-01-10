@@ -140,13 +140,13 @@ Copy individual files or entire directories from a source folder to a destinatio
 
 - source[`string`] - a file or a directory or a glob
 - destination[`string`] - a file or a directory.
-- options ['object`] - copy options
-- globOptions [`object`] - options to forward to glob options
+- options [`object`] - copy options
+- globOptions [`object`] - options to forward to glob options([See available options here](https://github.com/Yqnn/node-readdir-glob#options)) 
 
 **Caveats**
 
 - if source is a `glob`, destination must be a directory
-- if souce is a `file` and destination is a directory, the file will be copied into the directory
+- if source is a `file` and destination is a directory, the file will be copied into the directory
 
 ### Delete
 
