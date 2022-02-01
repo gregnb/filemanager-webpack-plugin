@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## v7.0.0-alpha.2 (2022-02-01)
+
+#### Bug Fixes
+
+- fix typings for copy actions ([100686f](https://github.com/gregnb/filemanager-webpack-plugin/commit/100686f))
+
+#### Dependency Updates
+
+- bump all dependencies to latest ([1dc902b](https://github.com/gregnb/filemanager-webpack-plugin/commit/1dc902b))
+
+#### Internal
+
+- update LICENSE ([aafd652](https://github.com/gregnb/filemanager-webpack-plugin/commit/aafd652))
+
 ## v7.0.0-alpha.1 (2021-12-04)
 
 #### Features
@@ -15,7 +29,7 @@ All notable changes to this project will be documented in this file.
 
 - remove cpy dependency, fixing vulnerabilities ([9dcfbd8](https://github.com/gregnb/filemanager-webpack-plugin/commit/9dcfbd8))
 
-#### Breaking changes
+#### Breaking Changes
 
 - copy with glob by default maintains directory structure ([9dcfbd8](https://github.com/gregnb/filemanager-webpack-plugin/commit/9dcfbd8))
 
