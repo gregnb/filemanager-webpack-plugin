@@ -21,9 +21,9 @@ type Copy = {
   /** Copy destination */
   destination: string;
   /** Copy Options */
-  options: CopyActionOptions;
+  options?: CopyActionOptions;
   /** Glob options */
-  globOptions: Omit<FgOptions, 'absolute' | 'cwd'>;
+  globOptions?: Omit<FgOptions, 'absolute' | 'cwd'>;
 }[];
 
 /** Delete individual files or entire directories */
