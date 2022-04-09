@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v7.0.0-beta.0 (2022-04-09)
+
+- no notable changes since v7.0.0-alpha.2
+
 ## v7.0.0-alpha.2 (2022-02-01)
 
 #### Bug Fixes
