@@ -124,7 +124,7 @@ Copy individual files or entire directories from a source folder to a destinatio
     options: {
       flat: false,
       preserveTimestamps: true,
-      overwite: true,
+      overwrite: true,
     },
     globOptions: {
       dot: true,
