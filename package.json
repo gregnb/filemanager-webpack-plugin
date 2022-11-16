@@ -55,18 +55,18 @@
     "schema-utils": "^4.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.0.2",
+    "@commitlint/cli": "^17.2.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
-    "ava": "^4.3.0",
+    "ava": "^5.1.0",
     "commitlint-config-non-conventional": "^1.0.1",
     "html-webpack-plugin": "^5.5.0",
-    "husky": "^8.0.1",
+    "husky": "^8.0.2",
     "is-ci": "^3.0.1",
-    "jszip": "^3.10.0",
-    "prettier": "^2.6.2",
+    "jszip": "^3.10.1",
+    "prettier": "^2.7.1",
     "pretty-quick": "^3.1.3",
     "rollup": "^2.75.6",
-    "webpack": "^5.73.0"
+    "webpack": "^5.75.0"
   }
 }
