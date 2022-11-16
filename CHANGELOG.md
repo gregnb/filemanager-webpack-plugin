@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v8.0.0 (2022-11-16)
+
+- drop nodejs 12 support, requires node 14.13.1+ ([0f334f0](https://github.com/gregnb/filemanager-webpack-plugin/commit/0f334f0))
+- fix export syntax for typings ([59b17ca](https://github.com/gregnb/filemanager-webpack-plugin/commit/59b17ca))
+- update to rollup 3 ([23e332c](https://github.com/gregnb/filemanager-webpack-plugin/commit/23e332c))
+
 ## v7.0.0 (2022-06-11)
 
 - no notable changes since v7.0.0-beta.0
