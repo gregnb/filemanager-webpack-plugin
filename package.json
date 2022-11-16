@@ -11,7 +11,7 @@
   "main": "./dist/index.cjs",
   "types": "types.d.ts",
   "exports": {
-    "types": "types.d.ts",
+    "types": "./types.d.ts",
     "require": "./dist/index.cjs",
     "import": "./src/index.js",
     "default": "./src/index.js"
