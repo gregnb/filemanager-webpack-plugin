@@ -141,7 +141,7 @@ Copy individual files or entire directories from a source folder to a destinatio
 - source[`string`] - a file or a directory or a glob
 - destination[`string`] - a file or a directory.
 - options [`object`] - copy options
-- globOptions [`object`] - options to forward to glob options([See available options here](https://github.com/Yqnn/node-readdir-glob#options)) 
+- globOptions [`object`] - options to forward to glob options([See available options here](https://github.com/Yqnn/node-readdir-glob#options))
 
 **Caveats**
 
@@ -259,3 +259,8 @@ copy: [
 ```
 
 - **context** [`string`] - The directory, an absolute path, for resolving files. Defaults to [webpack context](https://webpack.js.org/configuration/entry-context/#context).
+
+## Related plugins
+
+- [copy-asset-in-memory-webpack-plugin](https://github.com/sibiraj-s/copy-asset-in-memory-webpack-plugin)
+- [replace-asset-name-webpack-plugin](https://github.com/sibiraj-s/replace-asset-name-webpack-plugin)
