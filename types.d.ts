@@ -58,6 +58,21 @@ type Archive = {
   options?: ArchiverOptions | { globOptions: ReaddirGlobOptions };
 }[];
 
+/** Replace files content */
+type Replace = {
+  source: string;
+  mutations: Mutations[];
+}[];
+
+interface Mutations {
+  /** Pattern to find. */
+  pattern: string;
+  /** Term to replace in file. */
+  replacement: string;
+  /** Number of iterations for mutiple patterns. */
+  iterations?: number;
+}
+
 /** {@link https://github.com/Yqnn/node-readdir-glob#options} */
 interface ReaddirGlobOptions {
   /** Glob pattern or Array of Glob patterns to match the found files with. A file has to match at least one of the provided patterns to be returned. */
@@ -92,6 +107,7 @@ interface Actions {
   move?: Move;
   mkdir?: Mkdir;
   archive?: Archive;
+  replace?: Replace;
 }
 
 interface Options {

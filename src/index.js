@@ -4,7 +4,7 @@ import normalizePath from 'normalize-path';
 
 import optionsSchema from './options-schema.js';
 import pExec from './utils/p-exec.js';
-import { copyAction, moveAction, mkdirAction, archiveAction, deleteAction } from './actions/index.js';
+import { copyAction, moveAction, mkdirAction, archiveAction, replaceAction, deleteAction } from './actions/index.js';
 
 const PLUGIN_NAME = 'FileManagerPlugin';
 
@@ -97,6 +97,10 @@ class FileManagerPlugin {
 
         case 'archive':
           await this.applyAction(archiveAction, action);
+          break;
+
+        case 'replace':
+          await this.applyAction(replaceAction, action);
           break;
 
         default:
