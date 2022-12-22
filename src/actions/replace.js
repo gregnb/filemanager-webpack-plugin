@@ -27,7 +27,7 @@ const replaceAction = async (tasks, options) => {
     });
   });
 
-  logger.debug(`move tasks complete. tasks: ${tasks}`);
+  logger.debug(`replace tasks complete. tasks: ${tasks}`);
 };
 
 export default replaceAction;

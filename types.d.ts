@@ -60,7 +60,9 @@ type Archive = {
 
 /** Replace files content */
 type Replace = {
+  /** File source. */
   source: string;
+  /** Changes you want to make. */
   mutations: Mutations[];
 }[];
 
