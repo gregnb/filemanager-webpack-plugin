@@ -7,7 +7,7 @@ import tempy from './utils/tempy.js';
 import FileManagerPlugin from '../src/index.js';
 
 test.beforeEach(async (t) => {
-  t.context.tmpdir = await tempy.dir({ suffix: 'replace-action' });
+  t.context.tmpdir = await tempy.dir({ suffix: 'replaceInFile-action' });
 });
 
 test.afterEach(async (t) => {
@@ -31,7 +31,7 @@ test('should replace the given patterns in given files', async (t) => {
     context: tmpdir,
     events: {
       onEnd: {
-        replace: [
+        replaceInFile: [
           {
             source: file,
             mutations: [

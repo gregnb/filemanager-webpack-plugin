@@ -73,6 +73,31 @@ export default {
               },
             },
           ],
+          replaceInFile: [
+            {
+              source: '/path/to/file.txt',
+              mutations: [
+                {
+                  pattern: 'lorem-ipsum',
+                  replacement: 'lorem.ipsum',
+                },
+                {
+                  pattern: 'm',
+                  replacement: 'n',
+                  iterations: 2
+                },
+              ],
+            },
+            {
+              source: '/path/to/anotherfile.txt',
+              mutations: [
+                {
+                  pattern: 'lorem-ipsum',
+                  replacement: 'lorem.ipsum',
+                },
+              ],
+            }
+          ],
         },
       },
     }),
@@ -243,6 +268,44 @@ If you need to preserve the order in which operations will run you can set the o
   ];
 }
 ```
+
+### Replace In File
+
+Replace individual or multiple files.
+
+```js
+[
+  {
+    source: '/path/to/file.txt',
+    mutations: [
+      {
+        pattern: 'lorem-ipsum',
+        replacement: 'lorem.ipsum',
+      },
+      {
+        pattern: 'm',
+        replacement: 'n',
+        iterations: 2
+      },
+    ],
+  },
+  {
+    source: '/path/to/anotherfile.txt',
+    mutations: [
+      {
+        pattern: 'lorem-ipsum',
+        replacement: 'lorem.ipsum',
+      },
+    ],
+  },
+];
+```
+
+- source[`string`] - a file to replace some content
+- mutations[`array`] - changes you intend to make to the file.
+- pattern[`string`] - a string to find.
+- replacement[`string`] - a string to replace.
+- iterations[`number`] - optional. number of times it will search and replace the term. default is 1.
 
 ## Other Options
 

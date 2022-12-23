@@ -1,7 +1,7 @@
 import fs, { existsSync } from 'fs';
 import pExec from '../utils/p-exec.js';
 
-const replaceAction = async (tasks, options) => {
+const replaceInFileAction = async (tasks, options) => {
   const { runTasksInSeries, logger } = options;
 
   logger.debug(`processing replace tasks. tasks: ${tasks}`);
@@ -36,4 +36,4 @@ const replaceAction = async (tasks, options) => {
   logger.debug(`replace tasks complete. tasks: ${tasks}`);
 };
 
-export default replaceAction;
+export default replaceInFileAction;

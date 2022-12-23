@@ -59,7 +59,7 @@ type Archive = {
 }[];
 
 /** Replace files content */
-type Replace = {
+type ReplaceInFile = {
   /** File source. */
   source: string;
   /** Changes you want to make. */
@@ -109,7 +109,7 @@ interface Actions {
   move?: Move;
   mkdir?: Mkdir;
   archive?: Archive;
-  replace?: Replace;
+  replaceInFile?: ReplaceInFile;
 }
 
 interface Options {

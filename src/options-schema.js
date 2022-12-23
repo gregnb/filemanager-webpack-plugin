@@ -8,7 +8,7 @@ export default {
       type: 'array',
       minItems: 1,
       additionalItems: true,
-      itmes: [
+      items: [
         {
           type: 'object',
           additionalProperties: false,
@@ -147,8 +147,8 @@ export default {
         },
       ],
     },
-    Replace: {
-      description: 'Replace files.',
+    ReplaceInFile: {
+      description: 'Replace file contents.',
       type: 'array',
       additionalItems: true,
       items: [
@@ -189,8 +189,8 @@ export default {
         archive: {
           $ref: '#/definitions/Archive',
         },
-        replace: {
-          $ref: '#/definitions/Replace',
+        replaceInFile: {
+          $ref: '#/definitions/ReplaceInFile',
         },
       },
     },
