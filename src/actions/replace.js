@@ -12,7 +12,7 @@ const replaceAction = async (tasks, options) => {
     if (existsSync(file)) {
       fs.readFile(file, 'utf8', function (err, data) {
         if (err) {
-          logger.error(`unable to replace ${file}, ${err}`);
+          logger.error(`unable to read ${file}, ${err}`);
         }
 
         task.mutations.forEach((mutation) => {
@@ -33,7 +33,7 @@ const replaceAction = async (tasks, options) => {
     }
   });
 
-  logger.debug(`move tasks complete. tasks: ${tasks}`);
+  logger.debug(`replace tasks complete. tasks: ${tasks}`);
 };
 
 export default replaceAction;
