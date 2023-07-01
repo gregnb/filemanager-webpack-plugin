@@ -257,7 +257,7 @@ test('should ignore files in the archive correclty if ignore is a string', async
             destination: zipName,
             options: {
               globOptions: {
-                ignore: '**/**/file2',
+                ignore: ['**/**/file2'],
               },
             },
           },
