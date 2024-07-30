@@ -8,7 +8,7 @@ export default {
       type: 'array',
       minItems: 1,
       additionalItems: true,
-      itmes: [
+      items: [
         {
           type: 'object',
           additionalProperties: false,
@@ -147,6 +147,29 @@ export default {
         },
       ],
     },
+    ReplaceInFile: {
+      description: 'Replace file contents.',
+      type: 'array',
+      additionalItems: true,
+      items: [
+        {
+          type: 'object',
+          additionalProperties: false,
+          properties: {
+            source: {
+              description: 'Source. A file.',
+              type: 'string',
+              minLength: 1,
+            },
+            mutations: {
+              description: 'Multiple terms to find and replace. Multiple times (Optional).',
+              type: 'array',
+              minLength: 1,
+            },
+          },
+        },
+      ],
+    },
     Actions: {
       type: 'object',
       additionalProperties: false,
@@ -165,6 +188,9 @@ export default {
         },
         archive: {
           $ref: '#/definitions/Archive',
+        },
+        replaceInFile: {
+          $ref: '#/definitions/ReplaceInFile',
         },
       },
     },
