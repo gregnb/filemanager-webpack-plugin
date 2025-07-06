@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { basename, join, sep } from 'node:path';
 
 import test from 'ava';
-import del from 'del';
+import { deleteAsync } from 'del';
 
 import compile from './utils/compile.js';
 import getCompiler from './utils/getCompiler.js';
@@ -15,7 +15,7 @@ test.beforeEach(async (t) => {
 });
 
 test.afterEach(async (t) => {
-  await del(t.context.tmpdir);
+  await deleteAsync(t.context.tmpdir);
 });
 
 test('should copy files to a directory given a glob source', async (t) => {

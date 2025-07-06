@@ -2,7 +2,7 @@ import fs, { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 import test from 'ava';
-import del from 'del';
+import { deleteAsync } from 'del';
 import JSZip from 'jszip';
 
 import compile from './utils/compile.js';
@@ -22,7 +22,7 @@ test.beforeEach(async (t) => {
 });
 
 test.afterEach(async (t) => {
-  await del(t.context.tmpdir);
+  await deleteAsync(t.context.tmpdir);
 });
 
 test('should archive(ZIP) a directory to a destination ZIP', async (t) => {

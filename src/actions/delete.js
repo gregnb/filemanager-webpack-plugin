@@ -1,4 +1,4 @@
-import del from 'del';
+import { deleteAsync } from 'del';
 
 import pExec from '../utils/p-exec.js';
 
@@ -11,7 +11,7 @@ const deleteAction = async (tasks, taskOptions) => {
     const { options = {} } = task;
 
     try {
-      await del(task.absoluteSource, options);
+      await deleteAsync(task.absoluteSource, options);
       logger.info(`deleted ${task.source}`);
     } catch (err) {
       logger.error(`unable to delete ${task.source}. ${err}`);
