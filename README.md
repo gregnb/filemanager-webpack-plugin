@@ -3,7 +3,7 @@
   <h1>FileManager Webpack Plugin</h1>
   <p>This Webpack plugin allows you to copy, archive (.zip/.tar/.tar.gz), move, delete files and directories before and after builds</p>
   <p>
-    <a href="https://github.com/gregnb/filemanager-webpack-plugin/actions?query=workflow%3ATests" alt="Testst">
+    <a href="https://github.com/gregnb/filemanager-webpack-plugin/actions?query=workflow%3ATests" alt="Tests">
       <img src="https://github.com/gregnb/filemanager-webpack-plugin/workflows/Tests/badge.svg">
     </a>
     <a href="https://npmcharts.com/compare/filemanager-webpack-plugin?minimal=true" alt="NPM weekly downloads">
