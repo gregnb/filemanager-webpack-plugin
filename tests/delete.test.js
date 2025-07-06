@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 
-import test from 'ava';
+import { beforeEach, afterEach, test, expect, describe } from 'vitest';
 import { deleteAsync } from 'del';
 
 import compile from './utils/compile.js';
@@ -9,96 +9,94 @@ import tempy from './utils/tempy.js';
 
 import FileManagerPlugin from '../src/index.js';
 
-test.beforeEach(async (t) => {
-  t.context.tmpdir = await tempy.dir({ suffix: 'delete-action' });
-});
+describe('Delete Action', () => {
+  let tmpdir;
 
-test.afterEach(async (t) => {
-  await deleteAsync(t.context.tmpdir);
-});
+  beforeEach(async () => {
+    tmpdir = await tempy.dir({ suffix: 'delete-action' });
+  });
 
-test('should delete file when array of strings provided in delete function', async (t) => {
-  const { tmpdir } = t.context;
+  afterEach(async () => {
+    await deleteAsync(tmpdir);
+  });
 
-  const file1 = await tempy.file(tmpdir);
-  const file2 = await tempy.file(tmpdir);
-  const file3 = await tempy.file(tmpdir);
+  test('should delete file when array of strings provided in delete function', async () => {
+    const file1 = await tempy.file(tmpdir);
+    const file2 = await tempy.file(tmpdir);
+    const file3 = await tempy.file(tmpdir);
 
-  t.true(existsSync(file1));
-  t.true(existsSync(file2));
-  t.true(existsSync(file3));
+    expect(existsSync(file1)).toBe(true);
+    expect(existsSync(file2)).toBe(true);
+    expect(existsSync(file3)).toBe(true);
 
-  const config = {
-    context: tmpdir,
-    events: {
-      onStart: {
-        delete: [file1],
+    const config = {
+      context: tmpdir,
+      events: {
+        onStart: {
+          delete: [file1],
+        },
+        onEnd: {
+          delete: [file2, file3],
+        },
       },
-      onEnd: {
-        delete: [file2, file3],
+    };
+
+    const compiler = getCompiler();
+    new FileManagerPlugin(config).apply(compiler);
+    await compile(compiler);
+
+    expect(existsSync(file1)).toBe(false);
+    expect(existsSync(file2)).toBe(false);
+    expect(existsSync(file3)).toBe(false);
+  });
+
+  test('should support glob', async () => {
+    const file1 = await tempy.file(tmpdir);
+    const file2 = await tempy.file(tmpdir);
+    const file3 = await tempy.file(tmpdir);
+
+    expect(existsSync(file1)).toBe(true);
+    expect(existsSync(file2)).toBe(true);
+    expect(existsSync(file3)).toBe(true);
+
+    const config = {
+      context: tmpdir,
+      events: {
+        onEnd: {
+          delete: ['./*'],
+        },
       },
-    },
-  };
+    };
 
-  const compiler = getCompiler();
-  new FileManagerPlugin(config).apply(compiler);
-  await compile(compiler);
+    const compiler = getCompiler();
+    new FileManagerPlugin(config).apply(compiler);
 
-  t.false(existsSync(file1));
-  t.false(existsSync(file2));
-  t.false(existsSync(file3));
-});
+    await compile(compiler);
 
-test('should support glob', async (t) => {
-  const { tmpdir } = t.context;
+    expect(existsSync(file1)).toBe(false);
+    expect(existsSync(file2)).toBe(false);
+    expect(existsSync(file3)).toBe(false);
+  });
 
-  const file1 = await tempy.file(tmpdir);
-  const file2 = await tempy.file(tmpdir);
-  const file3 = await tempy.file(tmpdir);
+  test('should accept options', async () => {
+    const file = await tempy.file(tmpdir);
 
-  t.true(existsSync(file1));
-  t.true(existsSync(file2));
-  t.true(existsSync(file3));
+    expect(existsSync(file)).toBe(true);
 
-  const config = {
-    context: tmpdir,
-    events: {
-      onEnd: {
-        delete: ['./*'],
+    const config = {
+      context: tmpdir,
+      events: {
+        onEnd: {
+          delete: [{ source: './*', options: { force: true } }, './*'],
+        },
       },
-    },
-  };
+    };
 
-  const compiler = getCompiler();
-  new FileManagerPlugin(config).apply(compiler);
+    const compiler = getCompiler();
+    new FileManagerPlugin(config).apply(compiler);
 
-  await compile(compiler);
+    await compile(compiler);
 
-  t.false(existsSync(file1));
-  t.false(existsSync(file2));
-  t.false(existsSync(file3));
-});
-
-test('should accept options', async (t) => {
-  const { tmpdir } = t.context;
-
-  const file = await tempy.file(tmpdir);
-
-  t.true(existsSync(file));
-
-  const config = {
-    context: tmpdir,
-    events: {
-      onEnd: {
-        delete: [{ source: './*', options: { force: true } }, './*'],
-      },
-    },
-  };
-
-  const compiler = getCompiler();
-  new FileManagerPlugin(config).apply(compiler);
-
-  await compile(compiler);
-
-  t.false(existsSync(file));
+    expect(existsSync(file)).toBe(false);
+  });
 });

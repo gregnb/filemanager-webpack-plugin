@@ -1,7 +1,7 @@
 import { basename, join } from 'node:path';
 import { existsSync } from 'node:fs';
 
-import test from 'ava';
+import { beforeEach, afterEach, test, expect, describe } from 'vitest';
 import { deleteAsync } from 'del';
 
 import compile from './utils/compile.js';
@@ -10,36 +10,38 @@ import tempy from './utils/tempy.js';
 
 import FileManagerPlugin from '../src/index.js';
 
-test.beforeEach(async (t) => {
-  t.context.tmpdir = await tempy.dir({ suffix: 'multi-action' });
-});
+describe('Multi Actions', () => {
+  let tmpdir;
 
-test.afterEach(async (t) => {
-  await deleteAsync(t.context.tmpdir);
-});
+  beforeEach(async () => {
+    tmpdir = await tempy.dir({ suffix: 'multi-action' });
+  });
 
-test('should execute given actions in an event', async (t) => {
-  const { tmpdir } = t.context;
+  afterEach(async () => {
+    await deleteAsync(tmpdir);
+  });
 
-  const dirName1 = tempy.getDirName();
-  const destDir = tempy.getDirName();
-  const file = await tempy.file(tmpdir, 'file');
+  test('should execute given actions in an event', async () => {
+    const dirName1 = tempy.getDirName();
+    const destDir = tempy.getDirName();
+    const file = await tempy.file(tmpdir, 'file');
 
-  const config = {
-    context: tmpdir,
-    events: {
-      onEnd: {
-        mkdir: [dirName1],
-        copy: [{ source: basename(file), destination: `${destDir}/file-copied` }],
+    const config = {
+      context: tmpdir,
+      events: {
+        onEnd: {
+          mkdir: [dirName1],
+          copy: [{ source: basename(file), destination: `${destDir}/file-copied` }],
+        },
       },
-    },
-  };
+    };
 
-  const compiler = getCompiler();
-  new FileManagerPlugin(config).apply(compiler);
-  await compile(compiler);
+    const compiler = getCompiler();
+    new FileManagerPlugin(config).apply(compiler);
+    await compile(compiler);
 
-  t.true(existsSync(join(tmpdir, dirName1)));
-  t.true(existsSync(file));
-  t.true(existsSync(join(tmpdir, destDir, 'file-copied')));
+    expect(existsSync(join(tmpdir, dirName1))).toBe(true);
+    expect(existsSync(file)).toBe(true);
+    expect(existsSync(join(tmpdir, destDir, 'file-copied'))).toBe(true);
+  });
 });

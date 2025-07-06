@@ -1,7 +1,7 @@
 import { join, relative } from 'node:path';
 import { existsSync } from 'node:fs';
 
-import test from 'ava';
+import { beforeEach, afterEach, test, expect, describe } from 'vitest';
 import { deleteAsync } from 'del';
 
 import compile from './utils/compile.js';
@@ -10,81 +10,79 @@ import tempy from './utils/tempy.js';
 
 import FileManagerPlugin from '../src/index.js';
 
-test.beforeEach(async (t) => {
-  t.context.tmpdir = await tempy.dir({ suffix: 'mkdir-action' });
-});
+describe('Mkdir Action', () => {
+  let tmpdir;
 
-test.afterEach(async (t) => {
-  await deleteAsync(t.context.tmpdir);
-});
+  beforeEach(async () => {
+    tmpdir = await tempy.dir({ suffix: 'mkdir-action' });
+  });
 
-test('should create the given directories', async (t) => {
-  const { tmpdir } = t.context;
+  afterEach(async () => {
+    await deleteAsync(tmpdir);
+  });
 
-  const config = {
-    context: tmpdir,
-    events: {
-      onStart: {
-        mkdir: ['dir1', 'dir2'],
+  test('should create the given directories', async () => {
+    const config = {
+      context: tmpdir,
+      events: {
+        onStart: {
+          mkdir: ['dir1', 'dir2'],
+        },
+        onEnd: {
+          mkdir: ['dir3', 'dir4'],
+        },
       },
-      onEnd: {
-        mkdir: ['dir3', 'dir4'],
+    };
+
+    const compiler = getCompiler();
+    new FileManagerPlugin(config).apply(compiler);
+    await compile(compiler);
+
+    expect(existsSync(join(tmpdir, 'dir1'))).toBe(true);
+    expect(existsSync(join(tmpdir, 'dir2'))).toBe(true);
+    expect(existsSync(join(tmpdir, 'dir3'))).toBe(true);
+    expect(existsSync(join(tmpdir, 'dir4'))).toBe(true);
+  });
+
+  test('should create nested directories', async () => {
+    const config = {
+      context: tmpdir,
+      events: {
+        onEnd: {
+          mkdir: ['dir/depth1', 'dir/depth1/depth2'],
+        },
       },
-    },
-  };
+      runTasksInSeries: true,
+    };
 
-  const compiler = getCompiler();
-  new FileManagerPlugin(config).apply(compiler);
-  await compile(compiler);
+    const compiler = getCompiler();
+    new FileManagerPlugin(config).apply(compiler);
+    await compile(compiler);
 
-  t.true(existsSync(join(tmpdir, 'dir1')));
-  t.true(existsSync(join(tmpdir, 'dir2')));
-  t.true(existsSync(join(tmpdir, 'dir3')));
-  t.true(existsSync(join(tmpdir, 'dir4')));
-});
+    expect(existsSync(join(tmpdir, 'dir'))).toBe(true);
+    expect(existsSync(join(tmpdir, 'dir/depth1'))).toBe(true);
+    expect(existsSync(join(tmpdir, 'dir/depth1/depth2'))).toBe(true);
+  });
 
-test('should create nested directories', async (t) => {
-  const { tmpdir } = t.context;
+  test('should not overwite existing directories', async () => {
+    const dir = await tempy.dir({ root: tmpdir });
+    const file = await tempy.file(dir, 'file');
+    const dirName = relative(tmpdir, dir);
 
-  const config = {
-    context: tmpdir,
-    events: {
-      onEnd: {
-        mkdir: ['dir/depth1', 'dir/depth1/depth2'],
+    const config = {
+      context: tmpdir,
+      events: {
+        onEnd: {
+          mkdir: [dirName],
+        },
       },
-    },
-    runTasksInSeries: true,
-  };
+    };
 
-  const compiler = getCompiler();
-  new FileManagerPlugin(config).apply(compiler);
-  await compile(compiler);
+    const compiler = getCompiler();
+    new FileManagerPlugin(config).apply(compiler);
+    await compile(compiler);
 
-  t.true(existsSync(join(tmpdir, 'dir')));
-  t.true(existsSync(join(tmpdir, 'dir/depth1')));
-  t.true(existsSync(join(tmpdir, 'dir/depth1/depth2')));
-});
-
-test('should not overwite existing directories', async (t) => {
-  const { tmpdir } = t.context;
-
-  const dir = await tempy.dir({ root: tmpdir });
-  const file = await tempy.file(dir, 'file');
-  const dirName = relative(tmpdir, dir);
-
-  const config = {
-    context: tmpdir,
-    events: {
-      onEnd: {
-        mkdir: [dirName],
-      },
-    },
-  };
-
-  const compiler = getCompiler();
-  new FileManagerPlugin(config).apply(compiler);
-  await compile(compiler);
-
-  t.true(existsSync(dir));
-  t.true(existsSync(join(file)));
+    expect(existsSync(dir)).toBe(true);
+    expect(existsSync(join(file))).toBe(true);
+  });
 });
