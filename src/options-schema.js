@@ -8,7 +8,7 @@ export default {
       type: 'array',
       minItems: 1,
       additionalItems: true,
-      itmes: [
+      items: [
         {
           type: 'object',
           additionalProperties: false,
