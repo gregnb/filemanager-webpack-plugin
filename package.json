@@ -43,9 +43,7 @@
     "filemanager-plugin"
   ],
   "files": [
-    "dist",
-    "src",
-    "types.d.ts"
+    "dist"
   ],
   "scripts": {
     "dev": "tsdown --watch",
