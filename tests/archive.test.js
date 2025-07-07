@@ -1,7 +1,7 @@
 import fs, { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { beforeEach, afterEach, test, expect, describe } from 'vitest';
+import { test as baseTest, expect, describe } from 'vitest';
 import { deleteAsync } from 'del';
 import JSZip from 'jszip';
 
@@ -18,17 +18,15 @@ const zipHasFile = async (zipPath, fileName) => {
 };
 
 describe('Archive Action', () => {
-  let tmpdir;
-
-  beforeEach(async () => {
-    tmpdir = await tempy.dir({ suffix: 'archive-action' });
+  const test = baseTest.extend({
+    tmpdir: async ({}, use) => {
+      const tmpdir = await tempy.dir({ suffix: 'archive-action' });
+      await use(tmpdir);
+      await deleteAsync(tmpdir);
+    },
   });
 
-  afterEach(async () => {
-    await deleteAsync(tmpdir);
-  });
-
-  test('should archive(ZIP) a directory to a destination ZIP', async () => {
+  test('should archive(ZIP) a directory to a destination ZIP', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file');
 
     const zipName = tempy.getZipName();
@@ -50,7 +48,7 @@ describe('Archive Action', () => {
     expect(existsSync(zipPath)).toBe(true);
   });
 
-  test('should archive(ZIP) a single file to a destination ZIP', async () => {
+  test('should archive(ZIP) a single file to a destination ZIP', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file');
 
     const zipName = tempy.getZipName();
@@ -73,7 +71,7 @@ describe('Archive Action', () => {
     expect(await zipHasFile(zipPath, 'file')).toBe(true);
   });
 
-  test('should archive(ZIP) a directory glob to destination ZIP', async () => {
+  test('should archive(ZIP) a directory glob to destination ZIP', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file');
 
     const zipName = tempy.getZipName();
@@ -96,7 +94,7 @@ describe('Archive Action', () => {
     expect(await zipHasFile(zipPath, 'file')).toBe(true);
   });
 
-  test('should archive(TAR) a directory glob to destination TAR when format is provided', async () => {
+  test('should archive(TAR) a directory glob to destination TAR when format is provided', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file');
 
     const zipName = tempy.getZipName('.tar');
@@ -118,7 +116,7 @@ describe('Archive Action', () => {
     expect(existsSync(zipPath)).toBe(true);
   });
 
-  test('should archive(TAR.GZ) a directory glob to destination TAR.GZ', async () => {
+  test('should archive(TAR.GZ) a directory glob to destination TAR.GZ', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file');
 
     const zipName = tempy.getZipName('.tar.gz');
@@ -153,7 +151,7 @@ describe('Archive Action', () => {
   });
 
   // https://github.com/gregnb/filemanager-webpack-plugin/issues/37
-  test('should not include the output zip into compression', async () => {
+  test('should not include the output zip into compression', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file');
 
     const zipName = tempy.getZipName();
@@ -175,7 +173,7 @@ describe('Archive Action', () => {
     expect(await zipHasFile(zipPath, zipName)).toBe(false);
   });
 
-  test('should include files in the archive', async () => {
+  test('should include files in the archive', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file1');
     await tempy.file(tmpdir, 'file2');
 
@@ -200,7 +198,7 @@ describe('Archive Action', () => {
     expect(await zipHasFile(zipPath, 'file2')).toBe(true);
   });
 
-  test('should ignore files in the archive correclty if ignore is an array', async () => {
+  test('should ignore files in the archive correclty if ignore is an array', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file1');
     await tempy.file(tmpdir, 'file2');
 
@@ -235,7 +233,7 @@ describe('Archive Action', () => {
     expect(await zipHasFile(zipPath, 'file2')).toBe(false);
   });
 
-  test('should ignore files in the archive correclty if ignore is a string', async () => {
+  test('should ignore files in the archive correclty if ignore is a string', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file1');
     await tempy.file(tmpdir, 'file2');
 

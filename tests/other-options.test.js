@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
-import { beforeEach, afterEach, test, expect, describe } from 'vitest';
+import { test as baseTest, expect, describe } from 'vitest';
 import { deleteAsync } from 'del';
 
 import compile from './utils/compile.js';
@@ -13,17 +13,15 @@ import FileManagerPlugin from '../src/index.js';
 const fixturesDir = getFixtruesDir();
 
 describe('Other Options', () => {
-  let tmpdir;
-
-  beforeEach(async () => {
-    tmpdir = await tempy.dir({ suffix: 'other-options' });
+  const test = baseTest.extend({
+    tmpdir: async ({}, use) => {
+      const tmpdir = await tempy.dir({ suffix: 'archive-action' });
+      await use(tmpdir);
+      await deleteAsync(tmpdir);
+    },
   });
 
-  afterEach(async () => {
-    await deleteAsync(tmpdir);
-  });
-
-  test(`should tasks in sequence with option 'runTasksInSeries'`, async () => {
+  test(`should tasks in sequence with option 'runTasksInSeries'`, async ({ tmpdir }) => {
     const dir1 = tempy.getDirName('/');
     const dir2 = tempy.getDirName('/');
 
@@ -48,7 +46,7 @@ describe('Other Options', () => {
     expect(existsSync(join(tmpdir, dir2, 'index.html'))).toBe(true);
   });
 
-  test(`should resolve files from given 'context'`, async () => {
+  test(`should resolve files from given 'context'`, async ({ tmpdir }) => {
     const distDir = join(fixturesDir, 'dist');
 
     const config = {

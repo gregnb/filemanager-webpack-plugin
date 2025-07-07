@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { beforeEach, afterEach, test, expect, describe } from 'vitest';
+import { test as baseTest, expect, describe } from 'vitest';
 import { deleteAsync } from 'del';
 
 import compile from './utils/compile.js';
@@ -10,17 +10,15 @@ import tempy from './utils/tempy.js';
 import FileManagerPlugin from '../src/index.js';
 
 describe('Execution Order', () => {
-  let tmpdir;
-
-  beforeEach(async () => {
-    tmpdir = await tempy.dir({ suffix: 'execution-order' });
+  const test = baseTest.extend({
+    tmpdir: async ({}, use) => {
+      const tmpdir = await tempy.dir({ suffix: 'archive-action' });
+      await use(tmpdir);
+      await deleteAsync(tmpdir);
+    },
   });
 
-  afterEach(async () => {
-    await deleteAsync(tmpdir);
-  });
-
-  test('should execute actions in a given order', async () => {
+  test('should execute actions in a given order', async ({ tmpdir }) => {
     const mDir = await tempy.dir({ root: tmpdir });
     await tempy.file(mDir, 'file');
 

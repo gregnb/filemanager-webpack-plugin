@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 
-import { beforeEach, afterEach, test, expect, describe } from 'vitest';
+import { test as baseTest, expect, describe } from 'vitest';
 import { deleteAsync } from 'del';
 
 import compile from './utils/compile.js';
@@ -10,17 +10,15 @@ import tempy from './utils/tempy.js';
 import FileManagerPlugin from '../src/index.js';
 
 describe('Delete Action', () => {
-  let tmpdir;
-
-  beforeEach(async () => {
-    tmpdir = await tempy.dir({ suffix: 'delete-action' });
+  const test = baseTest.extend({
+    tmpdir: async ({}, use) => {
+      const tmpdir = await tempy.dir({ suffix: 'archive-action' });
+      await use(tmpdir);
+      await deleteAsync(tmpdir);
+    },
   });
 
-  afterEach(async () => {
-    await deleteAsync(tmpdir);
-  });
-
-  test('should delete file when array of strings provided in delete function', async () => {
+  test('should delete file when array of strings provided in delete function', async ({ tmpdir }) => {
     const file1 = await tempy.file(tmpdir);
     const file2 = await tempy.file(tmpdir);
     const file3 = await tempy.file(tmpdir);
@@ -50,7 +48,7 @@ describe('Delete Action', () => {
     expect(existsSync(file3)).toBe(false);
   });
 
-  test('should support glob', async () => {
+  test('should support glob', async ({ tmpdir }) => {
     const file1 = await tempy.file(tmpdir);
     const file2 = await tempy.file(tmpdir);
     const file3 = await tempy.file(tmpdir);
@@ -78,7 +76,7 @@ describe('Delete Action', () => {
     expect(existsSync(file3)).toBe(false);
   });
 
-  test('should accept options', async () => {
+  test('should accept options', async ({ tmpdir }) => {
     const file = await tempy.file(tmpdir);
 
     expect(existsSync(file)).toBe(true);

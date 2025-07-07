@@ -1,7 +1,7 @@
 import { join, relative, basename } from 'node:path';
 import { existsSync } from 'node:fs';
 
-import { beforeEach, afterEach, test, expect, describe } from 'vitest';
+import { test as baseTest, expect, describe } from 'vitest';
 import { deleteAsync } from 'del';
 
 import compile from './utils/compile.js';
@@ -11,17 +11,15 @@ import tempy from './utils/tempy.js';
 import FileManagerPlugin from '../src/index.js';
 
 describe('Move Action', () => {
-  let tmpdir;
-
-  beforeEach(async () => {
-    tmpdir = await tempy.dir({ suffix: 'move-action' });
+  const test = baseTest.extend({
+    tmpdir: async ({}, use) => {
+      const tmpdir = await tempy.dir({ suffix: 'archive-action' });
+      await use(tmpdir);
+      await deleteAsync(tmpdir);
+    },
   });
 
-  afterEach(async () => {
-    await deleteAsync(tmpdir);
-  });
-
-  test('should move files from source to destination', async () => {
+  test('should move files from source to destination', async ({ tmpdir }) => {
     const dir = await tempy.dir({ root: tmpdir });
     const file = await tempy.file(dir, 'file');
 

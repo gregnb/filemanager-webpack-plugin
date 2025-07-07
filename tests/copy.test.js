@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { basename, join, sep } from 'node:path';
 
-import { beforeEach, afterEach, test, expect, describe } from 'vitest';
+import { test as baseTest, expect, describe } from 'vitest';
 import { deleteAsync } from 'del';
 
 import compile from './utils/compile.js';
@@ -11,17 +11,15 @@ import tempy from './utils/tempy.js';
 import FileManagerPlugin from '../src/index.js';
 
 describe('Copy Action', () => {
-  let tmpdir;
-
-  beforeEach(async () => {
-    tmpdir = await tempy.dir({ suffix: 'copy-action' });
+  const test = baseTest.extend({
+    tmpdir: async ({}, use) => {
+      const tmpdir = await tempy.dir({ suffix: 'archive-action' });
+      await use(tmpdir);
+      await deleteAsync(tmpdir);
+    },
   });
 
-  afterEach(async () => {
-    await deleteAsync(tmpdir);
-  });
-
-  test('should copy files to a directory given a glob source', async () => {
+  test('should copy files to a directory given a glob source', async ({ tmpdir }) => {
     const file1 = await tempy.file(tmpdir);
     const file2 = await tempy.file(tmpdir);
     const dirName = tempy.getDirName();
@@ -44,7 +42,7 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, dirName, basename(file2)))).toBe(true);
   });
 
-  test('should copy files to a directory given a glob absolute source', async () => {
+  test('should copy files to a directory given a glob absolute source', async ({ tmpdir }) => {
     const file1 = await tempy.file(tmpdir);
     const file2 = await tempy.file(tmpdir);
     const dirName = tempy.getDirName();
@@ -69,7 +67,7 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, dirName, basename(file2)))).toBe(true);
   });
 
-  test('should deep copy files to directory given a glob source', async () => {
+  test('should deep copy files to directory given a glob source', async ({ tmpdir }) => {
     const file1 = await tempy.file(tmpdir);
     const nestedDir = await tempy.dir({ root: tmpdir });
     const file2 = await tempy.file(nestedDir);
@@ -94,7 +92,7 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, dirName, nestedDir.split(sep).pop(), basename(file2)))).toBe(true);
   });
 
-  test('should flat copy the files to directory given a glob source', async () => {
+  test('should flat copy the files to directory given a glob source', async ({ tmpdir }) => {
     const file1 = await tempy.file(tmpdir);
     const nestedDir = await tempy.dir({ root: tmpdir });
     const file2 = await tempy.file(nestedDir);
@@ -128,7 +126,7 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, dirName, basename(file2)))).toBe(true);
   });
 
-  test(`should create destination directory if it doesn't exist and copy files`, async () => {
+  test(`should create destination directory if it doesn't exist and copy files`, async ({ tmpdir }) => {
     const file = await tempy.file(tmpdir);
     const destDir = tempy.getDirName();
 
@@ -148,7 +146,7 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, destDir, basename(file)))).toBe(true);
   });
 
-  test('should copy and create destination directory given a glob source with extension', async () => {
+  test('should copy and create destination directory given a glob source with extension', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'index.html');
     const destDir = tempy.getDirName();
 
@@ -169,7 +167,7 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, destDir, 'fake'))).toBe(false);
   });
 
-  test('should copy source file to destination file', async () => {
+  test('should copy source file to destination file', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'index.html');
 
     const config = {
@@ -193,7 +191,9 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, 'deep/deep1/index.html'))).toBe(true);
   });
 
-  test('should copy file into the directory given source is a file and destination is a directory', async () => {
+  test('should copy file into the directory given source is a file and destination is a directory', async ({
+    tmpdir,
+  }) => {
     const fileName = tempy.getFileName();
     await tempy.file(tmpdir, fileName);
     const destDir = tempy.getDirName('/');
@@ -214,7 +214,7 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, destDir, fileName))).toBe(true);
   });
 
-  test('should copy a file without extension to target folder', async () => {
+  test('should copy a file without extension to target folder', async ({ tmpdir }) => {
     const fileName = tempy.getFileName();
     await tempy.file(tmpdir, fileName);
     const destDir = tempy.getDirName('/');
@@ -235,7 +235,7 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, destDir, fileName))).toBe(true);
   });
 
-  test('should not copy a file that does not exist', async () => {
+  test('should not copy a file that does not exist', async ({ tmpdir }) => {
     const config = {
       context: tmpdir,
       events: {

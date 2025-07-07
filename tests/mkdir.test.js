@@ -1,7 +1,7 @@
 import { join, relative } from 'node:path';
 import { existsSync } from 'node:fs';
 
-import { beforeEach, afterEach, test, expect, describe } from 'vitest';
+import { test as baseTest, expect, describe } from 'vitest';
 import { deleteAsync } from 'del';
 
 import compile from './utils/compile.js';
@@ -11,17 +11,15 @@ import tempy from './utils/tempy.js';
 import FileManagerPlugin from '../src/index.js';
 
 describe('Mkdir Action', () => {
-  let tmpdir;
-
-  beforeEach(async () => {
-    tmpdir = await tempy.dir({ suffix: 'mkdir-action' });
+  const test = baseTest.extend({
+    tmpdir: async ({}, use) => {
+      const tmpdir = await tempy.dir({ suffix: 'archive-action' });
+      await use(tmpdir);
+      await deleteAsync(tmpdir);
+    },
   });
 
-  afterEach(async () => {
-    await deleteAsync(tmpdir);
-  });
-
-  test('should create the given directories', async () => {
+  test('should create the given directories', async ({ tmpdir }) => {
     const config = {
       context: tmpdir,
       events: {
@@ -44,7 +42,7 @@ describe('Mkdir Action', () => {
     expect(existsSync(join(tmpdir, 'dir4'))).toBe(true);
   });
 
-  test('should create nested directories', async () => {
+  test('should create nested directories', async ({ tmpdir }) => {
     const config = {
       context: tmpdir,
       events: {
@@ -64,7 +62,7 @@ describe('Mkdir Action', () => {
     expect(existsSync(join(tmpdir, 'dir/depth1/depth2'))).toBe(true);
   });
 
-  test('should not overwite existing directories', async () => {
+  test('should not overwite existing directories', async ({ tmpdir }) => {
     const dir = await tempy.dir({ root: tmpdir });
     const file = await tempy.file(dir, 'file');
     const dirName = relative(tmpdir, dir);
