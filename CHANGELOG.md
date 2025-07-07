@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## v9.0.0 (2025-07-07)
+
+- minimum requires node v20.0.0+ ([368c370](https://github.com/gregnb/filemanager-webpack-plugin/commit/368c370))
+- option to throw on error to fail compilation ([6f769f0](https://github.com/gregnb/filemanager-webpack-plugin/commit/6f769f0))
+- fix LICENSE ([711d6c3](https://github.com/gregnb/filemanager-webpack-plugin/commit/711d6c3))
+- rewrite to typescript ([4f29d0d](https://github.com/gregnb/filemanager-webpack-plugin/commit/4f29d0d))
+
 ## v8.0.0 (2022-11-16)
 
 - drop nodejs 12 support, requires node 14.13.1+ ([0f334f0](https://github.com/gregnb/filemanager-webpack-plugin/commit/0f334f0))
