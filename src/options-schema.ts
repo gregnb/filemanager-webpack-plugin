@@ -1,4 +1,6 @@
-export default {
+import type { JSONSchema7 } from 'schema-utils';
+
+const optionsSchema: JSONSchema7 = {
   title: 'FileManagerPluginOptions',
   type: 'object',
   additionalProperties: false,
@@ -218,3 +220,5 @@ export default {
     },
   },
 };
+
+export default optionsSchema;

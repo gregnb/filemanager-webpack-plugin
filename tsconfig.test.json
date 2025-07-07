@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "checkJs": false,
+    "types": ["node"]
+  },
+  "include": ["tests/**/*.ts", "src/**/*.ts"]
+}

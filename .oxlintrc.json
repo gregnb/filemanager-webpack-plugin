@@ -1,0 +1,3 @@
+{
+  "plugins": ["oxc", "typescript", "unicorn", "vitest", "promise"]
+}

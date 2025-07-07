@@ -2,21 +2,54 @@ import fs from 'fs';
 import path from 'path';
 import fsExtra from 'fs-extra';
 import isGlob from 'is-glob';
+import type { Compiler } from 'webpack';
+import type { Options as FgOptions } from 'fast-glob';
+import type { CopyOptions } from 'fs-extra';
 
-import pExec from '../utils/p-exec.js';
-import globCopy from '../utils/glob-copy.js';
+import pExec from '../utils/p-exec';
+import globCopy from '../utils/glob-copy';
+import { Logger } from '../types';
+
+type FsCopyOptions = Pick<CopyOptions, 'overwrite' | 'preserveTimestamps'>;
+
+// Define internal types based on the exported types
+export interface CopyActionOptions extends FsCopyOptions {
+  /**
+   * If true, the copy operation will not preserve the directory structure
+   * and will copy all files to the destination directory.
+   */
+  flat?: boolean;
+}
+
+export type CopyGlobOptions = Omit<FgOptions, 'absolute' | 'cwd'>;
+
+export interface CopyTask {
+  source: string;
+  absoluteSource: string;
+  destination: string;
+  absoluteDestination?: string;
+  context?: string;
+  toType?: 'dir' | 'file';
+  options?: CopyActionOptions;
+  globOptions?: CopyGlobOptions;
+}
+
+interface CopyTaskOptions {
+  runTasksInSeries: boolean;
+  logger: Logger;
+}
 
 const fsExtraDefaultOptions = {
   preserveTimestamps: true,
 };
 
-const copy = async (task, { logger }) => {
+const copy = async (task: CopyTask, { logger }: { logger: Logger }): Promise<void> => {
   const {
     source,
     absoluteSource,
     destination,
     absoluteDestination,
-    context,
+    context = process.cwd(),
     toType,
     options = {},
     globOptions = {},
@@ -49,10 +82,10 @@ const copy = async (task, { logger }) => {
     await fsExtra.copy(absoluteSource, absoluteDestination, fsExtraDefaultOptions);
   }
 
-  logger.info(`copied "${source}" to "${destination}`);
+  logger.info(`copied "${source}" to "${destination}"`);
 };
 
-const copyAction = async (tasks, options) => {
+const copyAction = async (tasks: CopyTask[], options: CopyTaskOptions): Promise<void> => {
   const { runTasksInSeries, logger } = options;
 
   const taskOptions = {
@@ -61,7 +94,7 @@ const copyAction = async (tasks, options) => {
 
   logger.debug(`processing copy tasks. tasks: ${tasks}`);
 
-  await pExec(runTasksInSeries, tasks, async (task) => {
+  await pExec(runTasksInSeries, tasks, async (task: CopyTask) => {
     try {
       await copy(task, taskOptions);
     } catch (err) {

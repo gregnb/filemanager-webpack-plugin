@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const getFixtruesDir = () => {
+const getFixtruesDir = (): string => {
   return path.resolve(__dirname, '..', 'fixtures');
 };
 

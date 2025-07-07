@@ -1,19 +1,21 @@
 import { join } from 'node:path';
 import { existsSync } from 'node:fs';
+
 import { test as baseTest, expect, describe } from 'vitest';
 import { deleteAsync } from 'del';
 
-import compile from './utils/compile.js';
-import getCompiler from './utils/getCompiler.js';
-import getFixtruesDir from './utils/getFixturesDir.js';
-import tempy from './utils/tempy.js';
+import compile from './utils/compile';
+import getCompiler from './utils/getCompiler';
+import getFixtruesDir from './utils/getFixturesDir';
+import tempy from './utils/tempy';
 
-import FileManagerPlugin from '../src/index.js';
+import FileManagerPlugin from '../src';
 
 const fixturesDir = getFixtruesDir();
 
 describe('Other Options', () => {
-  const test = baseTest.extend({
+  const test = baseTest.extend<{ tmpdir: string }>({
+    // oxlint-disable-next-line no-empty-pattern
     tmpdir: async ({}, use) => {
       const tmpdir = await tempy.dir({ suffix: 'archive-action' });
       await use(tmpdir);
@@ -46,7 +48,7 @@ describe('Other Options', () => {
     expect(existsSync(join(tmpdir, dir2, 'index.html'))).toBe(true);
   });
 
-  test(`should resolve files from given 'context'`, async ({ tmpdir }) => {
+  test(`should resolve files from given 'context'`, async () => {
     const distDir = join(fixturesDir, 'dist');
 
     const config = {

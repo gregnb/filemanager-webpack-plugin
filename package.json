@@ -4,23 +4,37 @@
   "description": "Webpack plugin to copy, archive (.zip), move, delete files and directories before and after builds",
   "author": "gregnb",
   "license": "MIT",
-  "repository": "https://github.com/gregnb/filemanager-webpack-plugin.git",
+  "repository": "github:gregnb/filemanager-webpack-plugin",
   "bugs": "https://github.com/gregnb/filemanager-webpack-plugin/issues",
   "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme",
   "type": "module",
   "main": "./dist/index.cjs",
-  "types": "types.d.ts",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    "types": "./types.d.ts",
-    "require": "./dist/index.cjs",
-    "import": "./src/index.js",
-    "default": "./src/index.js"
+    "require": {
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
+    },
+    "import": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.ts"
+    }
   },
   "engines": {
     "node": ">=20.0.0"
   },
   "contributors": [
-    "sibiraj-s"
+    {
+      "name": "Sibiraj",
+      "url": "https://github.com/sibiraj-s"
+    }
+  ],
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/sibiraj-s"
+    }
   ],
   "keywords": [
     "webpack",
@@ -34,11 +48,11 @@
     "types.d.ts"
   ],
   "scripts": {
-    "dev": "rollup -c -w",
-    "build": "rollup -c",
+    "dev": "tsdown --watch",
+    "build": "tsdown --format esm --format cjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prettier": "prettier . --write --ignore-path .gitignore",
+    "format": "prettier . --write --ignore-path .gitignore",
     "prepublishOnly": "npm run build && npm run test",
     "prepare": "is-ci || husky install"
   },
@@ -47,6 +61,9 @@
   },
   "dependencies": {
     "@types/archiver": "^6.0.3",
+    "@types/fs-extra": "^11.0.4",
+    "@types/is-glob": "^4.0.2",
+    "@types/normalize-path": "^3.0.2",
     "archiver": "^7.0.1",
     "del": "^8.0.0",
     "fast-glob": "^3.3.3",
@@ -57,16 +74,17 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@types/node": "^20.0.0",
     "commitlint-config-non-conventional": "^1.0.1",
     "html-webpack-plugin": "^5.6.3",
     "husky": "^9.1.7",
     "is-ci": "^4.1.0",
     "jszip": "^3.10.1",
+    "oxlint": "^1.6.0",
     "prettier": "^3.6.2",
     "pretty-quick": "^4.2.2",
-    "rollup": "^4.44.2",
+    "tsdown": "^0.12.9",
+    "typescript": "^5.7.2",
     "vitest": "^3.2.4",
     "webpack": "^5.99.9"
   }

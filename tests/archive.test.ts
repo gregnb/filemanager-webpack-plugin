@@ -5,20 +5,21 @@ import { test as baseTest, expect, describe } from 'vitest';
 import { deleteAsync } from 'del';
 import JSZip from 'jszip';
 
-import compile from './utils/compile.js';
-import getCompiler from './utils/getCompiler.js';
-import tempy from './utils/tempy.js';
+import compile from './utils/compile';
+import getCompiler from './utils/getCompiler';
+import tempy from './utils/tempy';
 
-import FileManagerPlugin from '../src/index.js';
+import FileManagerPlugin from '../src';
 
-const zipHasFile = async (zipPath, fileName) => {
+const zipHasFile = async (zipPath: string, fileName: string) => {
   const data = await fs.promises.readFile(zipPath);
   const zip = await JSZip.loadAsync(data);
   return Object.keys(zip.files).includes(fileName);
 };
 
 describe('Archive Action', () => {
-  const test = baseTest.extend({
+  const test = baseTest.extend<{ tmpdir: string }>({
+    // oxlint-disable-next-line no-empty-pattern
     tmpdir: async ({}, use) => {
       const tmpdir = await tempy.dir({ suffix: 'archive-action' });
       await use(tmpdir);
@@ -103,7 +104,7 @@ describe('Archive Action', () => {
       context: tmpdir,
       events: {
         onEnd: {
-          archive: [{ source: '**/*', destination: zipName, format: 'tar' }],
+          archive: [{ source: '**/*', destination: zipName, format: 'tar' as const }],
         },
       },
     };
@@ -129,7 +130,7 @@ describe('Archive Action', () => {
             {
               source: '**/*',
               destination: zipName,
-              format: 'tar',
+              format: 'tar' as const,
               options: {
                 gzip: true,
                 gzipOptions: {
