@@ -47,7 +47,7 @@ interface Actions {
   archive?: ArchiveAction[];
 }
 
-interface FileManagerPluginOptions {
+export interface FileManagerPluginOptions {
   events?: {
     /**
      * Commands to execute before Webpack begins the bundling process

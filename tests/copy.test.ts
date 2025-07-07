@@ -8,7 +8,7 @@ import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
 import tempy from './utils/tempy';
 
-import FileManagerPlugin from '../src';
+import FileManagerPlugin, { FileManagerPluginOptions } from '../src';
 
 describe('Copy Action', () => {
   const test = baseTest.extend<{ tmpdir: string }>({
@@ -20,12 +20,12 @@ describe('Copy Action', () => {
     },
   });
 
-  test('should copy files to a directory given a glob source', async ({ tmpdir }) => {
+  test('copy files to a directory given a glob source', async ({ tmpdir }) => {
     const file1 = await tempy.file(tmpdir);
     const file2 = await tempy.file(tmpdir);
     const dirName = tempy.getDirName();
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -43,14 +43,14 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, dirName, basename(file2)))).toBe(true);
   });
 
-  test('should copy files to a directory given a glob absolute source', async ({ tmpdir }) => {
+  test('copy files to a directory given a glob absolute source', async ({ tmpdir }) => {
     const file1 = await tempy.file(tmpdir);
     const file2 = await tempy.file(tmpdir);
     const dirName = tempy.getDirName();
 
     const source = join(tmpdir, '*');
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -68,14 +68,14 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, dirName, basename(file2)))).toBe(true);
   });
 
-  test('should deep copy files to directory given a glob source', async ({ tmpdir }) => {
+  test('deep copy files to directory given a glob source', async ({ tmpdir }) => {
     const file1 = await tempy.file(tmpdir);
     const nestedDir = await tempy.dir({ root: tmpdir });
     const file2 = await tempy.file(nestedDir);
 
     const dirName = tempy.getDirName();
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -93,14 +93,14 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, dirName, nestedDir.split(sep).pop(), basename(file2)))).toBe(true);
   });
 
-  test('should flat copy the files to directory given a glob source', async ({ tmpdir }) => {
+  test('flat copy the files to directory given a glob source', async ({ tmpdir }) => {
     const file1 = await tempy.file(tmpdir);
     const nestedDir = await tempy.dir({ root: tmpdir });
     const file2 = await tempy.file(nestedDir);
 
     const dirName = tempy.getDirName();
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -127,11 +127,46 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, dirName, basename(file2)))).toBe(true);
   });
 
-  test(`should create destination directory if it doesn't exist and copy files`, async ({ tmpdir }) => {
+  test('ignore file while copying glob source', async ({ tmpdir }) => {
+    const file1 = await tempy.file(tmpdir);
+    const file2 = await tempy.file(tmpdir);
+    const file3 = await tempy.file(tmpdir);
+
+    const dirName = tempy.getDirName();
+
+    const config: FileManagerPluginOptions = {
+      context: tmpdir,
+      events: {
+        onEnd: {
+          copy: [
+            {
+              source: '**/*',
+              destination: dirName,
+              options: {},
+              globOptions: {
+                ignore: [`**/${basename(file2)}`],
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    const compiler = getCompiler();
+    new FileManagerPlugin(config).apply(compiler);
+    await compile(compiler);
+
+    expect(existsSync(join(tmpdir, dirName))).toBe(true);
+    expect(existsSync(join(tmpdir, dirName, basename(file1)))).toBe(true);
+    expect(existsSync(join(tmpdir, dirName, basename(file2)))).toBe(false);
+    expect(existsSync(join(tmpdir, dirName, basename(file3)))).toBe(true);
+  });
+
+  test(`create destination directory if it doesn't exist and copy files`, async ({ tmpdir }) => {
     const file = await tempy.file(tmpdir);
     const destDir = tempy.getDirName();
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -147,7 +182,7 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, destDir, basename(file)))).toBe(true);
   });
 
-  test('should copy and create destination directory given a glob source with extension', async ({ tmpdir }) => {
+  test('copy and create destination directory given a glob source with extension', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'index.html');
     const destDir = tempy.getDirName();
 
@@ -168,10 +203,10 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, destDir, 'fake'))).toBe(false);
   });
 
-  test('should copy source file to destination file', async ({ tmpdir }) => {
+  test('copy source file to destination file', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'index.html');
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       runTasksInSeries: true,
       events: {
@@ -192,14 +227,12 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, 'deep/deep1/index.html'))).toBe(true);
   });
 
-  test('should copy file into the directory given source is a file and destination is a directory', async ({
-    tmpdir,
-  }) => {
+  test('copy file into the directory given source is a file and destination is a directory', async ({ tmpdir }) => {
     const fileName = tempy.getFileName();
     await tempy.file(tmpdir, fileName);
     const destDir = tempy.getDirName('/');
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -215,12 +248,12 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, destDir, fileName))).toBe(true);
   });
 
-  test('should copy a file without extension to target folder', async ({ tmpdir }) => {
+  test('copy a file without extension to target folder', async ({ tmpdir }) => {
     const fileName = tempy.getFileName();
     await tempy.file(tmpdir, fileName);
     const destDir = tempy.getDirName('/');
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -236,8 +269,8 @@ describe('Copy Action', () => {
     expect(existsSync(join(tmpdir, destDir, fileName))).toBe(true);
   });
 
-  test('should not copy a file that does not exist', async ({ tmpdir }) => {
-    const config = {
+  test('not copy a file that does not exist', async ({ tmpdir }) => {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {

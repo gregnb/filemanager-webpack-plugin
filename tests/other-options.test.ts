@@ -9,7 +9,7 @@ import getCompiler from './utils/getCompiler';
 import getFixtruesDir from './utils/getFixturesDir';
 import tempy from './utils/tempy';
 
-import FileManagerPlugin from '../src';
+import FileManagerPlugin, { FileManagerPluginOptions } from '../src';
 
 const fixturesDir = getFixtruesDir();
 
@@ -23,11 +23,11 @@ describe('Other Options', () => {
     },
   });
 
-  test(`should tasks in sequence with option 'runTasksInSeries'`, async ({ tmpdir }) => {
+  test(`tasks in sequence with option 'runTasksInSeries'`, async ({ tmpdir }) => {
     const dir1 = tempy.getDirName('/');
     const dir2 = tempy.getDirName('/');
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: fixturesDir,
       runTasksInSeries: true,
       events: {
@@ -48,7 +48,7 @@ describe('Other Options', () => {
     expect(existsSync(join(tmpdir, dir2, 'index.html'))).toBe(true);
   });
 
-  test(`should resolve files from given 'context'`, async () => {
+  test(`resolve files from given 'context'`, async () => {
     const distDir = join(fixturesDir, 'dist');
 
     const config = {

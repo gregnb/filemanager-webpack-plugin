@@ -8,7 +8,7 @@ import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
 import tempy from './utils/tempy';
 
-import FileManagerPlugin from '../src';
+import FileManagerPlugin, { FileManagerPluginOptions } from '../src';
 
 describe('Mkdir Action', () => {
   const test = baseTest.extend<{ tmpdir: string }>({
@@ -20,8 +20,8 @@ describe('Mkdir Action', () => {
     },
   });
 
-  test('should create the given directories', async ({ tmpdir }) => {
-    const config = {
+  test('create the given directories', async ({ tmpdir }) => {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onStart: {
@@ -43,8 +43,8 @@ describe('Mkdir Action', () => {
     expect(existsSync(join(tmpdir, 'dir4'))).toBe(true);
   });
 
-  test('should create nested directories', async ({ tmpdir }) => {
-    const config = {
+  test('create nested directories', async ({ tmpdir }) => {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -63,12 +63,12 @@ describe('Mkdir Action', () => {
     expect(existsSync(join(tmpdir, 'dir/depth1/depth2'))).toBe(true);
   });
 
-  test('should not overwite existing directories', async ({ tmpdir }) => {
+  test('not overwite existing directories', async ({ tmpdir }) => {
     const dir = await tempy.dir({ root: tmpdir });
     const file = await tempy.file(dir, 'file');
     const dirName = relative(tmpdir, dir);
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {

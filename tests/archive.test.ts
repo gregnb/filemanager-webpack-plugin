@@ -9,7 +9,7 @@ import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
 import tempy from './utils/tempy';
 
-import FileManagerPlugin from '../src';
+import FileManagerPlugin, { FileManagerPluginOptions } from '../src';
 
 const zipHasFile = async (zipPath: string, fileName: string) => {
   const data = await fs.promises.readFile(zipPath);
@@ -27,12 +27,12 @@ describe('Archive Action', () => {
     },
   });
 
-  test('should archive(ZIP) a directory to a destination ZIP', async ({ tmpdir }) => {
+  test('archive(ZIP) a directory to a destination ZIP', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file');
 
     const zipName = tempy.getZipName();
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -49,12 +49,12 @@ describe('Archive Action', () => {
     expect(existsSync(zipPath)).toBe(true);
   });
 
-  test('should archive(ZIP) a single file to a destination ZIP', async ({ tmpdir }) => {
+  test('archive(ZIP) a single file to a destination ZIP', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file');
 
     const zipName = tempy.getZipName();
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -72,12 +72,12 @@ describe('Archive Action', () => {
     expect(await zipHasFile(zipPath, 'file')).toBe(true);
   });
 
-  test('should archive(ZIP) a directory glob to destination ZIP', async ({ tmpdir }) => {
+  test('archive(ZIP) a directory glob to destination ZIP', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file');
 
     const zipName = tempy.getZipName();
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -95,12 +95,12 @@ describe('Archive Action', () => {
     expect(await zipHasFile(zipPath, 'file')).toBe(true);
   });
 
-  test('should archive(TAR) a directory glob to destination TAR when format is provided', async ({ tmpdir }) => {
+  test('archive(TAR) a directory glob to destination TAR when format is provided', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file');
 
     const zipName = tempy.getZipName('.tar');
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -117,12 +117,12 @@ describe('Archive Action', () => {
     expect(existsSync(zipPath)).toBe(true);
   });
 
-  test('should archive(TAR.GZ) a directory glob to destination TAR.GZ', async ({ tmpdir }) => {
+  test('archive(TAR.GZ) a directory glob to destination TAR.GZ', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file');
 
     const zipName = tempy.getZipName('.tar.gz');
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -152,12 +152,12 @@ describe('Archive Action', () => {
   });
 
   // https://github.com/gregnb/filemanager-webpack-plugin/issues/37
-  test('should not include the output zip into compression', async ({ tmpdir }) => {
+  test('not include the output zip into compression', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file');
 
     const zipName = tempy.getZipName();
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -174,13 +174,13 @@ describe('Archive Action', () => {
     expect(await zipHasFile(zipPath, zipName)).toBe(false);
   });
 
-  test('should include files in the archive', async ({ tmpdir }) => {
+  test('include files in the archive', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file1');
     await tempy.file(tmpdir, 'file2');
 
     const zipName = tempy.getZipName();
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -199,13 +199,13 @@ describe('Archive Action', () => {
     expect(await zipHasFile(zipPath, 'file2')).toBe(true);
   });
 
-  test('should ignore files in the archive correclty if ignore is an array', async ({ tmpdir }) => {
+  test('ignore files in the archive correclty if ignore is an array', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file1');
     await tempy.file(tmpdir, 'file2');
 
     const zipName = tempy.getZipName();
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -234,13 +234,13 @@ describe('Archive Action', () => {
     expect(await zipHasFile(zipPath, 'file2')).toBe(false);
   });
 
-  test('should ignore files in the archive correclty if ignore is a string', async ({ tmpdir }) => {
+  test('ignore files in the archive correclty if ignore is a string', async ({ tmpdir }) => {
     await tempy.file(tmpdir, 'file1');
     await tempy.file(tmpdir, 'file2');
 
     const zipName = tempy.getZipName();
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {

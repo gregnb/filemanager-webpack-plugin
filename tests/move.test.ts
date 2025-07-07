@@ -8,7 +8,7 @@ import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
 import tempy from './utils/tempy';
 
-import FileManagerPlugin from '../src';
+import FileManagerPlugin, { FileManagerPluginOptions } from '../src';
 
 describe('Move Action', () => {
   const test = baseTest.extend<{ tmpdir: string }>({
@@ -20,14 +20,14 @@ describe('Move Action', () => {
     },
   });
 
-  test('should move files from source to destination', async ({ tmpdir }) => {
+  test('move files from source to destination', async ({ tmpdir }) => {
     const dir = await tempy.dir({ root: tmpdir });
     const file = await tempy.file(dir, 'file');
 
     const srcDir = relative(tmpdir, dir);
     const destDir = tempy.getDirName();
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {

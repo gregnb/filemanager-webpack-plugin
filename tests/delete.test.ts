@@ -7,7 +7,7 @@ import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
 import tempy from './utils/tempy';
 
-import FileManagerPlugin from '../src';
+import FileManagerPlugin, { FileManagerPluginOptions } from '../src';
 
 describe('Delete Action', () => {
   const test = baseTest.extend<{ tmpdir: string }>({
@@ -19,7 +19,7 @@ describe('Delete Action', () => {
     },
   });
 
-  test('should delete file when array of strings provided in delete function', async ({ tmpdir }) => {
+  test('delete file when array of strings provided in delete function', async ({ tmpdir }) => {
     const file1 = await tempy.file(tmpdir);
     const file2 = await tempy.file(tmpdir);
     const file3 = await tempy.file(tmpdir);
@@ -28,7 +28,7 @@ describe('Delete Action', () => {
     expect(existsSync(file2)).toBe(true);
     expect(existsSync(file3)).toBe(true);
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onStart: {
@@ -49,7 +49,7 @@ describe('Delete Action', () => {
     expect(existsSync(file3)).toBe(false);
   });
 
-  test('should support glob', async ({ tmpdir }) => {
+  test('support glob', async ({ tmpdir }) => {
     const file1 = await tempy.file(tmpdir);
     const file2 = await tempy.file(tmpdir);
     const file3 = await tempy.file(tmpdir);
@@ -58,7 +58,7 @@ describe('Delete Action', () => {
     expect(existsSync(file2)).toBe(true);
     expect(existsSync(file3)).toBe(true);
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
@@ -77,12 +77,12 @@ describe('Delete Action', () => {
     expect(existsSync(file3)).toBe(false);
   });
 
-  test('should accept options', async ({ tmpdir }) => {
+  test('accept options', async ({ tmpdir }) => {
     const file = await tempy.file(tmpdir);
 
     expect(existsSync(file)).toBe(true);
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {

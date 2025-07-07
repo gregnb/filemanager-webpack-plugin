@@ -7,7 +7,7 @@ import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
 import tempy from './utils/tempy';
 
-import FileManagerPlugin from '../src';
+import FileManagerPlugin, { FileManagerPluginOptions } from '../src';
 
 describe('Execution Order', () => {
   const test = baseTest.extend<{ tmpdir: string }>({
@@ -19,13 +19,13 @@ describe('Execution Order', () => {
     },
   });
 
-  test('should execute actions in a given order', async ({ tmpdir }) => {
+  test('execute actions in a given order', async ({ tmpdir }) => {
     const mDir = await tempy.dir({ root: tmpdir });
     await tempy.file(mDir, 'file');
 
     const dirName = relative(tmpdir, mDir);
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onStart: [

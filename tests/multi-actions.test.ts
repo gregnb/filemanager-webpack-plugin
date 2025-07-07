@@ -8,7 +8,7 @@ import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
 import tempy from './utils/tempy';
 
-import FileManagerPlugin from '../src';
+import FileManagerPlugin, { FileManagerPluginOptions } from '../src';
 
 describe('Multi Actions', () => {
   const test = baseTest.extend<{ tmpdir: string }>({
@@ -20,12 +20,12 @@ describe('Multi Actions', () => {
     },
   });
 
-  test('should execute given actions in an event', async ({ tmpdir }) => {
+  test('execute given actions in an event', async ({ tmpdir }) => {
     const dirName1 = tempy.getDirName();
     const destDir = tempy.getDirName();
     const file = await tempy.file(tmpdir, 'file');
 
-    const config = {
+    const config: FileManagerPluginOptions = {
       context: tmpdir,
       events: {
         onEnd: {
