@@ -10,6 +10,7 @@ import deleteAction, { DeleteTask, DeleteOptions } from './actions/delete';
 import moveAction, { MoveTask } from './actions/move';
 import mkdirAction, { MkdirTask } from './actions/mkdir';
 import archiveAction, { ArchiveTask, ArchiverOptions } from './actions/archive';
+import { Logger } from './types';
 
 type CopyAction = {
   source: string;
@@ -140,7 +141,7 @@ function resolvePaths(action: ActionTask[], context: string): ResolvedActionTask
 class FileManagerPlugin implements WebpackPluginInstance {
   private options: FileManagerPluginOptions;
   private context!: string;
-  private logger!: ReturnType<Compiler['getInfrastructureLogger']>;
+  private logger!: Logger;
 
   constructor(options: FileManagerPluginOptions) {
     validate(optionsSchema, options, {
