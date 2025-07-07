@@ -1,7 +1,7 @@
 import path from 'path';
 import { validate } from 'schema-utils';
 import normalizePath from 'normalize-path';
-import type { Compiler, WebpackPluginInstance } from 'webpack';
+import type { Compilation, Compiler, WebpackPluginInstance } from 'webpack';
 
 import optionsSchema from './options-schema';
 import pExec from './utils/p-exec';
@@ -10,7 +10,7 @@ import deleteAction, { DeleteTask, DeleteOptions } from './actions/delete';
 import moveAction, { MoveTask } from './actions/move';
 import mkdirAction, { MkdirTask } from './actions/mkdir';
 import archiveAction, { ArchiveTask, ArchiverOptions } from './actions/archive';
-import { Logger } from './types';
+import { TaskOptions, Logger } from './types';
 
 type CopyAction = {
   source: string;
@@ -72,6 +72,11 @@ export interface FileManagerPluginOptions {
    * The directory, an absolute path, for resolving files. Defaults to webpack context
    */
   context?: string | null;
+  /**
+   * If true, will throw an error if any action fails
+   * @default false
+   */
+  throwOnError?: boolean;
 }
 
 type ActionTask = string | CopyAction | DeleteAction | MoveAction | ArchiveAction;
@@ -87,6 +92,7 @@ const defaultOptions: FileManagerPluginOptions = {
   runTasksInSeries: false,
   context: null,
   runOnceInWatchMode: false,
+  throwOnError: false,
 };
 
 function resolvePaths(action: ActionTask[], context: string): ResolvedActionTask[] {
@@ -152,10 +158,16 @@ class FileManagerPlugin implements WebpackPluginInstance {
     this.options = { ...defaultOptions, ...options };
   }
 
-  private async applyAction(action: unknown, actionParams: ActionTask[]): Promise<void> {
-    const opts = {
+  private async applyAction(action: unknown, actionParams: ActionTask[], compilation: Compilation): Promise<void> {
+    const opts: TaskOptions = {
       runTasksInSeries: this.options.runTasksInSeries ?? false,
       logger: this.logger,
+      handleError: (error) => {
+        if (!this.options.throwOnError) {
+          return;
+        }
+        compilation.errors.push(error);
+      },
     };
 
     if (typeof action === 'function') {
@@ -163,38 +175,38 @@ class FileManagerPlugin implements WebpackPluginInstance {
     }
   }
 
-  private async run(event: Actions): Promise<void> {
+  private async run(event: Actions, compilation: Compilation): Promise<void> {
     for (const actionType in event) {
       const action = event[actionType];
 
       switch (actionType) {
         case 'delete':
-          await this.applyAction(deleteAction, action);
+          await this.applyAction(deleteAction, action, compilation);
           break;
 
         case 'mkdir':
-          await this.applyAction(mkdirAction, action);
+          await this.applyAction(mkdirAction, action, compilation);
           break;
 
         case 'copy':
-          await this.applyAction(copyAction, action);
+          await this.applyAction(copyAction, action, compilation);
           break;
 
         case 'move':
-          await this.applyAction(moveAction, action);
+          await this.applyAction(moveAction, action, compilation);
           break;
 
         case 'archive':
-          await this.applyAction(archiveAction, action);
+          await this.applyAction(archiveAction, action, compilation);
           break;
 
         default:
-          throw Error('Unknown action');
+          compilation.errors.push(new Error('Unknown action'));
       }
     }
   }
 
-  private async execute(eventName: 'onStart' | 'onEnd'): Promise<void> {
+  private async execute(eventName: 'onStart' | 'onEnd', compilation: Compilation): Promise<void> {
     const { events } = this.options;
 
     if (!events) return;
@@ -202,37 +214,46 @@ class FileManagerPlugin implements WebpackPluginInstance {
     if (Array.isArray(events[eventName])) {
       const eventsArr = events[eventName] as Actions[];
 
-      await pExec(true, eventsArr, async (event: Actions) => await this.run(event));
+      await pExec(true, eventsArr, async (event: Actions) => await this.run(event, compilation));
       return;
     }
 
     const event = events[eventName] as Actions;
-    await this.run(event);
+    await this.run(event, compilation);
   }
 
   apply(compiler: Compiler): void {
     this.context = this.options.context || compiler.options.context || process.cwd();
     this.logger = compiler.getInfrastructureLogger(PLUGIN_NAME);
 
-    const onStart = async (): Promise<void> => {
-      await this.execute('onStart');
+    const onStart = async (compilation: Compilation): Promise<void> => {
+      await this.execute('onStart', compilation);
     };
 
-    const onEnd = async (): Promise<void> => {
-      await this.execute('onEnd');
+    const onEnd = async (compilation: Compilation): Promise<void> => {
+      await this.execute('onEnd', compilation);
     };
 
-    compiler.hooks.beforeRun.tapPromise(PLUGIN_NAME, onStart);
-    compiler.hooks.afterEmit.tapPromise(PLUGIN_NAME, onEnd);
+    compiler.hooks.beforeRun.tapPromise(PLUGIN_NAME, async (comp) => {
+      comp.hooks.thisCompilation.tap(PLUGIN_NAME, async (compilation) => {
+        await onStart(compilation);
+      });
+    });
+
+    compiler.hooks.afterEmit.tapPromise(PLUGIN_NAME, async (compilation) => {
+      await onEnd(compilation);
+    });
 
     let watchRunCount = 0;
-    compiler.hooks.watchRun.tapPromise(PLUGIN_NAME, async () => {
+    compiler.hooks.watchRun.tapPromise(PLUGIN_NAME, async (comp) => {
       if (this.options.runOnceInWatchMode && watchRunCount > 0) {
         return;
       }
 
       ++watchRunCount;
-      await onStart();
+      comp.hooks.thisCompilation.tap(PLUGIN_NAME, async (compilation) => {
+        await onStart(compilation);
+      });
     });
   }
 }

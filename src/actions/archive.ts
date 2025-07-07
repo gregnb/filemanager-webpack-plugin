@@ -5,7 +5,7 @@ import isGlob from 'is-glob';
 import fsExtra from 'fs-extra';
 
 import pExec from '../utils/p-exec';
-import { Logger } from '../types';
+import { TaskOptions } from '../types';
 
 /** {@link https://github.com/Yqnn/node-readdir-glob#options} */
 interface ReaddirGlobOptions {
@@ -48,12 +48,7 @@ export interface ArchiveTask {
   options?: ArchiverOptions;
 }
 
-interface ArchiveActionOptions {
-  runTasksInSeries: boolean;
-  logger: Logger;
-}
-
-const archive = async (task: ArchiveTask, { logger }: { logger: Logger }): Promise<void> => {
+const archive = async (task: ArchiveTask, { logger }: TaskOptions): Promise<void> => {
   const { source, absoluteSource, absoluteDestination, options = {}, context = process.cwd() } = task;
   const format = task.format || (path.extname(absoluteDestination).replace('.', '') as 'zip' | 'tar');
 
@@ -111,19 +106,16 @@ const archive = async (task: ArchiveTask, { logger }: { logger: Logger }): Promi
   logger.info(`archive created at "${absoluteDestination}"`);
 };
 
-const archiveAction = async (tasks: ArchiveTask[], options: ArchiveActionOptions): Promise<void> => {
-  const { runTasksInSeries, logger } = options;
-
-  const taskOptions = {
-    logger,
-  };
+const archiveAction = async (tasks: ArchiveTask[], taskOptions: TaskOptions): Promise<void> => {
+  const { runTasksInSeries, logger, handleError } = taskOptions;
 
   logger.debug(`processing archive tasks. tasks: ${tasks}`);
   await pExec(runTasksInSeries, tasks, async (task: ArchiveTask) => {
     try {
       await archive(task, taskOptions);
-    } catch {
+    } catch (err) {
       logger.error(`error while creating archive. task ${task}`);
+      handleError(err);
     }
   });
   logger.debug(`archive tasks complete. tasks: ${tasks}`);

@@ -1,7 +1,7 @@
 import fsExtra from 'fs-extra';
 
 import pExec from '../utils/p-exec';
-import { Logger } from '../types';
+import { TaskOptions } from '../types';
 
 export interface MoveTask {
   source: string;
@@ -10,13 +10,8 @@ export interface MoveTask {
   absoluteDestination: string;
 }
 
-interface MoveTaskOptions {
-  runTasksInSeries: boolean;
-  logger: Logger;
-}
-
-const moveAction = async (tasks: MoveTask[], options: MoveTaskOptions): Promise<void> => {
-  const { runTasksInSeries, logger } = options;
+const moveAction = async (tasks: MoveTask[], taskOptions: TaskOptions): Promise<void> => {
+  const { runTasksInSeries, logger, handleError } = taskOptions;
 
   logger.debug(`processing move tasks. tasks: ${tasks}`);
 
@@ -26,6 +21,7 @@ const moveAction = async (tasks: MoveTask[], options: MoveTaskOptions): Promise<
       logger.info(`moved ${task.source} to ${task.destination}`);
     } catch (err) {
       logger.error(`unable to move ${task.source}, ${err}`);
+      handleError(err);
     }
   });
 

@@ -2,13 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import fsExtra from 'fs-extra';
 import isGlob from 'is-glob';
-import type { Compiler } from 'webpack';
 import type { Options as FgOptions } from 'fast-glob';
 import type { CopyOptions } from 'fs-extra';
 
 import pExec from '../utils/p-exec';
 import globCopy from '../utils/glob-copy';
-import { Logger } from '../types';
+import { TaskOptions } from '../types';
 
 type FsCopyOptions = Pick<CopyOptions, 'overwrite' | 'preserveTimestamps'>;
 
@@ -34,16 +33,11 @@ export interface CopyTask {
   globOptions?: CopyGlobOptions;
 }
 
-interface CopyTaskOptions {
-  runTasksInSeries: boolean;
-  logger: Logger;
-}
-
 const fsExtraDefaultOptions = {
   preserveTimestamps: true,
 };
 
-const copy = async (task: CopyTask, { logger }: { logger: Logger }): Promise<void> => {
+const copy = async (task: CopyTask, { logger }: TaskOptions): Promise<void> => {
   const {
     source,
     absoluteSource,
@@ -85,12 +79,8 @@ const copy = async (task: CopyTask, { logger }: { logger: Logger }): Promise<voi
   logger.info(`copied "${source}" to "${destination}"`);
 };
 
-const copyAction = async (tasks: CopyTask[], options: CopyTaskOptions): Promise<void> => {
-  const { runTasksInSeries, logger } = options;
-
-  const taskOptions = {
-    logger,
-  };
+const copyAction = async (tasks: CopyTask[], taskOptions: TaskOptions): Promise<void> => {
+  const { runTasksInSeries, logger, handleError } = taskOptions;
 
   logger.debug(`processing copy tasks. tasks: ${tasks}`);
 
@@ -99,6 +89,7 @@ const copyAction = async (tasks: CopyTask[], options: CopyTaskOptions): Promise<
       await copy(task, taskOptions);
     } catch (err) {
       logger.error(`error while copying. task ${err}`);
+      handleError(err);
     }
   });
   logger.debug(`copy tasks complete. tasks: ${tasks}`);

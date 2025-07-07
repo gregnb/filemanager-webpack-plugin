@@ -1,8 +1,7 @@
 import { deleteAsync, Options as DelOptions } from 'del';
-import type { Compiler } from 'webpack';
 
 import pExec from '../utils/p-exec';
-import { Logger } from '../types';
+import { TaskOptions } from '../types';
 
 export type { DelOptions as DeleteOptions };
 
@@ -12,13 +11,8 @@ export interface DeleteTask {
   options?: DelOptions;
 }
 
-interface DeleteTaskOptions {
-  runTasksInSeries: boolean;
-  logger: Logger;
-}
-
-const deleteAction = async (tasks: DeleteTask[], taskOptions: DeleteTaskOptions): Promise<void> => {
-  const { runTasksInSeries, logger } = taskOptions;
+const deleteAction = async (tasks: DeleteTask[], taskOptions: TaskOptions): Promise<void> => {
+  const { runTasksInSeries, logger, handleError } = taskOptions;
 
   logger.debug(`processing delete tasks. tasks: ${tasks}`);
 
@@ -30,6 +24,7 @@ const deleteAction = async (tasks: DeleteTask[], taskOptions: DeleteTaskOptions)
       logger.info(`deleted ${task.source}`);
     } catch (err) {
       logger.error(`unable to delete ${task.source}. ${err}`);
+      handleError(err);
     }
   });
 

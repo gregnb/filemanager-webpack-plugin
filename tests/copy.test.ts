@@ -285,4 +285,22 @@ describe('Copy Action', () => {
 
     expect(existsSync('./testing/wontexist.js')).toBe(false);
   });
+
+  test('throw error while trying to copy a file that does not exist', async ({ tmpdir }) => {
+    const config: FileManagerPluginOptions = {
+      context: tmpdir,
+      events: {
+        onEnd: {
+          copy: [{ source: 'doesnotexit.js', destination: 'wontexist.js' }],
+        },
+      },
+      throwOnError: true,
+    };
+
+    const compiler = getCompiler();
+    new FileManagerPlugin(config).apply(compiler);
+    await expect(async () => await compile(compiler)).rejects.toThrow();
+
+    expect(existsSync('./testing/wontexist.js')).toBe(false);
+  });
 });

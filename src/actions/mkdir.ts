@@ -1,20 +1,15 @@
 import fs from 'fs';
 
 import pExec from '../utils/p-exec';
-import { Logger } from '../types';
+import { TaskOptions } from '../types';
 
 export interface MkdirTask {
   source: string;
   absoluteSource: string;
 }
 
-interface MkdirTaskOptions {
-  runTasksInSeries: boolean;
-  logger: Logger;
-}
-
-const mkdirAction = async (tasks: MkdirTask[], options: MkdirTaskOptions): Promise<void> => {
-  const { runTasksInSeries, logger } = options;
+const mkdirAction = async (tasks: MkdirTask[], taskOptions: TaskOptions): Promise<void> => {
+  const { runTasksInSeries, logger, handleError } = taskOptions;
 
   logger.debug(`processing mkdir tasks. tasks: ${tasks}`);
 
@@ -23,7 +18,8 @@ const mkdirAction = async (tasks: MkdirTask[], options: MkdirTaskOptions): Promi
       await fs.promises.mkdir(task.absoluteSource, { recursive: true });
       logger.info(`created directory. ${task.source}`);
     } catch (err) {
-      logger.error(`unable to create direcotry: ${task.source}. ${err}`);
+      logger.error(`unable to create directory: ${task.source}. ${err}`);
+      handleError(err);
     }
   });
 

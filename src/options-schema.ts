@@ -213,6 +213,11 @@ const optionsSchema: JSONSchema7 = {
       type: 'string',
       description: 'The directory, an absolute path, for resolving files. Defaults to webpack context',
     },
+    throwOnError: {
+      type: 'boolean',
+      default: false,
+      description: 'If true, will throw an error if any action fails',
+    },
     runOnceInWatchMode: {
       type: 'boolean',
       default: false,
