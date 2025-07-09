@@ -18,7 +18,7 @@
     },
     "import": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.ts"
+      "default": "./dist/index.js"
     }
   },
   "engines": {
