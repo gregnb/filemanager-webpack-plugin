@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v9.0.1 (2025-07-09)
+
+- fix esm exports path ([efc7622](https://github.com/gregnb/filemanager-webpack-plugin/commit/efc7622))
+
 ## v9.0.0 (2025-07-07)
 
 - minimum requires node v20.0.0+ ([368c370](https://github.com/gregnb/filemanager-webpack-plugin/commit/368c370))
