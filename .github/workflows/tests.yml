@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [20, lts/*, current]
+        node-version: [22.14.0, lts/*, current]
 
     name: Test - ${{ matrix.os }} - Node v${{ matrix.node-version }}
 
