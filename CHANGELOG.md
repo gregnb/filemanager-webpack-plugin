@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v10.0.0 (2026-03-03)
+
+- minimum requires node v22.14.0+ ([d660df5](https://github.com/gregnb/filemanager-webpack-plugin/commit/d660df5))
+- fix glob copy `options.overwrite` incorrectly defaulting to `false` ([b6ea356](https://github.com/gregnb/filemanager-webpack-plugin/commit/b6ea356))
+- bump dependencies ([7bb0648](https://github.com/gregnb/filemanager-webpack-plugin/commit/7bb0648))
+
 ## v9.0.1 (2025-07-09)
 
 - fix esm exports path ([efc7622](https://github.com/gregnb/filemanager-webpack-plugin/commit/efc7622))
