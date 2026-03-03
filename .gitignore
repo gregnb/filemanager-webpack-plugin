@@ -204,6 +204,7 @@ $RECYCLE.BIN/
 # .pnp.*
 
 # Artifcats
+.tsbuild/
 dist/
 lib/
 testing/

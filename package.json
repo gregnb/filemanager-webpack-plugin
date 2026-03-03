@@ -47,7 +47,7 @@
   ],
   "scripts": {
     "dev": "tsdown --watch",
-    "build": "tsdown --format esm --format cjs",
+    "build": "tsdown",
     "test": "vitest run",
     "test:watch": "vitest",
     "format": "prettier . --write --ignore-path .gitignore",

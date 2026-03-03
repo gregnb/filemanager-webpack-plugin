@@ -4,7 +4,8 @@
     "allowJs": true,
     "esModuleInterop": true,
     "checkJs": false,
-    "types": ["node"]
+    "types": ["node"],
+    "outDir": ".tsbuild"
   },
   "include": ["tests/**/*.ts", "src/**/*.ts"]
 }
