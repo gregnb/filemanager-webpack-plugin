@@ -10,6 +10,7 @@ interface GlobCopyOptions extends FsCopyOptions {
 
 const defaultOptions: GlobCopyOptions = {
   flat: false,
+  overwrite: true,
   cwd: process.cwd(),
 };
 
