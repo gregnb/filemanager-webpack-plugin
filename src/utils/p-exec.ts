@@ -3,7 +3,7 @@ const defaultTask = async (): Promise<void> => {};
 const pExec = async <T>(
   series: boolean = false,
   arr: T[] = [],
-  task: (item: T) => Promise<void> = defaultTask
+  task: (item: T) => Promise<void> = defaultTask,
 ): Promise<void> => {
   if (series) {
     await arr.reduce(async (p, spec) => {

@@ -2,11 +2,32 @@
   "name": "filemanager-webpack-plugin",
   "version": "10.0.0",
   "description": "Webpack plugin to copy, archive (.zip), move, delete files and directories before and after builds",
-  "author": "gregnb",
-  "license": "MIT",
-  "repository": "github:gregnb/filemanager-webpack-plugin",
-  "bugs": "https://github.com/gregnb/filemanager-webpack-plugin/issues",
+  "keywords": [
+    "filemanager-plugin",
+    "webpack",
+    "webpack-archive-plugin",
+    "webpack-copy-plugin"
+  ],
   "homepage": "https://github.com/gregnb/filemanager-webpack-plugin#readme",
+  "bugs": "https://github.com/gregnb/filemanager-webpack-plugin/issues",
+  "license": "MIT",
+  "author": "gregnb",
+  "contributors": [
+    {
+      "name": "Sibiraj",
+      "url": "https://github.com/sibiraj-s"
+    }
+  ],
+  "repository": "github:gregnb/filemanager-webpack-plugin",
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/sibiraj-s"
+    }
+  ],
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -21,30 +42,6 @@
       "default": "./dist/index.js"
     }
   },
-  "engines": {
-    "node": ">=22.14.0"
-  },
-  "contributors": [
-    {
-      "name": "Sibiraj",
-      "url": "https://github.com/sibiraj-s"
-    }
-  ],
-  "funding": [
-    {
-      "type": "github",
-      "url": "https://github.com/sponsors/sibiraj-s"
-    }
-  ],
-  "keywords": [
-    "webpack",
-    "webpack-copy-plugin",
-    "webpack-archive-plugin",
-    "filemanager-plugin"
-  ],
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "dev": "tsdown --watch",
     "build": "tsdown",
@@ -53,9 +50,6 @@
     "format": "prettier . --write --ignore-path .gitignore",
     "prepublishOnly": "npm run build && npm run test",
     "prepare": "is-ci || husky install"
-  },
-  "peerDependencies": {
-    "webpack": "^5.0.0"
   },
   "dependencies": {
     "@types/archiver": "^7.0.0",
@@ -78,12 +72,18 @@
     "husky": "^9.1.7",
     "is-ci": "^4.1.0",
     "jszip": "^3.10.1",
+    "lint-staged": "^16.4.0",
+    "oxfmt": "^0.41.0",
     "oxlint": "^1.56.0",
-    "prettier": "^3.8.1",
-    "pretty-quick": "^4.2.2",
     "tsdown": "^0.21.4",
     "typescript": "^5.9.3",
     "vitest": "^4.1.0",
     "webpack": "^5.105.4"
+  },
+  "peerDependencies": {
+    "webpack": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=22.14.0"
   }
 }

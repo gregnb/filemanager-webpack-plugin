@@ -1,0 +1,5 @@
+'*.{ts,js}': 
+  - oxlint --fix
+  - oxfmt --write
+
+'*.{json,yaml,md,html}': oxfmt --write

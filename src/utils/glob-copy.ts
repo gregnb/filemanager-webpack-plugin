@@ -32,13 +32,18 @@ const globCopy = async (
   pattern: string,
   destination: string,
   options: GlobCopyOptions = defaultOptions,
-  globOptions: Record<string, any> = {}
+  globOptions: Record<string, any> = {},
 ): Promise<void[]> => {
   const mergedOptions = { ...defaultOptions, ...options };
 
   await fse.ensureDir(destination);
 
-  const matches = await fg(pattern, { dot: true, ...globOptions, absolute: true, cwd: mergedOptions.cwd });
+  const matches = await fg(pattern, {
+    dot: true,
+    ...globOptions,
+    absolute: true,
+    cwd: mergedOptions.cwd,
+  });
 
   const entries = matches.map((file) => {
     const destDir = path.isAbsolute(destination) ? destination : path.posix.join(mergedOptions.cwd, destination);
