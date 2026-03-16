@@ -1,2 +1,5 @@
 npm run build
 npm run test
+
+echo "running publint:\n"
+npx publint
