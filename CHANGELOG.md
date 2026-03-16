@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v10.0.1 (2026-03-16)
+
+- fix exports path in package.json ([d660df5](https://github.com/gregnb/filemanager-webpack-plugin/commit/d660df5))
+
 ## v10.0.0 (2026-03-03)
 
 - minimum requires node v22.14.0+ ([d660df5](https://github.com/gregnb/filemanager-webpack-plugin/commit/d660df5))
