@@ -6,12 +6,9 @@ import { deleteAsync } from 'del';
 
 import compile from './utils/compile';
 import getCompiler from './utils/getCompiler';
-import getFixtruesDir from './utils/getFixturesDir';
 import tempy from './utils/tempy';
 
 import FileManagerPlugin, { FileManagerPluginOptions } from '../src';
-
-const fixturesDir = getFixtruesDir();
 
 describe('Other Options', () => {
   const test = baseTest.extend<{ tmpdir: string }>({
@@ -27,8 +24,11 @@ describe('Other Options', () => {
     const dir1 = tempy.getDirName('/');
     const dir2 = tempy.getDirName('/');
 
+    const compiler = getCompiler();
+    const compilerContext = compiler.options.context!;
+
     const config: FileManagerPluginOptions = {
-      context: fixturesDir,
+      context: compilerContext,
       runTasksInSeries: true,
       events: {
         onEnd: {
@@ -40,7 +40,6 @@ describe('Other Options', () => {
       },
     };
 
-    const compiler = getCompiler(fixturesDir);
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
@@ -49,7 +48,8 @@ describe('Other Options', () => {
   });
 
   test(`resolve files from given 'context'`, async () => {
-    const distDir = join(fixturesDir, 'dist');
+    const compiler = getCompiler();
+    const distDir = join(compiler.options.context!, 'dist');
 
     const config = {
       events: {
@@ -60,7 +60,6 @@ describe('Other Options', () => {
       context: distDir,
     };
 
-    const compiler = getCompiler();
     new FileManagerPlugin(config).apply(compiler);
     await compile(compiler);
 
